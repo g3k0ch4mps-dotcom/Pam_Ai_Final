@@ -1,0 +1,218 @@
+openapi: 3.1.0
+info:
+  title: Pamilo Business AI API - RAG Assistant
+  description: |-
+    This is the official API documentation for the Pamilo Business AI system. It provides a robust backend for managing business logic, training AI with custom documents (RAG), and serving customer queries via a public chat widget.
+
+    The system integrates with multiple LLMs, natively supporting **OpenAI (GPT-4o-mini)** and **Google Gemini (1.5-Flash)** as a high-availability fallback.
+
+    ### Key Features:
+    - **Tenant Isolation**: Secure multi-tenant architecture.
+    - **RAG Pipeline**: Custom document extraction and prompt engineering.
+    - **Security**: Hardened with Helmet, Rate Limiting, and XSS sanitization.
+    - **Multi-LLM**: Automatic failover from OpenAI to Gemini.
+
+    Contact the dev team for enterprise API access or custom integrations.
+  termsOfService: http://localhost:3000/terms
+  contact:
+    email: support@pamilo.ai
+  license:
+    name: Private License
+  version: 1.0.0
+externalDocs:
+  description: Project Implementation Guide
+  url: http://localhost:3000/docs
+servers:
+  - url: http://localhost:3000/api
+    description: Development Server
+tags:
+  - name: Authentication
+    description: Operations about user registration and session management.
+  - name: Business
+    description: Management of business profiles, settings, and branding.
+  - name: Documents
+    description: Knowledge base management including uploads and deletions for RAG.
+  - name: Chat
+    description: The core AI interaction layer for public and private use.
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new business and owner.
+      description: Creates a new user account, a new business profile, and establishes ownership.
+      operationId: registerBusiness
+      requestBody:
+        description: User and Business details for registration.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRegister'
+        required: true
+      responses:
+        '201':
+          description: Registration successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: Invalid input data
+        '409':
+          description: Email already registered
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Logs user into the system.
+      description: Validates credentials and returns a JWT for authorization.
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email, example: "admin@example.com" }
+                password: { type: string, example: "Password123!" }
+        required: true
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /business/{id}/profile:
+    get:
+      tags:
+        - Business
+      summary: Get private business profile.
+      description: Returns full business details for internal management.
+      operationId: getBusinessProfile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Unique Business ID
+          schema: { type: string }
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Business not found
+      security:
+        - bearerAuth: []
+
+  /documents/upload:
+    post:
+      tags:
+        - Documents
+      summary: Uploads a knowledge base document.
+      description: Accepts PDF, DOCX, or TXT. Extracted text is used for RAG.
+      operationId: uploadDocument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: string
+                  format: binary
+                  description: Document file (max 5MB)
+      responses:
+        '200':
+          description: File processed and indexed successfully
+      security:
+        - bearerAuth: []
+
+  /chat/public:
+    post:
+      tags:
+        - Chat
+      summary: Public AI Conversation.
+      description: Allows external visitors to chat with the business AI using retrieved documents.
+      operationId: handlePublicChat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [businessSlug, question]
+              properties:
+                businessSlug: { type: string, example: "alpha-tech" }
+                question: { type: string, example: "What time do you open?" }
+      responses:
+        '200':
+          description: AI Response generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean, example: true }
+                  answer: { type: string, example: "We open at 9:00 AM daily." }
+                  provider: { type: string, enum: [openai, gemini] }
+        '429':
+          description: Rate limit exceeded
+
+components:
+  schemas:
+    AuthRegister:
+      type: object
+      required: [email, password, firstName, lastName, businessName]
+      properties:
+        email: { type: string, format: email, example: "jane@example.com" }
+        password: { type: string, minLength: 8, example: "StrongPassword123" }
+        firstName: { type: string, example: "Jane" }
+        lastName: { type: string, example: "Doe" }
+        businessName: { type: string, example: "Pamilo Corp" }
+        industry: { type: string, example: "Software" }
+
+    AuthResponse:
+      type: object
+      properties:
+        success: { type: boolean, example: true }
+        token: { type: string, description: "JWT Access Token" }
+        user:
+          type: object
+          properties:
+            id: { type: string }
+            email: { type: string }
+        business:
+          type: object
+          properties:
+            id: { type: string }
+            slug: { type: string }
+
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { type: string, example: "UNAUTHORIZED" }
+        message: { type: string, example: "Invalid token" }
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
