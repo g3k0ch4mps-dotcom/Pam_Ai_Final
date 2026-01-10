@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Upload, FileText, Trash2, Settings, MessageSquare, ExternalLink } from 'lucide-react';
+import URLManager from '../components/URLManager';
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -184,6 +185,11 @@ export default function Dashboard() {
                                         </div>
                                     ))
                                 )}
+                            </div>
+
+                            {/* URL Management Section */}
+                            <div className="mt-8 pt-8 border-t">
+                                <URLManager businessId={business?.id} />
                             </div>
                         </div>
                     )}
