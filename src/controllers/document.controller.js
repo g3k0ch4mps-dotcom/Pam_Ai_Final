@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Document = require('../models/Document');
 const extractionService = require('../services/extraction.service');
+const urlScraperService = require('../services/urlScraper.service');
 const searchService = require('../services/search.service');
 const logger = require('../utils/logger');
 
@@ -175,9 +176,183 @@ const searchHelper = async (req, res) => {
     }
 };
 
+/**
+ * Add document from URL
+ * @route POST /api/documents/add-url
+ */
+const addFromURL = async (req, res) => {
+    try {
+        const { url, autoRefresh } = req.body;
+        const businessId = req.businessId;
+        const userId = req.user._id;
+
+        if (!url) {
+            return res.status(400).json({
+                success: false,
+                error: { code: 'MISSING_URL', message: 'URL is required' }
+            });
+        }
+
+        // 1. Check if URL already exists for this business
+        const existing = await Document.findOne({
+            businessId,
+            sourceURL: url,
+            sourceType: 'url'
+        });
+
+        if (existing) {
+            return res.status(409).json({
+                success: false,
+                error: { code: 'URL_EXISTS', message: 'This URL has already been added' }
+            });
+        }
+
+        // 2. Scrape URL
+        logger.info(`Scraping URL: ${url}`);
+        const scrapedData = await urlScraperService.scrapeURL(url);
+
+        // 3. Calculate next refresh date if auto-refresh enabled
+        let nextRefresh = null;
+        if (autoRefresh && autoRefresh.enabled) {
+            const now = new Date();
+            const frequency = autoRefresh.frequency || 'weekly';
+
+            switch (frequency) {
+                case 'daily':
+                    nextRefresh = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                    break;
+                case 'weekly':
+                    nextRefresh = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'monthly':
+                    nextRefresh = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+                    break;
+            }
+        }
+
+        // 4. Save to database
+        const document = await Document.create({
+            businessId,
+            sourceType: 'url',
+            sourceURL: url,
+            urlTitle: scrapedData.title,
+            urlDescription: scrapedData.description,
+            textContent: scrapedData.textContent,
+            lastScrapedAt: scrapedData.scrapedAt,
+            autoRefresh: autoRefresh ? {
+                enabled: autoRefresh.enabled || false,
+                frequency: autoRefresh.frequency || 'weekly',
+                lastRefreshed: new Date(),
+                nextRefresh: nextRefresh
+            } : undefined,
+            uploadedBy: userId
+        });
+
+        logger.info(`✓ URL document created: ${document._id}`);
+
+        res.status(201).json({
+            success: true,
+            data: {
+                id: document._id,
+                url: document.sourceURL,
+                title: document.urlTitle,
+                scrapedAt: document.lastScrapedAt,
+                autoRefresh: document.autoRefresh
+            }
+        });
+
+    } catch (error) {
+        logger.error(`Add URL error: ${error.message}`);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: 'ADD_URL_FAILED',
+                message: error.message || 'Failed to add URL'
+            }
+        });
+    }
+};
+
+/**
+ * Refresh URL content
+ * @route POST /api/documents/:id/refresh
+ */
+const refreshURLContent = async (req, res) => {
+    try {
+        const document = await Document.findOne({
+            _id: req.params.id,
+            businessId: req.businessId,
+            sourceType: 'url'
+        });
+
+        if (!document) {
+            return res.status(404).json({
+                success: false,
+                error: { code: 'NOT_FOUND', message: 'URL document not found' }
+            });
+        }
+
+        // 1. Re-scrape URL
+        logger.info(`Refreshing URL: ${document.sourceURL}`);
+        const scrapedData = await urlScraperService.scrapeURL(document.sourceURL);
+
+        // 2. Update document
+        document.urlTitle = scrapedData.title;
+        document.urlDescription = scrapedData.description;
+        document.textContent = scrapedData.textContent;
+        document.lastScrapedAt = scrapedData.scrapedAt;
+
+        // 3. Update auto-refresh timestamps
+        if (document.autoRefresh && document.autoRefresh.enabled) {
+            document.autoRefresh.lastRefreshed = new Date();
+
+            const frequency = document.autoRefresh.frequency;
+            const now = new Date();
+
+            switch (frequency) {
+                case 'daily':
+                    document.autoRefresh.nextRefresh = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                    break;
+                case 'weekly':
+                    document.autoRefresh.nextRefresh = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'monthly':
+                    document.autoRefresh.nextRefresh = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+                    break;
+            }
+        }
+
+        await document.save();
+
+        logger.info(`✓ URL refreshed: ${document._id}`);
+
+        res.json({
+            success: true,
+            data: {
+                id: document._id,
+                url: document.sourceURL,
+                title: document.urlTitle,
+                refreshedAt: document.lastScrapedAt
+            }
+        });
+
+    } catch (error) {
+        logger.error(`Refresh URL error: ${error.message}`);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: 'REFRESH_FAILED',
+                message: error.message || 'Failed to refresh URL'
+            }
+        });
+    }
+};
+
 module.exports = {
     uploadDocument,
     listDocuments,
     deleteDocument,
-    searchHelper
+    searchHelper,
+    addFromURL,
+    refreshURLContent
 };

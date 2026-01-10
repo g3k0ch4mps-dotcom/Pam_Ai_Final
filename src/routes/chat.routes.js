@@ -15,6 +15,6 @@ const chatLimiter = rateLimit({
 });
 
 // Public Endpoint
-router.post('/public', chatLimiter, chatController.handlePublicChat);
+router.post('/public/:businessSlug', chatLimiter, chatController.handlePublicChat);
 
 module.exports = router;

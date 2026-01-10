@@ -10,7 +10,8 @@ const logger = require('../utils/logger');
  */
 const handlePublicChat = async (req, res) => {
     try {
-        const { businessSlug, question } = req.body;
+        const { businessSlug } = req.params;
+        const { question } = req.body;
 
         if (!businessSlug || !question) {
             return res.status(400).json({

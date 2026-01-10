@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Business = require('../models/Business');
 const BusinessMember = require('../models/BusinessMember');
 const authService = require('../services/auth.service');
+const { generateUniqueSlug } = require('../utils/slug');
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
 
@@ -39,13 +40,8 @@ const registerBusiness = async (req, res) => {
         });
 
         // 3. Create Business
-        // Generate slug from business name
-        let businessSlug = businessName.toLowerCase().replace(/[^a-z0-9]/g, '-');
-        // Ensure slug is unique (simple implementation)
-        const existingSlug = await Business.findOne({ businessSlug });
-        if (existingSlug) {
-            businessSlug = `${businessSlug}-${Date.now()}`;
-        }
+        // Generate unique slug
+        const businessSlug = await generateUniqueSlug(businessName, Business);
 
         const business = await Business.create({
             businessName,
