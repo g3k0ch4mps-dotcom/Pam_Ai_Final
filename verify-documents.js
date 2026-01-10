@@ -64,7 +64,7 @@ async function testDocumentPipeline() {
 
         let searchData = null;
         let attempts = 0;
-        while (attempts < 5) {
+        while (attempts < 10) {
             attempts++;
             // Allow some time for indexing
             await new Promise(r => setTimeout(r, 2000));

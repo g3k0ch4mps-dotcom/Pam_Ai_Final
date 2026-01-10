@@ -203,8 +203,37 @@ export default function Dashboard() {
                                     <input type="text" disabled value={business?.name || business?.businessName || ''} className="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md shadow-sm p-2" />
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium text-gray-700">Public Slug</label>
                                     <input type="text" disabled value={business?.slug || ''} className="mt-1 block w-full bg-gray-100 border-gray-300 rounded-md shadow-sm p-2" />
+                                </div>
+                                <div className="mt-6 border-t pt-6">
+                                    <h3 className="text-lg font-medium leading-6 text-gray-900 mb-2">Chat Widget</h3>
+                                    <p className="text-sm text-gray-500 mb-4">Add this code to your website to enable the AI assistant.</p>
+                                    <div className="relative">
+                                        <pre className="bg-gray-800 text-gray-100 p-4 rounded-md text-sm overflow-x-auto">
+                                            {`<script src="${window.location.origin}/chat-widget.js" 
+        data-slug="${business?.slug}">
+</script>`}
+                                        </pre>
+                                        <button
+                                            onClick={() => {
+                                                const code = `<script src="${window.location.origin}/chat-widget.js" data-slug="${business?.slug}"></script>`;
+                                                navigator.clipboard.writeText(code);
+                                                alert('Code copied!');
+                                            }}
+                                            className="absolute top-2 right-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+                                        >
+                                            Copy
+                                        </button>
+                                    </div>
+                                    <div className="mt-4">
+                                        <a
+                                            href={`/test-widget.html`}
+                                            target="_blank"
+                                            className="text-sm text-blue-600 hover:underline flex items-center"
+                                        >
+                                            Test Widget Page <ExternalLink className="ml-1 w-3 h-3" />
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

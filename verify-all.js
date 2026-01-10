@@ -5,7 +5,8 @@ const scripts = [
     'verify-auth.js',
     'verify-business.js',
     'verify-documents.js',
-    'verify-chat.js'
+    'verify-url-scraping.js',
+    'verify-chat-isolation.js'
 ];
 
 async function runScript(scriptName) {

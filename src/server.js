@@ -37,6 +37,10 @@ const xss = require('xss-clean');
 // 1. Set Security Headers
 app.use(helmet());
 
+// 1.5 Serve Static Files (Public Assets like chat widget)
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../public')));
+
 // 2. Global Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
