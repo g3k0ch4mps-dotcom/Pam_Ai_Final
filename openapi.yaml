@@ -1,134 +1,164 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
-  title: Pamilo Business AI API - RAG Assistant
-  description: |-
-    This is the official API documentation for the Pamilo Business AI system. It provides a robust backend for managing business logic, training AI with custom documents (RAG), and serving customer queries via a public chat widget.
-
-    The system integrates with multiple LLMs, natively supporting **OpenAI (GPT-4o-mini)** and **Google Gemini (1.5-Flash)** as a high-availability fallback.
-
-    ### Key Features:
-    - **Tenant Isolation**: Secure multi-tenant architecture.
-    - **RAG Pipeline**: Custom document extraction and prompt engineering.
-    - **Security**: Hardened with Helmet, Rate Limiting, and XSS sanitization.
-    - **Multi-LLM**: Automatic failover from OpenAI to Gemini.
-
-    Contact the dev team for enterprise API access or custom integrations.
-  termsOfService: http://localhost:3000/terms
-  contact:
-    email: support@pamilo.ai
-  license:
-    name: Private License
+  title: Business AI Assistant API
   version: 1.0.0
-externalDocs:
-  description: Project Implementation Guide
-  url: http://localhost:3000/docs
+  description: >
+    API for Business AI Assistant platform. Allows businesses to train AI on their documents and websites, and provides a chat interface for customers.
+  contact:
+    name: API Support
+    email: support@example.com
 servers:
   - url: http://localhost:3000/api
-    description: Development Server
-tags:
-  - name: Authentication
-    description: Operations about user registration and session management.
-  - name: Business
-    description: Management of business profiles, settings, and branding.
-  - name: Documents
-    description: Knowledge base management including uploads and deletions for RAG.
-  - name: Chat
-    description: The core AI interaction layer for public and private use.
+    description: Local Development Server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Error:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    Business:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        industry:
+          type: string
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        sourceType:
+          type: string
+          enum: [file, url]
+        originalName:
+          type: string
+        sourceURL:
+          type: string
+        urlTitle:
+          type: string
+        size:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
 
 paths:
+  # Authenticaiton
   /auth/register:
     post:
-      tags:
-        - Authentication
-      summary: Register a new business and owner.
-      description: Creates a new user account, a new business profile, and establishes ownership.
-      operationId: registerBusiness
+      tags: [Auth]
+      summary: Register a new business
       requestBody:
-        description: User and Business details for registration.
+        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthRegister'
-        required: true
+              type: object
+              required: [email, password, businessName]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+                firstName: { type: string }
+                lastName: { type: string }
+                businessName: { type: string }
+                industry: { type: string }
       responses:
-        '201':
+        201:
           description: Registration successful
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '400':
-          description: Invalid input data
-        '409':
-          description: Email already registered
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                type: object
+                properties:
+                  success: { type: boolean }
+                  token: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+                  business: { $ref: '#/components/schemas/Business' }
 
   /auth/login:
     post:
-      tags:
-        - Authentication
-      summary: Logs user into the system.
-      description: Validates credentials and returns a JWT for authorization.
-      operationId: loginUser
+      tags: [Auth]
+      summary: Login user
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               required: [email, password]
               properties:
-                email: { type: string, format: email, example: "admin@example.com" }
-                password: { type: string, example: "Password123!" }
-        required: true
+                email: { type: string }
+                password: { type: string }
       responses:
-        '200':
+        200:
           description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthResponse'
-        '401':
-          description: Invalid credentials
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
 
-  /business/{id}/profile:
+  /auth/me:
     get:
-      tags:
-        - Business
-      summary: Get private business profile.
-      description: Returns full business details for internal management.
-      operationId: getBusinessProfile
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: Unique Business ID
-          schema: { type: string }
+      tags: [Auth]
+      summary: Get current user profile
+      security: [{ bearerAuth: [] }]
       responses:
-        '200':
-          description: Success
-        '404':
-          description: Business not found
-      security:
-        - bearerAuth: []
+        200:
+          description: Profile data
+
+  # Documents
+  /documents:
+    get:
+      tags: [Documents]
+      summary: List business documents
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 10 }
+      responses:
+        200:
+          description: List of documents
 
   /documents/upload:
     post:
-      tags:
-        - Documents
-      summary: Uploads a knowledge base document.
-      description: Accepts PDF, DOCX, or TXT. Extracted text is used for RAG.
-      operationId: uploadDocument
+      tags: [Documents]
+      summary: Upload a file document (PDF/DOCX/TXT)
+      security: [{ bearerAuth: [] }]
       requestBody:
         content:
           multipart/form-data:
@@ -138,81 +168,108 @@ paths:
                 document:
                   type: string
                   format: binary
-                  description: Document file (max 5MB)
       responses:
-        '200':
-          description: File processed and indexed successfully
-      security:
-        - bearerAuth: []
+        201:
+          description: Document uploaded
 
-  /chat/public:
+  /documents/add-url:
     post:
-      tags:
-        - Chat
-      summary: Public AI Conversation.
-      description: Allows external visitors to chat with the business AI using retrieved documents.
-      operationId: handlePublicChat
+      tags: [Documents]
+      summary: Add content from URL
+      security: [{ bearerAuth: [] }]
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
-              required: [businessSlug, question]
+              required: [url]
               properties:
-                businessSlug: { type: string, example: "alpha-tech" }
-                question: { type: string, example: "What time do you open?" }
+                url: { type: string }
+                autoRefresh:
+                  type: object
+                  properties:
+                    enabled: { type: boolean }
+                    frequency: { type: string, enum: [daily, weekly, monthly] }
       responses:
-        '200':
-          description: AI Response generated
+        201:
+          description: URL added and scraped
+
+  /documents/{id}:
+    delete:
+      tags: [Documents]
+      summary: Delete a document
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Document deleted
+
+  /documents/{id}/refresh:
+    post:
+      tags: [Documents]
+      summary: Manually refresh URL content
+      security: [{ bearerAuth: [] }]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: URL refreshed
+
+  # Chat
+  /chat/public/{businessSlug}:
+    post:
+      tags: [Chat]
+      summary: Public chat endpoint
+      parameters:
+        - in: path
+          name: businessSlug
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question: { type: string }
+      responses:
+        200:
+          description: Chat response
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success: { type: boolean, example: true }
-                  answer: { type: string, example: "We open at 9:00 AM daily." }
-                  provider: { type: string, enum: [openai, gemini] }
-        '429':
-          description: Rate limit exceeded
+                  success: { type: boolean }
+                  answer: { type: string }
+                  references:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        filename: { type: string }
+                        score: { type: number }
 
-components:
-  schemas:
-    AuthRegister:
-      type: object
-      required: [email, password, firstName, lastName, businessName]
-      properties:
-        email: { type: string, format: email, example: "jane@example.com" }
-        password: { type: string, minLength: 8, example: "StrongPassword123" }
-        firstName: { type: string, example: "Jane" }
-        lastName: { type: string, example: "Doe" }
-        businessName: { type: string, example: "Pamilo Corp" }
-        industry: { type: string, example: "Software" }
-
-    AuthResponse:
-      type: object
-      properties:
-        success: { type: boolean, example: true }
-        token: { type: string, description: "JWT Access Token" }
-        user:
-          type: object
-          properties:
-            id: { type: string }
-            email: { type: string }
-        business:
-          type: object
-          properties:
-            id: { type: string }
-            slug: { type: string }
-
-    Error:
-      type: object
-      required: [code, message]
-      properties:
-        code: { type: string, example: "UNAUTHORIZED" }
-        message: { type: string, example: "Invalid token" }
-
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+  # Business
+  /business/public/{slug}:
+    get:
+      tags: [Business]
+      summary: Get public business info
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        200:
+          description: Public business info
