@@ -1,36 +1,16 @@
-const axios = require('axios');
+const puppeteer = require('puppeteer');
 const cheerio = require('cheerio');
 const validator = require('validator');
 const logger = require('../utils/logger');
 
 /**
  * URL Scraper Service
- * Scrapes web content with security measures to prevent SSRF attacks
+ * Scrapes web content using Puppeteer to handle SPAs
  */
 class URLScraperService {
     constructor() {
-        // Security: Block private IP ranges
-        this.blockedHosts = [
-            'localhost',
-            '127.0.0.1',
-            '0.0.0.0',
-            '::1',
-            '169.254.169.254' // AWS metadata endpoint
-        ];
-
-        // Private IP ranges (CIDR notation patterns)
-        this.privateIPPatterns = [
-            /^10\./,                    // 10.0.0.0/8
-            /^172\.(1[6-9]|2[0-9]|3[0-1])\./, // 172.16.0.0/12
-            /^192\.168\./,              // 192.168.0.0/16
-            /^127\./,                   // 127.0.0.0/8
-            /^169\.254\./,              // 169.254.0.0/16
-            /^fc00:/,                   // IPv6 private
-            /^fe80:/                    // IPv6 link-local
-        ];
-
-        this.maxContentSize = 5 * 1024 * 1024; // 5MB
-        this.requestTimeout = 10000; // 10 seconds
+        this.maxContentSize = 10 * 1024 * 1024; // 10MB limit
+        this.requestTimeout = 30000; // 30 seconds for browser loading
     }
 
     /**
@@ -39,22 +19,57 @@ class URLScraperService {
      * @returns {Promise<Object>} Scraped content
      */
     async scrapeURL(url) {
+        let browser = null;
         try {
             // 1. Validate URL format
             if (!this.validateURL(url)) {
                 throw new Error('Invalid URL format');
             }
 
-            // 2. Check URL safety (SSRF prevention)
-            if (!this.checkURLSafety(url)) {
-                throw new Error('URL is not allowed (security restriction)');
-            }
+            logger.info(`Launching Puppeteer for ${url}...`);
 
-            // 3. Fetch HTML content
-            const html = await this.fetchHTML(url);
+            // Launch browser
+            browser = await puppeteer.launch({
+                headless: "new",
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--disable-gpu'
+                ]
+            });
 
-            // 4. Extract text content
-            const extracted = this.extractText(html, url);
+            const page = await browser.newPage();
+
+            // Block resource types to speed up loading
+            await page.setRequestInterception(true);
+            page.on('request', (req) => {
+                const resourceType = req.resourceType();
+                if (['image', 'stylesheet', 'font', 'media'].includes(resourceType)) {
+                    req.abort();
+                } else {
+                    req.continue();
+                }
+            });
+
+            // Set user agent
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 BusinessAI/1.0');
+
+            // Navigate
+            await page.goto(url, {
+                waitUntil: 'networkidle2', // Wait until network is mostly idle
+                timeout: this.requestTimeout
+            });
+
+            // Get HTML content
+            const html = await page.content();
+            const title = await page.title();
+
+            // Extract text
+            const extracted = this.extractText(html, url, title);
 
             return {
                 success: true,
@@ -67,177 +82,75 @@ class URLScraperService {
 
         } catch (error) {
             logger.error(`URL scraping failed for ${url}: ${error.message}`);
-            throw error;
+
+            // Fallback object to ensure we return something if possible, or rethrow
+            throw new Error(`Failed to scrape URL with Puppeteer: ${error.message}`);
+        } finally {
+            if (browser) await browser.close();
         }
     }
 
-    /**
-     * Validate URL format
-     * @param {string} url - URL to validate
-     * @returns {boolean}
-     */
     validateURL(url) {
-        if (!url || typeof url !== 'string') {
-            return false;
-        }
-
-        // Use validator library
-        if (!validator.isURL(url, {
-            protocols: ['http', 'https'],
-            require_protocol: true,
-            require_valid_protocol: true
-        })) {
-            return false;
-        }
-
-        return true;
+        if (!url || typeof url !== 'string') return false;
+        return validator.isURL(url, { protocols: ['http', 'https'], require_protocol: true });
     }
 
-    /**
-     * Check URL safety to prevent SSRF attacks
-     * @param {string} url - URL to check
-     * @returns {boolean}
-     */
-    checkURLSafety(url) {
-        try {
-            const urlObj = new URL(url);
-
-            // 1. Only allow HTTP/HTTPS
-            if (!['http:', 'https:'].includes(urlObj.protocol)) {
-                logger.warn(`Blocked non-HTTP(S) protocol: ${urlObj.protocol}`);
-                return false;
-            }
-
-            // 2. Check hostname against blocklist
-            const hostname = urlObj.hostname.toLowerCase();
-            if (this.blockedHosts.includes(hostname)) {
-                logger.warn(`Blocked hostname: ${hostname}`);
-                return false;
-            }
-
-            // 3. Check for private IP patterns
-            for (const pattern of this.privateIPPatterns) {
-                if (pattern.test(hostname)) {
-                    logger.warn(`Blocked private IP: ${hostname}`);
-                    return false;
-                }
-            }
-
-            // 4. Additional check: resolve IP and verify it's not private
-            // Note: In production, you might want to do DNS resolution check
-            // For now, pattern matching should suffice
-
-            return true;
-
-        } catch (error) {
-            logger.error(`URL safety check failed: ${error.message}`);
-            return false;
-        }
-    }
-
-    /**
-     * Fetch HTML content from URL
-     * @param {string} url - URL to fetch
-     * @returns {Promise<string>} HTML content
-     */
-    async fetchHTML(url) {
-        try {
-            const response = await axios.get(url, {
-                timeout: this.requestTimeout,
-                maxContentLength: this.maxContentSize,
-                maxRedirects: 5,
-                headers: {
-                    'User-Agent': 'Business-AI-Assistant-Bot/1.0'
-                },
-                validateStatus: (status) => status >= 200 && status < 300
-            });
-
-            // Verify content type is HTML
-            const contentType = response.headers['content-type'] || '';
-            if (!contentType.includes('text/html') && !contentType.includes('text/plain')) {
-                throw new Error(`Unsupported content type: ${contentType}`);
-            }
-
-            return response.data;
-
-        } catch (error) {
-            if (error.code === 'ECONNABORTED') {
-                throw new Error('Request timeout - URL took too long to respond');
-            }
-            if (error.response) {
-                throw new Error(`HTTP ${error.response.status}: ${error.response.statusText}`);
-            }
-            throw new Error(`Failed to fetch URL: ${error.message}`);
-        }
-    }
-
-    /**
-     * Extract text content from HTML
-     * @param {string} html - HTML content
-     * @param {string} url - Original URL (for context)
-     * @returns {Object} Extracted content
-     */
-    extractText(html, url) {
+    extractText(html, url, pageTitle) {
         try {
             const $ = cheerio.load(html);
 
             // Remove unwanted elements
-            $('script, style, nav, footer, header, iframe, noscript').remove();
+            $('script, style, nav, footer, header, iframe, noscript, svg, button, form').remove();
 
-            // Extract title
-            let title = $('title').text().trim();
-            if (!title) {
-                title = $('h1').first().text().trim();
-            }
-            if (!title) {
-                title = new URL(url).hostname;
-            }
+            // Extract title if not provided
+            let title = pageTitle || $('title').text().trim();
+            if (!title) title = $('h1').first().text().trim();
+            if (!title) title = new URL(url).hostname;
 
             // Extract meta description
-            let description = $('meta[name="description"]').attr('content') || '';
-            if (!description) {
-                description = $('meta[property="og:description"]').attr('content') || '';
-            }
+            let description = $('meta[name="description"]').attr('content') ||
+                $('meta[property="og:description"]').attr('content') || '';
 
             // Extract main text content
-            // Prioritize main content areas
             let textContent = '';
 
-            const mainSelectors = ['main', 'article', '[role="main"]', '.content', '#content'];
+            // Try specific main content areas first
+            const mainSelectors = ['main', 'article', '#root', '#app', '.content', '#content', 'body'];
+
             for (const selector of mainSelectors) {
-                const mainContent = $(selector).text();
-                if (mainContent && mainContent.length > textContent.length) {
-                    textContent = mainContent;
+                if ($(selector).length > 0) {
+                    const text = $(selector).text().replace(/\s+/g, ' ').trim();
+                    if (text.length > textContent.length) {
+                        textContent = text;
+                    }
                 }
             }
 
-            // Fallback to body if no main content found
-            if (!textContent || textContent.length < 100) {
-                textContent = $('body').text();
-            }
-
-            // Clean up text
+            // Cleanup
             textContent = textContent
-                .replace(/\s+/g, ' ')  // Normalize whitespace
-                .replace(/\n+/g, '\n') // Normalize newlines
+                .replace(/\s+/g, ' ')
                 .trim();
 
-            // Limit content size (prevent extremely large documents)
-            const maxTextLength = 50000; // ~50KB of text
+            const maxTextLength = 50000;
             if (textContent.length > maxTextLength) {
                 textContent = textContent.substring(0, maxTextLength) + '...';
-                logger.info(`Content truncated to ${maxTextLength} characters`);
+            }
+
+            // Ensure we have something
+            if (textContent.length < 50) {
+                logger.warn(`Scraped content is very short (${textContent.length} chars). Might still be loading or blocked.`);
             }
 
             return {
-                title: title.substring(0, 500), // Limit title length
-                description: description.substring(0, 1000), // Limit description
+                title: title.substring(0, 500),
+                description: description.substring(0, 1000),
                 textContent: textContent
             };
 
         } catch (error) {
             logger.error(`Text extraction failed: ${error.message}`);
-            throw new Error('Failed to extract text from HTML');
+            // Return bare minimum
+            return { title: 'Extraction Failed', description: '', textContent: '' };
         }
     }
 }
