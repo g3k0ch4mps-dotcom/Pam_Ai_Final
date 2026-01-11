@@ -133,10 +133,17 @@ const deleteDocument = async (req, res) => {
             });
         }
 
-        // 1. Delete file from disk
-        const filePath = require('path').join(__dirname, '../../uploads', document.filename);
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
+        // 1. Delete file from disk (only if it's a file)
+        if (document.sourceType === 'file' && document.filename) {
+            const filePath = require('path').join(__dirname, '../../uploads', document.filename);
+            if (fs.existsSync(filePath)) {
+                try {
+                    fs.unlinkSync(filePath);
+                } catch (err) {
+                    logger.warn(`Failed to delete file ${filePath}: ${err.message}`);
+                    // Continue to delete from DB even if file delete fails
+                }
+            }
         }
 
         // 2. Delete from DB
