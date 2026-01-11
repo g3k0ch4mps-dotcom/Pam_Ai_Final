@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 // // START GEMINI CONFIGURATION // //
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const geminiModel = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
 // // END GEMINI CONFIGURATION // //
 
 /**
@@ -41,32 +41,45 @@ const generateResponse = async (question, contextDocs, businessSettings) => {
 
     const fullPrompt = `${systemPrompt}\n\nContext:\n${contextText}\n\nQuestion: ${question}`;
 
-    try {
-        // --- 1. Attempt OpenAI (Primary) ---
-        logger.info('Attempting AI generation with OpenAI...');
-        const completion = await openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: `Context:\n${contextText}\n\nQuestion: ${question}` }
-            ],
-            temperature: 0.3,
-            max_tokens: 500
-        });
+    // Helper to check if key is valid (not empty and not placeholder)
+    const isValidKey = (key) => key && key.length > 10 && !key.includes('your-openai-api-key') && !key.includes('your-gemini-api-key');
 
-        const answer = completion.choices[0].message.content;
-        return {
-            answer,
-            provider: 'openai',
-            usage: completion.usage
-        };
+    let processingError = null;
 
-    } catch (openAiError) {
-        logger.error(`OpenAI Error: ${openAiError.message}`);
-
-        // // START GEMINI FALLBACK CODE // //
+    // --- 1. Attempt OpenAI (Primary) ---
+    if (isValidKey(process.env.OPENAI_API_KEY)) {
         try {
-            logger.info('⚠️ OpenAI failed. Falling back to Google Gemini...');
+            logger.info('Attempting AI generation with OpenAI...');
+            const completion = await openai.chat.completions.create({
+                model: "gpt-4o-mini",
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: `Context:\n${contextText}\n\nQuestion: ${question}` }
+                ],
+                temperature: 0.3,
+                max_tokens: 500
+            });
+
+            const answer = completion.choices[0].message.content;
+            return {
+                answer,
+                provider: 'openai',
+                usage: completion.usage
+            };
+
+        } catch (openAiError) {
+            logger.error(`OpenAI Error: ${openAiError.message}`);
+            processingError = openAiError;
+            // Continue to fallback...
+        }
+    } else {
+        logger.info('Skipping OpenAI (Key invalid or missing)');
+    }
+
+    // --- 2. Attempt Gemini (Fallback or Primary if OpenAI missing) ---
+    if (isValidKey(process.env.GEMINI_API_KEY)) {
+        try {
+            logger.info(processingError ? '⚠️ OpenAI failed. Falling back to Google Gemini...' : 'Attempting AI generation with Gemini...');
 
             const result = await geminiModel.generateContent(fullPrompt);
             const response = await result.response;
@@ -75,29 +88,27 @@ const generateResponse = async (question, contextDocs, businessSettings) => {
             return {
                 answer,
                 provider: 'gemini',
-                usage: { total_tokens: 'N/A (Gemini)' }
-            };
-        } catch (geminiError) {
-            logger.error(`Gemini Fallback Error: ${geminiError.message}`);
-            // // END GEMINI FALLBACK CODE // //
-
-            // --- Final Fallback: Mock/Error ---
-            if (process.env.NODE_ENV === 'development') {
-                logger.info('⚠️ Using MOCK AI response due to all API failures');
-                return {
-                    answer: "This is a mock response because both OpenAI and Gemini failed.",
-                    provider: 'mock',
-                    usage: { total_tokens: 0 }
-                };
-            }
-
-            return {
-                answer: "I apologize, but I am currently unable to process your request. Please try again later.",
-                provider: 'error',
                 usage: { total_tokens: 0 }
             };
+        } catch (geminiError) {
+            logger.error(`Gemini Error: ${geminiError.message}`);
+            processingError = geminiError;
         }
+    } else {
+        logger.info('Skipping Gemini (Key invalid or missing)');
     }
+
+    // --- Final Fallback: Mock/Error ---
+    if (process.env.NODE_ENV === 'development') {
+        logger.info('⚠️ Using MOCK AI response due to all API failures');
+        return {
+            answer: "This is a mock response because valid API keys for OpenAI or Gemini were not found or requests failed.",
+            provider: 'mock',
+            usage: { total_tokens: 0 }
+        };
+    }
+
+    throw new Error('All AI providers failed or are unconfigured.');
 };
 
 module.exports = {

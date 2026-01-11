@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Widget Test Page</title>
     <style>
-        body { font-family: sans-serif; padding: 40px; line-height: 1.6; max-width: 800px; mx-auto; }
-        h1 { color: #2563eb; }
-        code { background: #eee; padding: 4px; border-radius: 4px; }
+        body {
+            font-family: sans-serif;
+            padding: 40px;
+            line-height: 1.6;
+            max-width: 800px;
+            mx-auto;
+        }
+
+        h1 {
+            color: #2563eb;
+        }
+
+        code {
+            background: #eee;
+            padding: 4px;
+            border-radius: 4px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Business AI Widget Test</h1>
     <p>This is a simulated external website. The widget should appear in the bottom right corner.</p>
     <p>It is configured to use the slug: <code>test-business-1768060488877</code> (from verification script).</p>
-    
+
     <!-- Embed Code -->
-    <script src="/chat-widget.js" data-slug="test-business-1768060488877"></script>
+    <div id="widget-container"></div>
+    <script>
+        // Get slug from URL or default
+        const urlParams = new URLSearchParams(window.location.search);
+        const slug = urlParams.get('slug') || 'test-business-1768060488877';
+
+        document.querySelector('p code').textContent = slug;
+
+        // Inject script dynamically to ensure slug is set
+        const script = document.createElement('script');
+        script.src = `/chat-widget.js?v=${Date.now()}`; // Cache bust
+        script.setAttribute('data-slug', slug);
+        document.body.appendChild(script);
+    </script>
 </body>
+
 </html>

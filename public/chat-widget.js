@@ -271,7 +271,9 @@
             if (data.success) {
                 addMessage(data.answer, 'ai');
             } else {
-                addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                console.error('Chat Widget Error:', data);
+                const errorMessage = data.error?.message || 'Unknown error occurred';
+                addMessage(`Backend Error: ${errorMessage}`, 'ai');
             }
         } catch (error) {
             removeTypingIndicator();
