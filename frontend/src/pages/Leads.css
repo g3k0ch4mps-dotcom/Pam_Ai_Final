@@ -1,0 +1,4 @@
+/* Basic styles for Leads page to ensure layout consistency if tailwind misses anything */
+.leads-page {
+    /* mostly handling via tailwind classes in jsx */
+}
