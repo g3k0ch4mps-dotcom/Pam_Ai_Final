@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Upload, FileText, Trash2, Settings, MessageSquare, ExternalLink } from 'lucide-react';
 import URLManager from '../components/URLManager';
+import Leads from './Leads';
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -131,6 +132,13 @@ export default function Dashboard() {
                             Documents
                         </button>
                         <button
+                            onClick={() => setActiveTab('leads')}
+                            className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'leads' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                        >
+                            <span className="mr-3 text-xl">👥</span>
+                            Leads
+                        </button>
+                        <button
                             onClick={() => setActiveTab('settings')}
                             className={`w-full flex items-center px-4 py-2 text-sm font-medium rounded-md ${activeTab === 'settings' ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-100'}`}
                         >
@@ -192,6 +200,10 @@ export default function Dashboard() {
                                 <URLManager businessId={business?.id} />
                             </div>
                         </div>
+                    )}
+
+                    {activeTab === 'leads' && (
+                        <Leads />
                     )}
 
                     {activeTab === 'settings' && (
