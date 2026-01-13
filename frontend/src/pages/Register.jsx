@@ -30,15 +30,22 @@ export default function Register() {
             });
 
             const data = await response.json();
+            console.log('Registration response:', data); // Debug log
 
             if (data.success) {
                 // Auto login or redirect to login
                 localStorage.setItem('token', data.token);
+                localStorage.setItem('business_id', data.business?.id); // Store business ID for Leads page
                 navigate('/dashboard');
             } else {
-                setError(data.error?.message || 'Registration failed');
+                console.error('Registration failed:', data.error); // Debug log
+                const errorMsg = data.error?.details ?
+                    `${data.error.message}: ${data.error.details.join(', ')}` :
+                    (data.error?.message || 'Registration failed');
+                setError(errorMsg);
             }
         } catch (err) {
+            console.error('Registration error:', err); // Debug log
             setError('Connection error');
         }
     };
