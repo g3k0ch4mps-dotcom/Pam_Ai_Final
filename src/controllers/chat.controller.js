@@ -37,6 +37,11 @@ const handlePublicChat = async (req, res) => {
             });
         }
 
+        // 2a. Find or Create Lead Session
+        const sessionId = req.body.sessionId || `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const leadService = require('../services/lead.service');
+        await leadService.findOrCreateLead(business._id, businessSlug, sessionId);
+
         // 3. Search Relevant Documents
         logger.info(`Searching docs for business: ${business.businessName}, query: ${question}`);
         const contextDocs = await searchService.searchDocuments(business._id, question, 3); // Top 3 docs
@@ -48,7 +53,17 @@ const handlePublicChat = async (req, res) => {
             { businessName: business.businessName }
         );
 
-        // 5. Log Chat
+        // 4a. Update Lead with Interaction
+        // Add User Question
+        await leadService.addChatMessage(sessionId, 'user', question);
+        await leadService.extractInterests(question).forEach(interest =>
+            leadService.addInterest(sessionId, interest)
+        );
+
+        // Add AI Response
+        await leadService.addChatMessage(sessionId, 'assistant', responseData.answer);
+
+        // 5. Log Chat (Legacy / Independent Log)
         await ChatLog.create({
             businessId: business._id,
             userQuestion: question,
@@ -56,15 +71,16 @@ const handlePublicChat = async (req, res) => {
             relevantDocuments: contextDocs.map(d => d.id),
             ipAddress: req.ip,
             cost: {
-                tokens: responseData.usage.total_tokens,
+                tokens: responseData.usage ? responseData.usage.total_tokens : 0,
                 // Simple estimation: $0.002 per 1k tokens (approx for gpt-3.5)
-                estimatedCostUSD: (responseData.usage.total_tokens / 1000) * 0.002
+                estimatedCostUSD: responseData.usage ? (responseData.usage.total_tokens / 1000) * 0.002 : 0
             }
         });
 
         res.json({
             success: true,
             answer: responseData.answer,
+            sessionId: sessionId, // Return session ID to frontend
             references: contextDocs.map(d => ({ filename: d.filename, score: d.score })) // Optional: Return sources
         });
 

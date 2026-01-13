@@ -114,6 +114,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/business', businessRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/leads', require('./routes/lead.routes'));
 
 /**
  * Root endpoint - API information
