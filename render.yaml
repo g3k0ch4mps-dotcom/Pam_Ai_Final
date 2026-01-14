@@ -1,0 +1,42 @@
+# render.yaml
+services:
+  # Backend Web Service
+  - type: web
+    name: business-ai-backend
+    env: node
+    region: oregon # Customize as needed
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        sync: false # Set in Render Dashboard
+      - key: JWT_SECRET
+        sync: false # Set in Render Dashboard
+      - key: OPENAI_API_KEY
+        sync: false # Set in Render Dashboard
+      - key: GEMINI_API_KEY
+        sync: false # Set in Render Dashboard
+      - key: FRONTEND_URL
+        sync: false # Set in Render Dashboard after deployment
+      - key: ALLOWED_ORIGINS
+        sync: false # Set in Render Dashboard
+
+  # Frontend Static Site
+  - type: web
+    name: business-ai-frontend
+    env: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    pullRequestPreviewsEnabled: true
+    envVars:
+      - key: VITE_API_URL
+        sync: false # Set this to the backend URL after backend is deployed
