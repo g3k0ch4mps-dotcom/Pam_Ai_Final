@@ -6,7 +6,7 @@ Base URL: `http://localhost:3000/api`
 
 ## 🔐 Authentication
 This API uses **JSON Web Tokens (JWT)** for authorization.
-- Token should be included in the header as: `Authorization: Bearer <your_token> `
+- Token should be included in the header as: `Authorization: Bearer <your_token>`
 
 ---
 
