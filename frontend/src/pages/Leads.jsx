@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { API_URLS } from '../apiConfig';
 import './Leads.css';
 
-// We'll define sub-components here for simplicity or split them if preferred.
-// Keeping it single file for now as per the prompt's structural hint, 
 // but will ensure it's clean.
-
-const API_URL = ''; // Relative path since we proxy or are on same origin for dev
 
 function Leads() {
     const [leads, setLeads] = useState([]);
@@ -31,7 +28,7 @@ function Leads() {
         try {
             const token = localStorage.getItem('token');
             // Construct URL with query params
-            const url = new URL(`${window.location.origin}/api/leads/business/${businessId}`);
+            const url = new URL(`${API_URLS.leads.base}/business/${businessId}`);
 
             if (filter === 'email') url.searchParams.append('hasEmail', 'true');
             if (filter === 'hot') url.searchParams.append('minScore', '50');
@@ -62,7 +59,7 @@ function Leads() {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(
-                `/api/leads/business/${businessId}/export/csv`,
+                `${API_URLS.leads.base}/business/${businessId}/export/csv`,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -275,7 +272,7 @@ function LeadDetailModal({ lead, onClose, onUpdate }) {
             const businessId = localStorage.getItem('business_id');
 
             const response = await fetch(
-                `/api/leads/business/${businessId}/${lead._id}`,
+                `${API_URLS.leads.base}/business/${businessId}/${lead._id}`,
                 {
                     method: 'PATCH',
                     headers: {

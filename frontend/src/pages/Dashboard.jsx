@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Upload, FileText, Trash2, Settings, MessageSquare, ExternalLink } from 'lucide-react';
+import { API_URLS } from '../apiConfig';
 import URLManager from '../components/URLManager';
 import Leads from './Leads';
 
@@ -20,7 +21,7 @@ export default function Dashboard() {
                 if (!token) return navigate('/login');
 
                 // 1. Get Me (and Business Role)
-                const meRes = await fetch('/api/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+                const meRes = await fetch(API_URLS.auth.me, { headers: { Authorization: `Bearer ${token}` } });
                 const meData = await meRes.json();
 
                 if (!meData.success) {
@@ -48,7 +49,7 @@ export default function Dashboard() {
     }, [navigate]);
 
     const fetchDocuments = async (businessId, token) => {
-        const res = await fetch('/api/documents', { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch(API_URLS.documents.base, { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         if (data.success) setDocuments(data.data);
     };
@@ -68,7 +69,7 @@ export default function Dashboard() {
 
         const token = localStorage.getItem('token');
         try {
-            const res = await fetch('/api/documents/upload', {
+            const res = await fetch(API_URLS.documents.upload, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData
@@ -88,7 +89,7 @@ export default function Dashboard() {
     const handleDeleteDoc = async (id) => {
         if (!confirm('Are you sure?')) return;
         const token = localStorage.getItem('token');
-        await fetch(`/api/documents/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+        await fetch(`${API_URLS.documents.base}/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
         fetchDocuments(business?.id, token);
     };
 

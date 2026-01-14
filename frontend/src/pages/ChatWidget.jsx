@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Send, MessageCircle } from 'lucide-react';
+import { API_URLS } from '../apiConfig';
 import LeadCaptureForm from '../components/LeadCaptureForm';
 
 export default function ChatWidget() {
@@ -32,7 +33,7 @@ export default function ChatWidget() {
         setLoading(true);
 
         try {
-            const res = await fetch(`/api/chat/public/${slug}`, {
+            const res = await fetch(`${API_URLS.chat.public}/${slug}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -72,7 +73,7 @@ export default function ChatWidget() {
 
     const handleLeadSubmit = async (formData) => {
         try {
-            await fetch('/api/leads/capture', {
+            await fetch(API_URLS.leads.base + '/capture', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

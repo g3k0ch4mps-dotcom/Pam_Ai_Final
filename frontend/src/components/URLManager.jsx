@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
 import { Link2, RefreshCw, Trash2, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { API_URLS } from '../apiConfig';
 
 export default function URLManager({ businessId }) {
     const [urls, setUrls] = useState([]);
@@ -16,7 +16,7 @@ export default function URLManager({ businessId }) {
     const fetchURLs = async () => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('/api/documents', {
+            const res = await fetch(API_URLS.documents.base, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const data = await res.json();
@@ -37,7 +37,7 @@ export default function URLManager({ businessId }) {
 
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('/api/documents/add-url', {
+            const res = await fetch(`${API_URLS.documents.base}/add-url`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ export default function URLManager({ businessId }) {
     const handleRefresh = async (docId) => {
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch(`/api/documents/${docId}/refresh`, {
+            const res = await fetch(`${API_URLS.documents.base}/${docId}/refresh`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -89,7 +89,7 @@ export default function URLManager({ businessId }) {
 
         try {
             const token = localStorage.getItem('token');
-            await fetch(`/api/documents/${docId}`, {
+            await fetch(`${API_URLS.documents.base}/${docId}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });
