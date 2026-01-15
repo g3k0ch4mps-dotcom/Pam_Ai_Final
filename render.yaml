@@ -6,6 +6,7 @@ services:
     env: node
     region: oregon # Customize as needed
     plan: free
+    rootDir: backend
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health

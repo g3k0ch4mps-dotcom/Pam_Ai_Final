@@ -4,8 +4,7 @@ const documentSchema = new mongoose.Schema({
     businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Business',
-        required: true,
-        index: true // Faster lookups by business
+        required: true
     },
     // Source type: file or url
     sourceType: {

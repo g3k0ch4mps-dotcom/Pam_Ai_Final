@@ -21,6 +21,8 @@ const logger = require('../utils/logger');
 const connectionOptions = {
     // Server selection timeout (30 seconds)
     serverSelectionTimeoutMS: 30000,
+    // Provide explicit IPv4 support
+    family: 4,
 };
 
 /**

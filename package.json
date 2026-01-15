@@ -1,55 +1,46 @@
 {
-  "name": "business-ai-assistant",
-  "version": "1.0.0",
-  "description": "AI-powered business assistant API with RAG (Retrieval-Augmented Generation)",
-  "main": "src/server.js",
-  "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "ai",
-    "rag",
-    "chatbot",
-    "business",
-    "assistant",
-    "openai",
-    "chromadb"
-  ],
-  "author": "",
-  "license": "MIT",
-  "engines": {
-    "node": "20.x",
-    "npm": ">=9.0.0"
-  },
-  "dependencies": {
-    "@google/generative-ai": "^0.24.1",
-    "axios": "^1.13.2",
-    "bcrypt": "^5.1.1",
-    "cheerio": "^1.1.2",
-    "cors": "^2.8.5",
-    "csv-parser": "^3.0.0",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "express-mongo-sanitize": "^2.2.0",
-    "express-rate-limit": "^7.1.5",
-    "express-validator": "^7.0.1",
-    "helmet": "^7.1.0",
-    "json2csv": "^6.0.0-alpha.2",
-    "jsonwebtoken": "^9.0.2",
-    "mammoth": "^1.6.0",
-    "mongoose": "^8.0.0",
-    "multer": "^1.4.5-lts.1",
-    "openai": "^4.20.0",
-    "pdf-parse": "^1.1.1",
-    "puppeteer": "^24.34.0",
-    "slugify": "^1.6.6",
-    "validator": "^13.15.26",
-    "winston": "^3.11.0",
-    "xss-clean": "^0.1.4"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  }
+    "name": "pam-ai-final",
+    "version": "1.0.0",
+    "description": "Business AI Assistant - Complete Solution",
+    "scripts": {
+        "dev": "concurrently --kill-others-on-fail -n \"BACKEND,FRONTEND\" -c \"bgBlue.bold,bgMagenta.bold\" -p \"[{name}]\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+        "dev:backend": "cd backend && npm run dev",
+        "dev:frontend": "cd frontend && npm run dev",
+        "dev:backend-only": "cd backend && npm run dev",
+        "dev:frontend-only": "cd frontend && npm run dev",
+        "start": "concurrently -n \"BACKEND,FRONTEND\" -c \"bgBlue.bold,bgMagenta.bold\" \"npm run start:backend\" \"npm run start:frontend\"",
+        "start:backend": "cd backend && npm start",
+        "start:frontend": "cd frontend && npm run preview",
+        "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+        "install:backend": "cd backend && npm install",
+        "install:frontend": "cd frontend && npm install",
+        "build": "npm run build:backend && npm run build:frontend",
+        "build:backend": "cd backend && npm run build",
+        "build:frontend": "cd frontend && npm run build",
+        "test": "npm run test:backend && npm run test:frontend",
+        "test:backend": "cd backend && npm test",
+        "test:frontend": "cd frontend && npm test"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "engines": {
+        "node": ">=20.0.0",
+        "npm": ">=9.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/g3k0ch4mps-dotcom/Pam_Ai_Final.git"
+    },
+    "keywords": [
+        "ai",
+        "chatbot",
+        "business-assistant",
+        "mongodb",
+        "express",
+        "react",
+        "openai"
+    ],
+    "author": "g3k0ch4mps",
+    "license": "MIT"
 }
