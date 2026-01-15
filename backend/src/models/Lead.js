@@ -5,8 +5,7 @@ const leadSchema = new mongoose.Schema({
     businessId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Business',
-        required: true,
-        index: true
+        required: true
     },
 
     businessSlug: {
@@ -18,8 +17,7 @@ const leadSchema = new mongoose.Schema({
     // Session tracking
     sessionId: {
         type: String,
-        required: true,
-        index: true
+        required: true
     },
 
     // Contact information (all optional - collected gradually)

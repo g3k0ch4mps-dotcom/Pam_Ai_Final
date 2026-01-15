@@ -1,0 +1,40 @@
+# Render Environment Variables - Copy & Paste
+
+Use these values when configuring your **Backend Web Service** on Render.
+
+### Backend Environment Variables
+Paste these one by one in the "Advanced" -> "Add Environment Variable" section:
+
+| Key | Value |
+| :--- | :--- |
+| **NODE_ENV** | `production` |
+| **PORT** | `3000` |
+| **MONGODB_URI** | `[YOUR_MONGODB_CONNECTION_STRING]` |
+| **JWT_SECRET** | `[PASTE_YOUR_SECURE_SECRET_HERE]` |
+| **JWT_EXPIRE** | `7d` |
+| **OPENAI_API_KEY** | `[YOUR_OPENAI_API_KEY]` |
+| **GEMINI_API_KEY** | `[YOUR_GEMINI_API_KEY]` |
+| **MAX_FILE_SIZE** | `10485760` |
+| **UPLOAD_PATH** | `./uploads` |
+| **RATE_LIMIT_WINDOW_MS** | `900000` |
+| **RATE_LIMIT_MAX_REQUESTS** | `100` |
+| **ALLOWED_ORIGINS** | `[YOUR_FRONTEND_URL_AFTER_DEPLOYMENT]` |
+| **FRONTEND_URL** | `[YOUR_FRONTEND_URL_AFTER_DEPLOYMENT]` |
+| **LOG_LEVEL** | `info` |
+
+---
+
+### Frontend Environment Variables
+Set this in your **Frontend Static Site** advanced settings:
+
+| Key | Value |
+| :--- | :--- |
+| **VITE_API_URL** | `[YOUR_BACKEND_URL_FROM_STEP_12]` |
+
+---
+
+### Secure JWT Secret Generator
+Run this in your PowerShell terminal to get a new secret for Render:
+```powershell
+powershell -Command "-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 64 | ForEach-Object {[char]$_})"
+```
