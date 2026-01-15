@@ -45,3 +45,7 @@ services:
     envVars:
       - key: VITE_API_URL
         sync: false # Set this to the backend URL after backend is deployed
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
