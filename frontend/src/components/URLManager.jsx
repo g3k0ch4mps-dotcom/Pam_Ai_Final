@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link2, RefreshCw, Trash2, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import { API_URLS } from '../apiConfig';
+import UrlPreviewModal from './UrlPreviewModal';
 
 export default function URLManager({ businessId }) {
     const [urls, setUrls] = useState([]);
@@ -9,6 +10,8 @@ export default function URLManager({ businessId }) {
     const [frequency, setFrequency] = useState('weekly');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPreview, setShowPreview] = useState(false);
+    const [previewData, setPreviewData] = useState(null);
 
     useEffect(() => {
         fetchURLs();
@@ -31,9 +34,38 @@ export default function URLManager({ businessId }) {
         }
     };
 
-    const handleAddURL = async (e) => {
+    const handlePreviewURL = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch(`${API_URLS.documents.base}/preview-url`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ url: newUrl })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                setPreviewData(data.data);
+                setShowPreview(true);
+            } else {
+                setError(data.error?.message || 'Failed to preview URL');
+            }
+        } catch (err) {
+            setError('Network error. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleConfirmAdd = async () => {
         setLoading(true);
 
         try {
@@ -45,7 +77,7 @@ export default function URLManager({ businessId }) {
                     Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    url: newUrl,
+                    url: previewData.url,
                     autoRefresh: autoRefresh ? { enabled: true, frequency } : { enabled: false }
                 })
             });
@@ -55,6 +87,8 @@ export default function URLManager({ businessId }) {
             if (data.success) {
                 setNewUrl('');
                 setAutoRefresh(false);
+                setShowPreview(false);
+                setPreviewData(null);
                 fetchURLs();
             } else {
                 setError(data.error?.message || 'Failed to add URL');
@@ -109,7 +143,7 @@ export default function URLManager({ businessId }) {
                     Add Content from URL
                 </h3>
 
-                <form onSubmit={handleAddURL} className="space-y-3">
+                <form onSubmit={handlePreviewURL} className="space-y-3">
                     <div>
                         <input
                             type="url"
@@ -160,10 +194,10 @@ export default function URLManager({ businessId }) {
                         {loading ? (
                             <>
                                 <Loader className="w-4 h-4 mr-2 animate-spin" />
-                                Adding...
+                                Previewing...
                             </>
                         ) : (
-                            'Add URL'
+                            'Preview Content'
                         )}
                     </button>
                 </form>
@@ -239,6 +273,18 @@ export default function URLManager({ businessId }) {
                     ))
                 )}
             </div>
+
+            {/* Preview Modal */}
+            <UrlPreviewModal
+                isOpen={showPreview}
+                onClose={() => {
+                    setShowPreview(false);
+                    setPreviewData(null);
+                }}
+                previewData={previewData}
+                onConfirm={handleConfirmAdd}
+                loading={loading}
+            />
         </div>
     );
 }

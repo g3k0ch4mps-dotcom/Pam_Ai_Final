@@ -14,6 +14,7 @@ router.use(checkBusinessAccess); // Ensures req.businessId is set and valid
 
 // Routes
 router.post('/upload', uploadMiddleware, documentController.uploadDocument);
+router.post('/preview-url', urlScrapeLimiter, documentController.previewUrlContent);
 router.post('/add-url', urlScrapeLimiter, documentController.addFromURL);
 router.post('/:id/refresh', urlScrapeLimiter, documentController.refreshURLContent);
 router.get('/', documentController.listDocuments);

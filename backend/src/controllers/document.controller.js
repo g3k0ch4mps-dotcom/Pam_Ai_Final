@@ -184,6 +184,99 @@ const searchHelper = async (req, res) => {
 };
 
 /**
+ * Preview URL content before adding to knowledge base
+ * @route POST /api/documents/preview-url
+ */
+const previewUrlContent = async (req, res) => {
+    try {
+        const { url } = req.body;
+
+        if (!url) {
+            return res.status(400).json({
+                success: false,
+                error: { code: 'MISSING_URL', message: 'URL is required' }
+            });
+        }
+
+        // Validate URL format
+        const urlPattern = /^https?:\/\/.+/i;
+        if (!urlPattern.test(url)) {
+            return res.status(400).json({
+                success: false,
+                error: { code: 'INVALID_URL', message: 'Please provide a valid URL starting with http:// or https://' }
+            });
+        }
+
+        logger.info(`[Preview] Scraping URL: ${url}`);
+
+        // Scrape the URL with retry
+        const scrapedData = await urlScraperService.scrapeWithRetry(url, 2);
+
+        if (!scrapedData || !scrapedData.success) {
+            return res.status(422).json({
+                success: false,
+                error: {
+                    code: 'SCRAPE_FAILED',
+                    message: scrapedData?.error || 'Failed to scrape URL content',
+                    details: 'The website may be blocking automated access or took too long to respond.'
+                }
+            });
+        }
+
+        // Check content length
+        if (!scrapedData.textContent || scrapedData.textContent.length < 50) {
+            return res.status(422).json({
+                success: false,
+                error: {
+                    code: 'INSUFFICIENT_CONTENT',
+                    message: 'Content too short or page appears empty'
+                }
+            });
+        }
+
+        // Calculate statistics
+        const wordCount = scrapedData.textContent.trim().split(/\s+/).length;
+        const charCount = scrapedData.textContent.length;
+        const estimatedReadTime = Math.ceil(wordCount / 200); // 200 words per minute
+
+        // Prepare preview data
+        const previewData = {
+            title: scrapedData.title || 'Untitled',
+            url: url,
+            content: scrapedData.textContent,
+            preview: scrapedData.textContent.substring(0, 500) + (scrapedData.textContent.length > 500 ? '...' : ''),
+            stats: {
+                words: wordCount,
+                characters: charCount,
+                estimatedReadTime: estimatedReadTime
+            },
+            metadata: {
+                scrapedAt: scrapedData.scrapedAt,
+                method: scrapedData.method || 'unknown'
+            }
+        };
+
+        logger.info(`[Preview] Success for ${url} - ${wordCount} words`);
+
+        res.status(200).json({
+            success: true,
+            message: 'Preview generated successfully',
+            data: previewData
+        });
+
+    } catch (error) {
+        logger.error(`[Preview] Error: ${error.message}`);
+        res.status(500).json({
+            success: false,
+            error: {
+                code: 'PREVIEW_ERROR',
+                message: 'Failed to generate preview'
+            }
+        });
+    }
+};
+
+/**
  * Add document from URL
  * @route POST /api/documents/add-url
  */
@@ -384,6 +477,7 @@ module.exports = {
     listDocuments,
     deleteDocument,
     searchHelper,
+    previewUrlContent,
     addFromURL,
     refreshURLContent
 };
