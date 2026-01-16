@@ -216,7 +216,18 @@ const addFromURL = async (req, res) => {
 
         // 2. Scrape URL
         logger.info(`Scraping URL: ${url}`);
-        const scrapedData = await urlScraperService.scrapeURL(url);
+        const scrapedData = await urlScraperService.scrapeWithRetry(url, 3);
+
+        if (!scrapedData || !scrapedData.success) {
+            return res.status(422).json({
+                success: false,
+                error: {
+                    code: 'SCRAPE_FAILED',
+                    message: scrapedData?.error || 'Failed to scrape URL content',
+                    details: 'The website might be blocking automated access or timed out.'
+                }
+            });
+        }
 
         // 3. Calculate next refresh date if auto-refresh enabled
         let nextRefresh = null;
@@ -301,7 +312,20 @@ const refreshURLContent = async (req, res) => {
 
         // 1. Re-scrape URL
         logger.info(`Refreshing URL: ${document.sourceURL}`);
-        const scrapedData = await urlScraperService.scrapeURL(document.sourceURL);
+        const scrapedData = await urlScraperService.scrapeWithRetry(document.sourceURL, 2);
+
+        if (!scrapedData || !scrapedData.success) {
+            // Log warning but don't fail the request completely if possible, 
+            // or just return error state.
+            logger.warn(`Failed to refresh URL ${document.sourceURL}: ${scrapedData?.error}`);
+            return res.status(422).json({
+                success: false,
+                error: {
+                    code: 'REFRESH_FAILED',
+                    message: scrapedData?.error || 'Failed to refresh content'
+                }
+            });
+        }
 
         // 2. Update document
         document.urlTitle = scrapedData.title;
