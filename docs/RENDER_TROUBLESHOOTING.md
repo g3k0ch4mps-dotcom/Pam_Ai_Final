@@ -65,4 +65,4 @@ If the above doesn't work, ensure these Environment Variables are set in the Das
 **Solution:**
 1.  **Whitelist 0.0.0.0/0**: In MongoDB Atlas -> Network Access -> Add IP Address -> `0.0.0.0/0`.
 2.  **Check Connection String**: Ensure `MONGODB_URI` in Render Env Vars matches the format:
-    `mongodb+srv://user:password@cluster.mongodb.net/dbname?retryWrites=true&w=majority&ssl=true`
+    `mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DBNAME>?retryWrites=true&w=majority&ssl=true`

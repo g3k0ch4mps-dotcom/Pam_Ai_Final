@@ -820,7 +820,7 @@ nano .env
 # MongoDB
 MONGODB_URI=mongodb://localhost:27017/business-ai
 # OR for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/database
+# MONGODB_URI=mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.mongodb.net/<DATABASE>
 
 # JWT
 JWT_SECRET=your-super-secret-key-min-32-chars
