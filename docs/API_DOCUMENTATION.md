@@ -289,6 +289,90 @@ The API returns standard HTTP status codes and a consistent JSON error format.
 }
 ```
 
+#### Preview URL Content
+**Endpoint:** `POST /api/documents/preview-url`
+**Authentication:** Required
+**Description:** Scrapes content from a URL using our intelligent multi-zone extractor and returns a preview without saving to the knowledge base.
+
+**Request Body:**
+```json
+{
+  "url": "https://example.com/page"
+}
+```
+
+**Response (Success):** `200 OK`
+```json
+{
+  "success": true,
+  "message": "Preview generated successfully",
+  "data": {
+    "title": "Page Title",
+    "url": "https://example.com/page",
+    "content": "Full content with section markers:\n\n=== NAVIGATION SECTION ===\nHome | Products | About\n\n=== MAIN SECTION ===\nMain page content...\n\n=== SIDEBAR SECTION ===\nPricing: $499/mo\n\n=== FOOTER SECTION ===\nContact: info@example.com",
+    "preview": "First 500 characters...",
+    "stats": {
+      "words": 1234,
+      "characters": 5678,
+      "estimatedReadTime": 6
+    },
+    "metadata": {
+      "scrapedAt": "2026-01-17T10:30:00.000Z",
+      "method": "puppeteer"
+    }
+  }
+}
+```
+
+**Response (Error):** `422 Unprocessable Entity`
+```json
+{
+  "success": false,
+  "error": {
+    "code": "SCRAPE_FAILED",
+    "message": "Website took too long to respond (Timeout)."
+  }
+}
+```
+
+**Content Structure:**
+
+The scraped content includes section markers for different page zones:
+
+- `=== NAVIGATION SECTION ===`: Menu items, categories, top navigation
+- `=== MAIN SECTION ===`: Primary page content (articles, products, etc.)
+- `=== SIDEBAR SECTION ===`: Supplementary info (pricing, features, specs)
+- `=== FOOTER SECTION ===`: Contact info, hours, locations
+
+This ensures ALL valuable content is preserved, regardless of location on the page.
+
+**Supported Website Types:**
+- E-commerce sites (Shopify, WooCommerce, custom)
+- Blogs (WordPress, Medium, Ghost, custom CMS)
+- Documentation sites
+- Company websites
+- News articles
+- Forums
+- Any website with text content
+
+**Error Codes:**
+
+| Status | Error Code | Message |
+|--------|-----------|---------|
+| 400 | MISSING_URL | URL is required |
+| 400 | INVALID_URL | Please provide a valid URL starting with http:// or https:// |
+| 422 | SCRAPE_FAILED | Failed to scrape URL content |
+| 422 | INSUFFICIENT_CONTENT | Content too short or page appears empty |
+| 500 | PREVIEW_ERROR | Failed to generate preview |
+
+**User-Friendly Error Messages:**
+
+The scraper provides clear, actionable error messages:
+- "Website took too long to respond (Timeout)."
+- "Website is blocking automated access (403)."
+- "Page not found (404)."
+- "Network error: Unable to reach website."
+
 #### List Documents
 **Endpoint:** `GET /api/documents`
 **Authentication:** Required

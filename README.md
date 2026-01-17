@@ -9,7 +9,52 @@ Business AI Assistant is a comprehensive solution designed to automate customer 
 - **Lead Capture**: Automatically collects visitor contact info during chat.
 - **Multi-Business Support**: SaaS-ready architecture for multiple business profiles.
 - **Document Management**: Upload, index, and search business knowledge base.
-- **URL Scraping**: Add your website URL to train the AI.
+- **Intelligent Web Scraper**: Multi-zone extraction preserving ALL valuable content.
+
+## 🤖 Intelligent Web Scraper
+
+Our application features a state-of-the-art web scraper that extracts content from any website intelligently.
+
+### Key Features
+
+- **Universal Compatibility**: Works on any website (e-commerce, blogs, docs, etc.)
+- **Multi-Zone Extraction**: Extracts from navigation, main content, sidebars, and footers
+- **Intelligent Filtering**: Keeps all valuable content, removes only ads and noise
+- **Content Preservation**: Never loses important information from any page section
+- **Dual Strategy**: Uses Axios for speed, Puppeteer for reliability
+
+### How It Works
+
+1. Analyzes the entire webpage structure
+2. Identifies valuable content in ALL sections (nav, main, sidebar, footer)
+3. Filters out advertisements, tracking scripts, and noise
+4. Extracts clean, organized content with section markers
+5. Validates content quality before saving
+
+For detailed information, see [SCRAPER-GUIDE.md](./SCRAPER-GUIDE.md)
+
+### Supported Website Types
+
+✅ E-commerce sites (Shopify, WooCommerce, custom platforms)  
+✅ Blog posts (WordPress, Medium, Ghost, custom CMS)  
+✅ Documentation sites (GitBook, ReadTheDocs, etc.)  
+✅ Company websites (about pages, services)  
+✅ News articles (any news platform)  
+✅ Product galleries and portfolios  
+✅ Forums and discussion boards  
+✅ ANY website with text content
+
+### Technical Implementation
+
+**Location:** `backend/src/services/urlScraper.service.js`
+
+The scraper uses intelligent content scoring to identify valuable content:
+- Analyzes content characteristics
+- Checks for valuable patterns (phone numbers, emails, prices)
+- Preserves elements with substantial information
+- Removes only absolute noise (ads, tracking, hidden elements)
+
+See [Technical Documentation](./docs/SCRAPER-TECHNICAL.md) for implementation details.
 
 ## 🛠️ Technology Stack
 - **Backend**: Node.js, Express.js, MongoDB (Mongoose)
