@@ -167,8 +167,8 @@ class URLScraperService {
                  */
                 const isTrueNoise = (element) => {
                     const tag = element.tagName?.toLowerCase() || '';
-                    const className = (element.className || '').toLowerCase();
-                    const id = (element.id || '').toLowerCase();
+                    const className = (typeof element.className === 'string' ? element.className : (element.getAttribute?.('class') || '')).toLowerCase();
+                    const id = (typeof element.id === 'string' ? element.id : (element.getAttribute?.('id') || '')).toLowerCase();
                     const text = (element.innerText || '').toLowerCase();
 
                     const absoluteNoisePatterns = [
