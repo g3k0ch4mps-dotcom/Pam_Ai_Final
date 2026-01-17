@@ -1,48 +1,29 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
   title: Business AI Assistant API
-  description: |
-    API for Business AI Assistant platform.
-    Features:
-    - AI Chat with RAG
-    - Document Management
-    - Lead Capture & Scoring
-    - Multi-tenant Business Management
+  description: >
+    Comprehensive API for building custom AI assistants for businesses.
+    Features include document knowledge base management, landing page scraping,
+    lead capture, and RAG-based (Retrieval-Augmented Generation) chat.
   version: 1.0.0
   contact:
     name: API Support
-    email: support@pam-ai.com
+    url: https://mamuzaengineering.com
+
 servers:
-  - url: https://pam-ai-backend.onrender.com
+  - url: https://pam-ai-ww00.onrender.com
     description: Production Server
   - url: http://localhost:3000
-    description: Local Development
+    description: Local Development Server
+
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: string
-        email:
-          type: string
-          format: email
-        businessId:
-          type: string
-    Business:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        slug:
-          type: string
     Error:
       type: object
       properties:
@@ -54,103 +35,260 @@ components:
           properties:
             code:
               type: string
+              example: VALIDATION_ERROR
             message:
               type: string
+              example: Validation failed
+            details:
+              type: array
+              items:
+                type: string
+              example: ["Email is required"]
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        firstName:
+          type: string
+        lastName:
+          type: string
+
+    BusinessInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        role:
+          type: string
+          enum: [owner, admin, member]
+
+    PublicBusiness:
+      type: object
+      properties:
+        businessName:
+          type: string
+        businessSlug:
+          type: string
+        industry:
+          type: string
+        chatSettings:
+          type: object
+          properties:
+            isPublic:
+              type: boolean
+            welcomeMessage:
+              type: string
+            primaryColor:
+              type: string
+        branding:
+          type: object
+          properties:
+            logoUrl:
+              type: string
+            websiteUrl:
+              type: string
+
+    Document:
+      type: object
+      properties:
+        id:
+          type: string
+        businessId:
+          type: string
+        sourceType:
+          type: string
+          enum: [file, url]
+        originalName:
+          type: string
+        sourceURL:
+          type: string
+        size:
+          type: number
+        uploadedAt:
+          type: string
+          format: date-time
+
 paths:
-  /api/health:
-    get:
-      summary: Check API Health
-      responses:
-        '200':
-          description: API is healthy
   /api/auth/register:
     post:
-      summary: Register new business
+      summary: Register a new business and owner
+      tags: [Authentication]
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
-              required: [email, password, businessName]
+              required: [email, password, firstName, lastName, businessName]
               properties:
-                email: {type: string}
-                password: {type: string}
-                businessName: {type: string}
-                firstName: {type: string}
-                lastName: {type: string}
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+                firstName: { type: string }
+                lastName: { type: string }
+                businessName: { type: string }
+                industry: { type: string }
       responses:
         '201':
           description: Registration successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  token: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+                  business: { $ref: '#/components/schemas/BusinessInfo' }
+
   /api/auth/login:
     post:
-      summary: User Login
+      summary: Login user
+      tags: [Authentication]
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               required: [email, password]
               properties:
-                email: {type: string}
-                password: {type: string}
+                email: { type: string, format: email }
+                password: { type: string }
       responses:
         '200':
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  token: { type: string }
+                  user: { $ref: '#/components/schemas/User' }
+                  business: { $ref: '#/components/schemas/BusinessInfo' }
+
   /api/business/public/{slug}:
     get:
       summary: Get public business info
+      tags: [Business]
       parameters:
         - name: slug
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       responses:
         '200':
-          description: Success
-  /api/documents/upload:
-    post:
-      summary: Upload Document
-      security: [{bearerAuth: []}]
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                document: {type: string, format: binary}
-      responses:
-        '201':
-          description: Upload successful
-  /api/documents/add-url:
-    post:
-      summary: Scrape URL
-      security: [{bearerAuth: []}]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url: {type: string}
-      responses:
-        '200':
-          description: Scraping started
+          description: Public business info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data: { $ref: '#/components/schemas/PublicBusiness' }
+
   /api/chat/public/{businessSlug}:
     post:
-      summary: Public Chat Message
+      summary: Send message to public chat
+      tags: [Chat]
       parameters:
         - name: businessSlug
           in: path
           required: true
-          schema: {type: string}
+          schema: { type: string }
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required: [question]
               properties:
-                message: {type: string}
-                history: {type: array, items: {type: object}}
+                question: { type: string }
+                sessionId: { type: string }
       responses:
         '200':
-          description: AI Response
+          description: AI response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  answer: { type: string }
+                  sessionId: { type: string }
+
+  /api/documents/preview-url:
+    post:
+      summary: Preview content from a URL
+      tags: [Knowledge Base]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url: { type: string, format: uri }
+      responses:
+        '200':
+          description: URL content preview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data:
+                    type: object
+                    properties:
+                      title: { type: string }
+                      content: { type: string }
+                      stats: { type: object }
+
+  /api/documents:
+    get:
+      summary: List all documents
+      tags: [Knowledge Base]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer, default: 1 }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 10 }
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  data: { type: array, items: { $ref: '#/components/schemas/Document' } }
+                  pagination: { type: object }
+
+  /api/health:
+    get:
+      summary: Check system health
+      tags: [System]
+      responses:
+        '200':
+          description: Systems operational
+        '503':
+          description: Service degraded

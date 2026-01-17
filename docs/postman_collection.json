@@ -1,27 +1,27 @@
 {
     "info": {
-        "_postman_id": "pam-ai-api-collection",
+        "_postman_id": "8b5e2f1a-3d4c-4e5f-9a1b-2c3d4e5f6a7b",
         "name": "Business AI Assistant API",
-        "description": "Collection for testing the Business AI Assistant API.",
+        "description": "API collection for the Business AI Assistant system including Knowledge Base management and RAG Chat.",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
     "item": [
         {
-            "name": "Auth",
+            "name": "Authentication",
             "item": [
                 {
-                    "name": "Register",
+                    "name": "Register Business",
                     "request": {
                         "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"businessName\": \"Test Biz\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\"\n}"
+                            "raw": "{\n    \"email\": \"test-owner@example.com\",\n    \"password\": \"Password123\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"Owner\",\n    \"businessName\": \"Test Business\",\n    \"industry\": \"Technology\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "{{base_url}}/api/auth/register",
@@ -34,7 +34,8 @@
                                 "register"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Login",
@@ -43,10 +44,9 @@
                             "listen": "test",
                             "script": {
                                 "exec": [
-                                    "var jsonData = pm.response.json();",
-                                    "if (jsonData.success) {",
-                                    "    pm.collectionVariables.set(\"token\", jsonData.token);",
-                                    "    pm.collectionVariables.set(\"business_slug\", jsonData.business.slug);",
+                                    "const response = pm.response.json();",
+                                    "if (response.success && response.token) {",
+                                    "    pm.environment.set(\"auth_token\", response.token);",
                                     "}"
                                 ],
                                 "type": "text/javascript"
@@ -55,15 +55,15 @@
                     ],
                     "request": {
                         "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+                            "raw": "{\n    \"email\": \"test-owner@example.com\",\n    \"password\": \"Password123\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "{{base_url}}/api/auth/login",
@@ -76,94 +76,126 @@
                                 "login"
                             ]
                         }
-                    }
-                }
-            ]
-        },
-        {
-            "name": "Business",
-            "item": [
+                    },
+                    "response": []
+                },
                 {
-                    "name": "Get Public Info",
+                    "name": "Get Profile (Me)",
                     "request": {
                         "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
                         "url": {
-                            "raw": "{{base_url}}/api/business/public/{{business_slug}}",
+                            "raw": "{{base_url}}/api/auth/me",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "api",
-                                "business",
-                                "public",
-                                "{{business_slug}}"
+                                "auth",
+                                "me"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 }
             ]
         },
         {
-            "name": "Documents",
+            "name": "Knowledge Base (Documents)",
             "item": [
                 {
-                    "name": "Upload Document",
+                    "name": "List Documents",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/documents?page=1&limit=10",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "documents"
+                            ],
+                            "query": [
                                 {
-                                    "key": "token",
-                                    "value": "{{token}}"
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
                                 }
                             ]
-                        },
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Preview URL",
+                    "request": {
                         "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
+                            }
+                        ],
                         "body": {
-                            "mode": "formdata",
-                            "formdata": [
-                                {
-                                    "key": "document",
-                                    "type": "file",
-                                    "src": []
+                            "mode": "raw",
+                            "raw": "{\n    \"url\": \"https://shop.mamuzaengineering.com/product\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
                                 }
-                            ]
+                            }
                         },
                         "url": {
-                            "raw": "{{base_url}}/api/documents/upload",
+                            "raw": "{{base_url}}/api/documents/preview-url",
                             "host": [
                                 "{{base_url}}"
                             ],
                             "path": [
                                 "api",
                                 "documents",
-                                "upload"
+                                "preview-url"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 },
                 {
                     "name": "Add URL",
                     "request": {
-                        "auth": {
-                            "type": "bearer",
-                            "bearer": [
-                                {
-                                    "key": "token",
-                                    "value": "{{token}}"
-                                }
-                            ]
-                        },
                         "method": "POST",
                         "header": [
                             {
-                                "key": "Content-Type",
-                                "value": "application/json"
+                                "key": "Authorization",
+                                "value": "Bearer {{auth_token}}",
+                                "type": "text"
                             }
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"url\": \"https://example.com\"\n}"
+                            "raw": "{\n    \"url\": \"https://shop.mamuzaengineering.com/product\",\n    \"autoRefresh\": {\n        \"enabled\": true,\n        \"frequency\": \"weekly\"\n    }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
                             "raw": "{{base_url}}/api/documents/add-url",
@@ -176,29 +208,30 @@
                                 "add-url"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 }
             ]
         },
         {
-            "name": "Chat",
+            "name": "AI Chat",
             "item": [
                 {
-                    "name": "Public Chat Message",
+                    "name": "Public Chat Request",
                     "request": {
                         "method": "POST",
-                        "header": [
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
+                        "header": [],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"message\": \"Hello, what do you do?\"\n}"
+                            "raw": "{\n    \"question\": \"What products do you offer for robotics?\",\n    \"sessionId\": \"session-12345\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
                         },
                         "url": {
-                            "raw": "{{base_url}}/api/chat/public/{{business_slug}}",
+                            "raw": "{{base_url}}/api/chat/public/test-business",
                             "host": [
                                 "{{base_url}}"
                             ],
@@ -206,20 +239,22 @@
                                 "api",
                                 "chat",
                                 "public",
-                                "{{business_slug}}"
+                                "test-business"
                             ]
                         }
-                    }
+                    },
+                    "response": []
                 }
             ]
         },
         {
-            "name": "System",
+            "name": "Health & System",
             "item": [
                 {
                     "name": "Health Check",
                     "request": {
                         "method": "GET",
+                        "header": [],
                         "url": {
                             "raw": "{{base_url}}/api/health",
                             "host": [
@@ -230,7 +265,27 @@
                                 "health"
                             ]
                         }
-                    }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Ping",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/api/health/ping",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "health",
+                                "ping"
+                            ]
+                        }
+                    },
+                    "response": []
                 }
             ]
         }
@@ -242,12 +297,7 @@
             "type": "string"
         },
         {
-            "key": "token",
-            "value": "",
-            "type": "string"
-        },
-        {
-            "key": "business_slug",
+            "key": "auth_token",
             "value": "",
             "type": "string"
         }
