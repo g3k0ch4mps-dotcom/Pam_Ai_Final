@@ -168,7 +168,7 @@ class URLScraperService {
             });
 
             // Wait a small buffer for critical JS to render text
-            await page.waitForTimeout(2000);
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             // Extract content in browser context
             const data = await page.evaluate(() => {
