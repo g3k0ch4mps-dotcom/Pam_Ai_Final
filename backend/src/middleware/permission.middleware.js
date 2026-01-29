@@ -1,104 +1,120 @@
-const BusinessMember = require('../models/BusinessMember');
-const logger = require('../utils/logger');
+/**
+ * Permission Middleware
+ * 
+ * Checks if user has required permissions to access a route.
+ * Assumes 'auth.middleware' has already populated req.user.
+ */
+
+const User = require('../models/User');
 
 /**
- * Middleware to check if the authenticated user is a member of the accessed business
- * Requires 'auth.middleware' to run first to populate req.user
+ * Check if user has a specific permission
+ * 
+ * Usage:
+ *   router.delete('/:id', checkPermission('documents.delete'), controller.delete);
  */
-const checkBusinessAccess = async (req, res, next) => {
-    try {
-        // Priority: Path Param > Body > Token (Implicit)
-        const businessId = req.params.id || req.body.businessId || req.businessId;
-
-        if (!businessId) {
-            return res.status(400).json({
-                success: false,
-                error: {
-                    code: 'MISSING_BUSINESS_ID',
-                    message: 'Business ID is required'
-                }
-            });
-        }
-
-        // Check if the user is a member of this business
-        // We can use the cached membership from the token if strict real-time revocation isn't critical,
-        // but for settings updates, it's safer to query the DB.
-
-        // Efficiency: If the token already has the businessId and matches, and we validated the token...
-        // usage: req.businessId comes from authenticate middleware decoding the token
-
-        // Case A: The route parameter matches the business ID in the user's token
-        if (req.businessId && req.businessId === businessId) {
-            // User is authenticated for this business context
-            return next();
-        }
-
-        // Case B: User might be in multiple businesses (future proofing), or token doesn't have it.
-        // Check DB explicitly.
-        const membership = await BusinessMember.findOne({
-            userId: req.user._id,
-            businessId: businessId
-        });
-
-        if (!membership) {
-            return res.status(403).json({
-                success: false,
-                error: {
-                    code: 'ACCESS_DENIED',
-                    message: 'You do not have access to this business.'
-                }
-            });
-        }
-
-        // Update request context
-        req.businessId = businessId;
-        req.userRole = membership.role;
-
-        next();
-    } catch (error) {
-        logger.error(`Access check failed: ${error.message}`);
-        res.status(500).json({
-            success: false,
-            error: {
-                code: 'ACCESS_CHECK_ERROR',
-                message: 'Failed to verify access permissions'
+function checkPermission(requiredPermission) {
+    return async (req, res, next) => {
+        try {
+            // User must be authenticated
+            if (!req.user) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'User not authenticated',
+                    code: 'AUTH_REQUIRED'
+                });
             }
-        });
-    }
-};
+
+            // If we need fresh data (e.g. role changed since login/token issue), fetch user.
+            // Using req.user from auth middleware (which usually fetches from DB) is safest.
+            const user = req.user;
+
+            if (!user.hasPermission) {
+                // Should exist if using the updated User model. 
+                // Fallback or error if model not updated properly.
+                console.error('[Permission] User model missing hasPermission method');
+                return res.status(500).json({ success: false, error: 'Internal Server Error' });
+            }
+
+            if (!user.hasPermission(requiredPermission)) {
+                return res.status(403).json({
+                    success: false,
+                    error: 'Insufficient permissions',
+                    code: 'PERMISSION_DENIED',
+                    required: requiredPermission
+                });
+            }
+
+            next();
+        } catch (error) {
+            console.error('[Permission] Error:', error);
+            res.status(500).json({
+                success: false,
+                error: 'Permission check failed',
+                code: 'PERMISSION_CHECK_ERROR'
+            });
+        }
+    };
+}
 
 /**
- * Middleware to enforce role-based access
- * Must run AFTER checkBusinessAccess (or authenticate if businessId is in token)
- * @param {...string} allowedRoles - Array of allowed roles (e.g. 'owner', 'admin')
+ * Check if user has ANY of the provided permissions
  */
-const requireRole = (...allowedRoles) => {
-    return (req, res, next) => {
-        if (!req.userRole) {
-            return res.status(403).json({
-                success: false,
-                error: {
-                    code: 'ROLE_MISSING',
-                    message: 'User role could not be determined'
-                }
-            });
-        }
+function checkAnyPermission(permissions) {
+    return async (req, res, next) => {
+        try {
+            const user = req.user;
+            if (!user) {
+                return res.status(401).json({ success: false, error: 'User not authenticated' });
+            }
 
-        if (!allowedRoles.includes(req.userRole)) {
-            return res.status(403).json({
-                success: false,
-                error: {
-                    code: 'INSUFFICIENT_PERMISSIONS',
-                    message: `This action requires one of the following roles: ${allowedRoles.join(', ')}`
-                }
-            });
-        }
+            // Check if user has at least one of the permissions
+            const hasAccess = permissions.some(perm => user.hasPermission(perm));
 
-        next();
+            if (!hasAccess) {
+                return res.status(403).json({
+                    success: false,
+                    error: 'Insufficient permissions',
+                    code: 'PERMISSION_DENIED',
+                    required: permissions
+                });
+            }
+
+            next();
+        } catch (error) {
+            console.error('[Permission] Error:', error);
+            res.status(500).json({ success: false, error: 'Permission check failed' });
+        }
     };
-};
+}
+
+/**
+ * Require a specific System Role (e.g. Super Admin)
+ */
+function requireSystemRole(roleId) {
+    return async (req, res, next) => {
+        try {
+            const user = req.user;
+            if (!user) return res.status(401).json({ success: false, error: 'User not authenticated' });
+
+            if (user.role !== roleId) {
+                return res.status(403).json({
+                    success: false,
+                    error: `Role ${roleId} required`,
+                    code: 'ROLE_REQUIRED'
+                });
+            }
+
+            next();
+        } catch (error) {
+            console.error('[Permission] Error:', error);
+            res.status(500).json({ success: false, error: 'System role check failed' });
+        }
+    };
+}
 
 module.exports = {
-    checkBusinessAccess,
-    requireRole
+    checkPermission,
+    checkAnyPermission,
+    requireSystemRole
 };

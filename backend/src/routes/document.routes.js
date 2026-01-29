@@ -6,19 +6,28 @@ const uploadMiddleware = require('../middleware/upload.middleware');
 
 const { urlScrapeLimiter } = require('../middleware/rateLimiter.middleware');
 
+const { checkPermission } = require('../middleware/permission.middleware');
+
 const router = express.Router();
 
 // All routes require authentication and business context
 router.use(authenticate);
-router.use(enforceTenantIsolation); // Strict tenant isolation
+router.use(enforceTenantIsolation);
 
 // Routes
-router.post('/upload', uploadMiddleware, documentController.uploadDocument);
-router.post('/preview-url', urlScrapeLimiter, documentController.previewUrlContent);
-router.post('/add-url', urlScrapeLimiter, documentController.addFromURL);
-router.post('/:id/refresh', urlScrapeLimiter, documentController.refreshURLContent);
-router.get('/', documentController.listDocuments);
-router.delete('/:id', documentController.deleteDocument);
-router.get('/search', documentController.searchHelper);
+// Upload: Requires creation permission
+router.post('/upload', checkPermission('documents.create'), uploadMiddleware, documentController.uploadDocument);
+
+// URL Utils: Requires creation permission
+router.post('/preview-url', checkPermission('documents.create'), urlScrapeLimiter, documentController.previewUrlContent);
+router.post('/add-url', checkPermission('documents.create'), urlScrapeLimiter, documentController.addFromURL);
+router.post('/:id/refresh', checkPermission('documents.update'), urlScrapeLimiter, documentController.refreshURLContent);
+
+// List/Search: Requires read permission
+router.get('/', checkPermission('documents.read'), documentController.listDocuments);
+router.get('/search', checkPermission('documents.read'), documentController.searchHelper);
+
+// Delete: Requires delete permission
+router.delete('/:id', checkPermission('documents.delete'), documentController.deleteDocument);
 
 module.exports = router;
