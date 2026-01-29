@@ -1,6 +1,5 @@
 const User = require('../models/User');
 const Business = require('../models/Business');
-const BusinessMember = require('../models/BusinessMember');
 const authService = require('../services/auth.service');
 const { generateUniqueSlug } = require('../utils/slug');
 const logger = require('../utils/logger');
@@ -11,6 +10,8 @@ const mongoose = require('mongoose');
  * @route POST /api/auth/register
  */
 const registerBusiness = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
         const { email, password, firstName, lastName, businessName, industry } = req.body;
 
@@ -19,6 +20,8 @@ const registerBusiness = async (req, res) => {
         // 1. Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
+            await session.abortTransaction();
+            session.endSession();
             return res.status(409).json({
                 success: false,
                 error: {
@@ -28,62 +31,57 @@ const registerBusiness = async (req, res) => {
             });
         }
 
-        // 2. Create User
-        const hashedPassword = await authService.hashPassword(password);
-        // Use create() checks or singular document creation without session
-        const user = await User.create({
-            email,
-            passwordHash: hashedPassword,
-            firstName,
-            lastName,
-            isEmailVerified: false
-        });
-
-        // 3. Create Business
-        // Generate unique slug
+        // 2. Create Business First
         const businessSlug = await generateUniqueSlug(businessName, Business);
-
-        const business = await Business.create({
+        const business = await Business.create([{
             businessName,
             businessSlug,
             industry,
             subscriptionStatus: 'free'
-        });
+        }], { session });
 
-        // 4. Create BusinessMember relationship
-        await BusinessMember.create({
-            userId: user._id,
-            businessId: business._id,
-            role: 'owner'
-        });
+        // 3. Create User with role and businessId
+        const hashedPassword = await authService.hashPassword(password);
+        const user = await User.create([{
+            email,
+            passwordHash: hashedPassword,
+            firstName,
+            lastName,
+            role: 'business_owner',
+            businessId: business[0]._id,
+            isEmailVerified: false
+        }], { session });
+
+        await session.commitTransaction();
+        session.endSession();
 
         logger.info(`✓ Registration successful for ${email}`);
 
-        // 5. Generate Token
-        const member = {
-            businessId: business._id,
-            role: 'owner'
-        };
-        const token = authService.generateToken(user, member);
+        // 4. Generate Token
+        const token = authService.generateToken(user[0]);
 
         res.status(201).json({
             success: true,
             token,
             user: {
-                id: user._id,
-                email: user.email,
-                firstName: user.firstName,
-                lastName: user.lastName
+                id: user[0]._id,
+                email: user[0].email,
+                firstName: user[0].firstName,
+                lastName: user[0].lastName,
+                role: user[0].role
             },
             business: {
-                id: business._id,
-                name: business.businessName,
-                slug: business.businessSlug,
-                role: 'owner'
+                id: business[0]._id,
+                name: business[0].businessName,
+                slug: business[0].businessSlug
             }
         });
 
     } catch (error) {
+        if (session.inTransaction()) {
+            await session.abortTransaction();
+        }
+        session.endSession();
         logger.error(`Registration error: ${error.message}`);
         logger.error(`Error stack: ${error.stack}`);
 
@@ -136,22 +134,19 @@ const login = async (req, res) => {
         user.lastLogin = new Date();
         await user.save();
 
-        // 3. Find primary business membership (for now just take the first one)
-        const membership = await BusinessMember.findOne({ userId: user._id }).sort({ createdAt: 1 });
+        // 3. Generate Token
+        const token = authService.generateToken(user);
 
-        // 4. Generate Token
-        const token = authService.generateToken(user, membership);
-
-        // 5. Get Business Details if member exists
+        // 4. Get Business Details if user has businessId
         let businessData = null;
-        if (membership) {
-            const business = await Business.findById(membership.businessId);
+        if (user.businessId) {
+            const business = await Business.findById(user.businessId);
             if (business) {
                 businessData = {
                     id: business._id,
                     name: business.businessName,
                     slug: business.businessSlug,
-                    role: membership.role
+                    role: user.role
                 };
             }
         }
@@ -163,7 +158,8 @@ const login = async (req, res) => {
                 id: user._id,
                 email: user.email,
                 firstName: user.firstName,
-                lastName: user.lastName
+                lastName: user.lastName,
+                role: user.role
             },
             business: businessData
         });
@@ -212,6 +208,7 @@ const getMe = async (req, res) => {
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName,
+                    role: user.role,
                     lastLogin: user.lastLogin
                 },
                 business: businessData

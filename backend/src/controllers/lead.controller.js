@@ -1,6 +1,8 @@
 const leadService = require('../services/lead.service');
 const logger = require('../utils/logger');
 const { Parser } = require('json2csv');
+const { scopeToBusinessId } = require('../utils/queryScoping');
+const Lead = require('../models/Lead');
 
 /**
  * Lead Controller
@@ -45,15 +47,10 @@ const captureLead = async (req, res) => {
 // GET /api/business/:businessId/leads - List leads (Protected)
 const getLeads = async (req, res) => {
     try {
-        const { businessId } = req.params; // Verified by middleware usually
-        const filters = req.query;
+        const query = scopeToBusinessId(req, {});
+        const filters = { ...req.query, ...query };
 
-        // Security check: req.businessId should match params.businessId (from auth middleware)
-        if (req.businessId && req.businessId !== businessId) {
-            return res.status(403).json({ success: false, message: 'Unauthorized access to business data' });
-        }
-
-        const leads = await leadService.getBusinessLeads(businessId, filters);
+        const leads = await leadService.getBusinessLeads(req.businessId, filters);
         res.json({ success: true, leads });
     } catch (error) {
         logger.error(`Get leads error: ${error.message}`);
@@ -67,15 +64,8 @@ const updateLead = async (req, res) => {
         const { id } = req.params;
         const { status, notes } = req.body;
 
-        const lead = await leadService.getLeadBySession(id); // Usually ID is session ID? No, here it's Mongo ID
-        // Wait, service has getLeadBySession. We need getLeadById.
-        // Let's implement a direct update using model in service or here.
-        // Ideally service should have updateLeadById.
-        // Let's add a quick direct update here for now or extend service.
-
-        const Lead = require('../models/Lead');
-        const updatedLead = await Lead.findByIdAndUpdate(
-            id,
+        const updatedLead = await Lead.findOneAndUpdate(
+            scopeToBusinessId(req, { _id: id }),
             { $set: { status, notes } },
             { new: true }
         );
@@ -92,15 +82,14 @@ const updateLead = async (req, res) => {
 // GET /api/business/:businessId/leads/export/csv
 const exportLeadsCsv = async (req, res) => {
     try {
-        const { businessId } = req.params;
-        const leads = await leadService.getBusinessLeads(businessId, { limit: 1000 });
+        const leads = await leadService.getBusinessLeads(req.businessId, { limit: 1000 });
 
         const fields = ['name', 'email', 'phone', 'leadScore', 'status', 'interests', 'firstContact', 'lastContact'];
         const json2csvParser = new Parser({ fields });
         const csv = json2csvParser.parse(leads);
 
         res.header('Content-Type', 'text/csv');
-        res.attachment(`leads-${businessId}-${Date.now()}.csv`);
+        res.attachment(`leads-${req.businessId}-${Date.now()}.csv`);
         res.send(csv);
     } catch (error) {
         logger.error(`Export CSV error: ${error.message}`);
