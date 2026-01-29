@@ -74,7 +74,24 @@ const documentSchema = new mongoose.Schema({
     uploadedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    // Alias for uploadedBy to match other models
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    // RBAC: Specific sharing
+    sharedWith: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        accessLevel: {
+            type: String,
+            enum: ['view', 'edit'],
+            default: 'view'
+        }
+    }]
 }, {
     timestamps: true
 });
