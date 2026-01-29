@@ -4,6 +4,7 @@ const extractionService = require('../services/extraction.service');
 const urlScraperService = require('../services/urlScraper.service');
 const searchService = require('../services/search.service');
 const logger = require('../utils/logger');
+const { scopeToBusinessId, assignOwnership } = require('../utils/queryScoping');
 
 /**
  * Upload and process a new document
@@ -34,15 +35,16 @@ const uploadDocument = async (req, res) => {
         }
 
         // 2. Save to Database
-        const document = await Document.create({
-            businessId,
+        // 2. Save to Database
+        const docData = assignOwnership(req, {
             filename: req.file.filename,
             originalName: originalname,
             mimeType: mimetype,
             size,
-            textContent,
-            uploadedBy: userId
+            textContent
         });
+
+        const document = await Document.create(docData);
 
         // 3. Cleanup: Delete the temp file (We rely on DB for text storage now?)
         // WAIT: If we delete the file, we can't re-download it. 
@@ -88,13 +90,14 @@ const listDocuments = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10;
         const skip = (page - 1) * limit;
 
-        const documents = await Document.find({ businessId: req.businessId })
+        const query = scopeToBusinessId(req, {});
+        const documents = await Document.find(query)
             .select('-textContent') // Exclude heavy text content
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
-        const total = await Document.countDocuments({ businessId: req.businessId });
+        const total = await Document.countDocuments(query);
 
         res.json({
             success: true,
@@ -121,10 +124,9 @@ const listDocuments = async (req, res) => {
  */
 const deleteDocument = async (req, res) => {
     try {
-        const document = await Document.findOne({
-            _id: req.params.id,
-            businessId: req.businessId
-        });
+        const document = await Document.findOne(
+            scopeToBusinessId(req, { _id: req.params.id })
+        );
 
         if (!document) {
             return res.status(404).json({
@@ -294,11 +296,12 @@ const addFromURL = async (req, res) => {
         }
 
         // 1. Check if URL already exists for this business
-        const existing = await Document.findOne({
-            businessId,
-            sourceURL: url,
-            sourceType: 'url'
-        });
+        const existing = await Document.findOne(
+            scopeToBusinessId(req, {
+                sourceURL: url,
+                sourceType: 'url'
+            })
+        );
 
         if (existing) {
             return res.status(409).json({
@@ -342,8 +345,7 @@ const addFromURL = async (req, res) => {
         }
 
         // 4. Save to database
-        const document = await Document.create({
-            businessId,
+        const docData = assignOwnership(req, {
             sourceType: 'url',
             sourceURL: url,
             urlTitle: scrapedData.title,
@@ -355,9 +357,10 @@ const addFromURL = async (req, res) => {
                 frequency: autoRefresh.frequency || 'weekly',
                 lastRefreshed: new Date(),
                 nextRefresh: nextRefresh
-            } : undefined,
-            uploadedBy: userId
+            } : undefined
         });
+
+        const document = await Document.create(docData);
 
         logger.info(`✓ URL document created: ${document._id}`);
 
@@ -390,11 +393,12 @@ const addFromURL = async (req, res) => {
  */
 const refreshURLContent = async (req, res) => {
     try {
-        const document = await Document.findOne({
-            _id: req.params.id,
-            businessId: req.businessId,
-            sourceType: 'url'
-        });
+        const document = await Document.findOne(
+            scopeToBusinessId(req, {
+                _id: req.params.id,
+                sourceType: 'url'
+            })
+        );
 
         if (!document) {
             return res.status(404).json({

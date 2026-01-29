@@ -8,7 +8,8 @@ const logger = require('../utils/logger');
  */
 const getBusinessProfile = async (req, res) => {
     try {
-        const business = await Business.findById(req.params.id);
+        // Enforce Tenant Isolation: Use req.businessId, ignore params.id
+        const business = await Business.findById(req.businessId);
 
         if (!business) {
             return res.status(404).json({
@@ -52,7 +53,7 @@ const updateBusinessSettings = async (req, res) => {
         if (industry) updates.industry = industry;
 
         const business = await Business.findByIdAndUpdate(
-            req.params.id,
+            req.businessId, // Enforce tenant scope
             { $set: updates },
             { new: true, runValidators: true }
         );
