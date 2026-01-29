@@ -34,7 +34,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
-app.set( 'trust proxy', 1);
+app.set('trust proxy', 1);
 
 // 1. Set Security Headers
 app.use(helmet());
@@ -87,7 +87,7 @@ const corsOptions = {
 
     const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
     const frontendUrl = process.env.FRONTEND_URL;
-    
+
     if (frontendUrl && !allowedOrigins.includes(frontendUrl)) {
       allowedOrigins.push(frontendUrl);
     }
@@ -116,9 +116,20 @@ const businessRoutes = require('./routes/business.routes');
 const documentRoutes = require('./routes/document.routes');
 const chatRoutes = require('./routes/chat.routes');
 
+// New Namespaces
+const businessNamespace = require('./routes/business/index');
+const adminNamespace = require('./routes/admin/index');
+
 // Mount routes
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+
+// New Structured Namespaces
+app.use('/api/business/v1', businessNamespace); // e.g., /api/business/v1/documents
+app.use('/api/admin/v1', adminNamespace);
+
+// Legacy/Compatibility Routes (Mapped to same controllers via existing routers)
+// These keys will eventually be deprecated in favor of /api/business/v1/...
 app.use('/api/business', businessRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/chat', chatRoutes);
