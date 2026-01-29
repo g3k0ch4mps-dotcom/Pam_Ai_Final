@@ -70,8 +70,10 @@ async function verifyArchitecture() {
         const docA = await Document.create({
             businessId: businessA._id,
             uploadedBy: ownerA._id,
+            sourceType: 'file',
             filename: 'secret_plan_a.pdf',
             originalName: 'secret_plan_a.pdf',
+            mimeType: 'application/pdf',
             size: 1024,
             textContent: 'Confidential A'
         });
@@ -115,11 +117,22 @@ async function verifyArchitecture() {
 
     } catch (error) {
         console.error('\n❌ VERIFICATION FAILED:', error.message);
+        if (error.message.includes('whitelist')) {
+            console.error('\n💡 TIP: Access from this IP is blocked. Check your Dashboard > Network Access.');
+        }
     } finally {
-        // Cleanup
-        await cleanupTestData();
-        await mongoose.disconnect();
-        console.log('Disconnected.');
+        // Cleanup only if connected
+        if (mongoose.connection.readyState === 1) {
+            try {
+                await cleanupTestData();
+            } catch (err) {
+                console.warn('⚠️ Cleanup failed (likely due to connection limits/drops):', err.message);
+            }
+            await mongoose.disconnect();
+            console.log('Disconnected.');
+        } else {
+            console.log('Skipped cleanup (Not connected).');
+        }
     }
 }
 

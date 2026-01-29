@@ -38,9 +38,9 @@ Based on your verified Senior experience and Excellent portfolio:
 | **Backend** | API, Auth, MongoDB, RAG, Lead Logic
 | **Frontend** | N/A | 
 | **AI Integration** | OpenAI Pipeline, Fallbacks, Context |
-| **DevOps** | Render, CI/CD, Security |
+| **DevOps** |  CI/CD, Security |
 | **QA & Polish** | Testing, Bug Fixes, UI Refinements |
-| **Documentation** | API, System, User Guides  |
+| **Documentation** | API, System, User Guides , Database ,Backend, Swagger files and postman colleciton |
 | **Project Mgmt** | Planning, Communication |
 | **TOTAL** |  **580 Hours** |
 
@@ -71,17 +71,6 @@ Presenting options allows the client to choose their budget rather than saying "
 *   **Timeline:** 8 Weeks
 *   **Price:** **$28,500 USD**
 
-### 🚀 Option 2: Professional (Recommended)
-*The full SaaS platform as currently built.*
-*   **Includes:** Everything in Essential + RAG Pipeline, Lead Scoring, Public Widget Customization, Full API Documentation.
-*   **Timeline:** 12 Weeks
-*   **Price:** **$48,000 USD**
-
-### ⭐ Option 3: Enterprise
-*Source code ownership and extended support.*
-*   **Includes:** Full Source Code Rights, Docker/K8s Setup, 3 months Support, Custom Integrations (CRM/Email).
-*   **Timeline:** 16 Weeks
-*   **Price:** **$74,500 USD**
 
 ---
 
@@ -97,29 +86,3 @@ For a project of this size ($48k), **Cash Flow is critical**.
 
 ---
 
-## 7. Strategic Advice for Toronto Market
-
-1.  **Emphasize "Time Zone Overlap":**
-    *   Kenya (EAT) is often 7-8 hours ahead of Toronto (EST).
-    *   **Pitch:** "I work while you sleep. You send requests in your evening, and they are done by your morning."
-    *   **Pitch:** "I work while you sleep. You send requests in your evening, and they are done by your morning."
-    *   Or: "I can overlap 2-3 hours of your morning for synchronous meetings."
-
-2.  **Highlight Communication:**
-    *   Toronto clients value clear, direct English communication. Your documentation quality proves this.
-    *   Mention your "System Documentation" deliverable as a key selling point.
-
-3.  **The "AI Specialist" Premium:**
-    *   Don't just sell "web development." Sell "AI Transformation."
-    *   Regular devs charge $60/hr. AI experts charge $100+/hr.
-
-## 8. Negotiation Tips
-
-*   **If they say "Too expensive":**
-    *   "I understand. We can look at the **Essential** package which gets you to market for $28k, and add features later." (Don't lower rate, reduce scope).
-*   **If they compare to cheap freelancers ($20/hr):**
-    *   "You can certainly find cheaper developers. However, my rate includes architectural security, comprehensive documentation (so you aren't locked in), and AI expertise that ensures the chatbot actually works."
-
----
-
-**Ready to send?** I can draft a formal **Proposal Email** based on this analysis if you like.

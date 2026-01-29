@@ -45,11 +45,9 @@ const authenticate = async (req, res, next) => {
         req.user = user;
         req.tokenPayload = decoded;
 
-        // Attach business context if present in token
-        if (decoded.businessId) {
-            req.businessId = decoded.businessId;
-            req.userRole = decoded.roles && decoded.roles.length > 0 ? decoded.roles[0] : 'member';
-        }
+        // Ensure context is available on request
+        req.userRole = user.role;
+        req.businessId = user.businessId;
 
         next();
     } catch (error) {

@@ -439,25 +439,20 @@ module.exports = {
 ### 4.2 JWT Authentication
 
 ```javascript
-// services/jwt.service.js
+// services/auth.service.js
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_EXPIRE = process.env.JWT_EXPIRE || '7d';
-
-// Generate JWT token
-function generateToken(userId, businessId, role, permissions) {
+// Generate JWT token (aligned with User model)
+function generateToken(user) {
   const payload = {
-    userId,
-    businessId,
-    role,
-    permissions,
-    iat: Date.now()
+    id: user._id,
+    email: user.email,
+    role: user.role,
+    businessId: user.businessId || null
   };
   
-  return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRE,
-    algorithm: 'HS256'
+  return jwt.sign(payload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE || '24h'
   });
 }
 
@@ -493,11 +488,32 @@ module.exports = {
 ### 4.3 Authentication Middleware
 
 ```javascript
-// middleware/auth.js
-const { verifyToken } = require('../services/jwt.service');
+// middleware/auth.middleware.js
+const { verifyToken } = require('../services/auth.service');
+const User = require('../models/User');
 
-// Verify JWT token
-function authenticateToken(req, res, next) {
+// Verify JWT token and populate context
+async function authenticate(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  
+  if (!token) return res.status(401).json({ success: false, message: 'Token required' });
+  
+  try {
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ success: false, message: 'User not found' });
+    
+    // Attach context directly to request
+    req.user = user;
+    req.userRole = user.role;
+    req.businessId = user.businessId;
+    
+    next();
+  } catch (error) {
+    return res.status(401).json({ success: false, message: 'Invalid token' });
+  }
+}
   // Get token from Authorization header
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
@@ -544,75 +560,33 @@ module.exports = { authenticateToken };
 ### 4.4 Permission Check Middleware
 
 ```javascript
-// middleware/permissions.js
+// middleware/permission.middleware.js
+const { roles } = require('../config/roles');
 
 // Check if user has specific permission
 function requirePermission(permission) {
   return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'Authentication required'
-        }
-      });
-    }
+    const userRole = roles[req.userRole];
+    const hasPermission = userRole && (
+      userRole.permissions.includes(permission) || 
+      userRole.permissions.includes('*')
+    );
     
-    if (!req.user.permissions[permission]) {
-      return res.status(403).json({
-        success: false,
-        error: {
-          code: 'PERMISSION_DENIED',
-          message: `You do not have permission: ${permission}`
-        }
-      });
+    if (!hasPermission) {
+      return res.status(403).json({ success: false, message: 'Permission denied' });
     }
-    
     next();
   };
 }
 
-// Check if user is owner
-function requireOwner(req, res, next) {
-  if (req.user.role !== 'owner') {
-    return res.status(403).json({
-      success: false,
-      error: {
-        code: 'OWNER_ONLY',
-        message: 'This action requires owner privileges'
-      }
-    });
+// middleware/tenantIsolation.middleware.js
+// Enforces that req.businessId exists for business-scoped routes
+const tenantIsolation = (req, res, next) => {
+  if (!req.businessId) {
+    return res.status(401).json({ success: false, message: 'Business context missing' });
   }
   next();
-}
-
-// Check if user has access to business
-async function checkBusinessAccess(req, res, next) {
-  const { businessId } = req.params;
-  const userId = req.user.userId;
-  
-  // Verify user is member of this business
-  const membership = await BusinessMember.findOne({
-    userId,
-    businessId,
-    status: 'active'
-  });
-  
-  if (!membership) {
-    return res.status(403).json({
-      success: false,
-      error: {
-        code: 'ACCESS_DENIED',
-        message: 'You do not have access to this business'
-      }
-    });
-  }
-  
-  // Attach membership to request
-  req.businessMembership = membership;
-  next();
-}
+};
 
 module.exports = {
   requirePermission,
@@ -762,39 +736,21 @@ router.post('/:businessId/documents/upload',
 ## 🔐 Layer 6: Data Access Control
 
 ```javascript
-// Always validate businessId in queries
-
-// ❌ BAD: No businessId filter (security risk!)
-async function getDocuments(req, res) {
-  const documents = await Document.find({});
-  // Returns ALL documents from ALL businesses!
-  res.json({ documents });
+// utils/queryScoping.js
+function scopeToBusinessId(req, query = {}) {
+  if (req.businessId) {
+    query.businessId = req.businessId;
+  }
+  return query;
 }
 
-// ✅ GOOD: Always filter by businessId
+// ✅ BEST: Use automated query scoping middleware and utilities
 async function getDocuments(req, res) {
-  const { businessId } = req.params;
-  const userId = req.user.userId;
+  // Automatically attaches { businessId: req.businessId } to the query
+  const query = scopeToBusinessId(req, {});
+  const documents = await Document.find(query);
   
-  // 1. Verify user has access
-  const membership = await BusinessMember.findOne({
-    userId,
-    businessId,
-    status: 'active'
-  });
-  
-  if (!membership) {
-    return res.status(403).json({
-      error: 'Access denied'
-    });
-  }
-  
-  // 2. Get documents ONLY for this business
-  const documents = await Document.find({
-    businessId: businessId  // ALWAYS filter!
-  });
-  
-  res.json({ documents });
+  res.json({ success: true, documents });
 }
 
 // ✅ GOOD: Use ChromaDB collection specific to business

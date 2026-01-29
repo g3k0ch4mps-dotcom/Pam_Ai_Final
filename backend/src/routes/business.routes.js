@@ -1,7 +1,7 @@
 const express = require('express');
 const businessController = require('../controllers/business.controller');
-const { authenticate } = require('../middleware/auth.middleware');
-const { checkBusinessAccess, requireRole } = require('../middleware/permission.middleware');
+const { authenticate, restrictTo } = require('../middleware/auth.middleware');
+const { validateBusinessId } = require('../middleware/tenantIsolation.middleware');
 
 const router = express.Router();
 
@@ -18,14 +18,14 @@ router.use(authenticate);
 
 // Get Business Profile (Any Member)
 router.get('/:id/profile',
-    checkBusinessAccess,
+    validateBusinessId,
     businessController.getBusinessProfile
 );
 
 // Update Settings (Owner Only)
 router.put('/:id/settings',
-    checkBusinessAccess,
-    requireRole('owner'),
+    validateBusinessId,
+    restrictTo('business_owner'),
     businessController.updateBusinessSettings
 );
 

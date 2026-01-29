@@ -12,6 +12,7 @@ if (!logger.info) {
 
 async function runTest() {
     const urls = [
+        'https://shop.mamuzaengineering.com/products',
         'https://shop.mamuzaengineering.com/product',
         'https://example.com'
     ];

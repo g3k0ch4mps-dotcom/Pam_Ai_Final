@@ -22,22 +22,16 @@ const comparePassword = async (password, hash) => {
     return bcrypt.compare(password, hash);
 };
 
-/**
- * Generate a JWT token for a user
- * @param {Object} user - User object
- * @param {Object|null} businessMember - BusinessMember object (optional)
- * @returns {string} JWT Token
- */
-const generateToken = (user, businessMember = null) => {
+const generateToken = (user) => {
     const payload = {
         id: user._id,
         email: user.email,
-        roles: businessMember ? [businessMember.role] : [],
-        businessId: businessMember ? businessMember.businessId : null
+        role: user.role,
+        businessId: user.businessId || null
     };
 
     return jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN || '24h'
+        expiresIn: process.env.JWT_EXPIRE || '24h'
     });
 };
 

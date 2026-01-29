@@ -207,150 +207,56 @@ async function askQuestion(question) {
 
 ---
 
-## 🔒 Business Admin APIs (Authentication Required)
+## 🔒 Business Management APIs (Authentication Required)
 
-These endpoints require JWT token in `Authorization` header.
+All business operations are now structured under the `/api/business/v1` namespace. Every request requires a JWT token in the `Authorization` header.
 
-**Header Format:**
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
----
-
-### 3. Register Business
-
-```http
-POST /api/business/register
-```
-
-**Purpose:** Register new business and create owner account
-
-**Rate Limit:** 5 requests per 15 minutes per IP
-
-**Request Body:**
-```json
-{
-  "email": "owner@luxurysalon.com",
-  "password": "SecurePass123!",
-  "fullName": "Sarah Johnson",
-  "businessName": "Luxury Salon & Spa",
-  "businessType": "salon",
-  "industry": "beauty",
-  "phone": "+1-555-0123",
-  "address": {
-    "street": "123 Main Street",
-    "city": "New York",
-    "state": "NY",
-    "country": "USA",
-    "zipCode": "10001"
-  }
-}
-```
-
-**Field Requirements:**
-- `email` - Valid email format, unique
-- `password` - Min 8 chars, must contain uppercase, lowercase, number
-- `fullName` - 2-50 characters
-- `businessName` - Unique business name
-- `phone` - Optional
-- `address` - Optional but recommended
-
-**Response (201 Created):**
-```json
-{
-  "success": true,
-  "message": "Business registered successfully",
-  "user": {
-    "id": "user_456def",
-    "email": "owner@luxurysalon.com",
-    "fullName": "Sarah Johnson"
-  },
-  "business": {
-    "id": "biz_123abc",
-    "businessName": "Luxury Salon & Spa",
-    "businessSlug": "luxury-salon-spa",
-    "chatUrl": "https://yourapp.com/chat/luxury-salon-spa"
-  },
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "role": "owner"
-}
-```
-
-**Error Responses:**
-```json
-// 400 Bad Request
-{
-  "success": false,
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "Invalid email format",
-    "details": {
-      "field": "email",
-      "value": "notanemail"
-    }
-  }
-}
-
-// 409 Conflict
-{
-  "success": false,
-  "error": {
-    "code": "EMAIL_EXISTS",
-    "message": "Email already registered"
-  }
-}
-```
+**New Headers Requirements:**
+- `Authorization`: `Bearer <token>`
+- `Content-Type`: `application/json`
 
 ---
 
-### 4. Business Login
+### 3. Business Registration & Login
+These routes remain under the central `/api/auth` namespace for account bootstrapping.
 
-```http
-POST /api/business/login
-```
+**POST /api/auth/register**
+- Registers a business and creates the primary owner account (RBAC: `business_owner`).
 
-**Purpose:** Login as business owner or team member
+**POST /api/auth/login**
+- Returns user details, role, and business ID along with the JWT.
+- Token payload contains `id`, `role`, and `businessId`.
 
-**Rate Limit:** 5 attempts per 15 minutes per IP (brute force protection)
+---
 
-**Request Body:**
-```json
-{
-  "email": "owner@luxurysalon.com",
-  "password": "SecurePass123!"
-}
-```
+## 🏢 Business Operations (v1)
+Base Path: `/api/business/v1`
 
-**Response (200 OK):**
-```json
-{
-  "success": true,
-  "message": "Login successful",
-  "user": {
-    "id": "user_456def",
-    "email": "owner@luxurysalon.com",
-    "fullName": "Sarah Johnson"
-  },
-  "businesses": [
-    {
-      "id": "biz_123abc",
-      "businessName": "Luxury Salon & Spa",
-      "businessSlug": "luxury-salon-spa",
-      "role": "owner",
-      "permissions": {
-        "canUploadDocuments": true,
-        "canDeleteDocuments": true,
-        "canManageTeam": true,
-        "canViewAnalytics": true,
-        "canManageSettings": true
-      }
-    }
-  ],
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "expiresIn": "7d"
-}
-```
+| Feature | Method | Endpoint | Description |
+| :--- | :--- | :--- | :--- |
+| **Documents** | `GET` | `/documents` | List business documents (Scoped) |
+| **Documents** | `POST` | `/documents` | Upload new knowledge base file |
+| **Chat** | `GET` | `/chat/conversations` | List internal conversations |
+| **Chat** | `POST` | `/chat/message` | Handle internal AI interaction |
+| **Leads** | `GET` | `/leads` | List captured leads (Scoped) |
+| **Leads** | `PATCH` | `/leads/:id` | Update lead status/notes |
+| **Settings** | `GET` | `/settings` | Get business profile |
+| **Settings** | `PATCH` | `/settings` | Update chat branding/logic |
+
+---
+
+### 4. Document Management
+All document operations are strictly isolated by the user's `businessId` attached to the JWT.
+
+**GET /api/business/v1/documents**
+- Fetches all documents owned by the active business.
+
+**POST /api/business/v1/documents**
+- Uploads and processes a new file.
+- Automatically assigns ownership to the active business.
+
+**DELETE /api/business/v1/documents/:id**
+- Requires `business_owner` or `business_admin` role.
 
 **Error Responses:**
 ```json

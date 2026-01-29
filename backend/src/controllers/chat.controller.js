@@ -44,6 +44,11 @@ const handlePublicChat = async (req, res) => {
             });
         }
 
+        // 2a. Find or Create Lead Session
+        const sessionId = req.body.sessionId || `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        const leadService = require('../services/lead.service');
+        await leadService.findOrCreateLead(business._id, businessSlug, sessionId);
+
         // 3. Search Relevant Documents
         logger.info(`Searching docs for business: ${business.businessName}, query: ${question}`);
         const contextDocs = await searchService.searchDocuments(business._id, question, 3); // Top 3 docs
@@ -54,6 +59,16 @@ const handlePublicChat = async (req, res) => {
             contextDocs,
             { businessName: business.businessName }
         );
+
+        // 4a. Update Lead with Interaction
+        // Add User Question
+        await leadService.addChatMessage(sessionId, 'user', question);
+        await leadService.extractInterests(question).forEach(interest =>
+            leadService.addInterest(sessionId, interest)
+        );
+
+        // Add AI Response
+        await leadService.addChatMessage(sessionId, 'assistant', responseData.answer);
 
         // 5. Log Chat
         // Optionally migrate this to Conversation model too if we want unified storage
@@ -72,6 +87,7 @@ const handlePublicChat = async (req, res) => {
         res.json({
             success: true,
             answer: responseData.answer,
+            sessionId: sessionId,
             references: contextDocs.map(d => ({ filename: d.filename, score: d.score }))
         });
 

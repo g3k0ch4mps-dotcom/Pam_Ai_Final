@@ -14,12 +14,12 @@ Two-Database Architecture:
 
 ┌────────────────────────┐
 │      MongoDB           │
-│  (Relational-like data)│
+│  (Multi-tenant Store)  │
 │                        │
-│  • Users               │
+│  • Users (RBAC + BIZ)  │
 │  • Businesses          │
-│  • BusinessMembers     │
 │  • Documents metadata  │
+│  • Leads               │
 │  • Chat logs           │
 └────────────────────────┘
 
@@ -52,16 +52,20 @@ Two-Database Architecture:
   
   // Authentication
   email: "owner@luxurysalon.com",          // Unique, required
-  password: "$2b$12$hashedpassword...",    // bcrypt hashed
+  passwordHash: "$2b$12$hashedpassword...", // bcrypt hashed
   
   // Profile
-  fullName: "Sarah Johnson",               // Required
-  phone: "+1-555-0123",                    // Optional
-  avatar: "https://cdn.../avatar.jpg",     // Optional
+  firstName: "Sarah",                      // Required
+  lastName: "Johnson",                     // Required
+  
+  // RBAC & Multi-tenancy
+  role: "business_owner",                  // Enum: owner, admin, staff, viewer, super_admin
+  businessId: ObjectId("biz_123abc"),      // Linked primary business
+  isSystemUser: false,                     // Flag for support/super admins
   
   // Status
   isActive: true,                          // Can login?
-  emailVerified: false,                    // Email confirmed?
+  isEmailVerified: false,                  // Email confirmed?
   
   // Timestamps
   createdAt: ISODate("2024-01-01T00:00:00Z"),
@@ -166,59 +170,13 @@ db.businesses.createIndex({ isActive: 1 })
 
 ---
 
-### 3. BusinessMembers Collection
+> [!IMPORTANT]
+> **Refactored Architecture**: As of January 2026, the `BusinessMembers` collection has been deprecated. Roles and Business associations are now stored directly on the `User` document for better performance and simpler security rules.
 
-**Purpose:** Link users to businesses with roles and permissions
-
-```javascript
-{
-  _id: ObjectId("member_789ghi"),
-  
-  // Relationships
-  userId: ObjectId("user_456def"),         // Reference to Users
-  businessId: ObjectId("biz_123abc"),      // Reference to Businesses
-  
-  // Role & Permissions
-  role: "manager",                         // "owner", "admin", "manager", "staff"
-  customRoleName: null,                    // If using custom role
-  
-  permissions: {
-    canUploadDocuments: true,
-    canDeleteDocuments: false,
-    canManageTeam: false,
-    canViewAnalytics: true,
-    canManageSettings: false,
-    canChat: true                          // Can use business chat?
-  },
-  
-  // Status
-  status: "active",                        // "active", "invited", "suspended"
-  invitedBy: ObjectId("user_456def"),      // Who invited this person?
-  invitedAt: ISODate("2024-01-10T00:00:00Z"),
-  joinedAt: ISODate("2024-01-15T00:00:00Z"),
-  
-  // Timestamps
-  createdAt: ISODate("2024-01-10T00:00:00Z"),
-  updatedAt: ISODate("2024-12-29T10:30:00Z")
-}
-```
-
-**Indexes:**
-```javascript
-// Compound unique index: user can only have one role per business
-db.businessMembers.createIndex(
-  { userId: 1, businessId: 1 }, 
-  { unique: true }
-)
-db.businessMembers.createIndex({ businessId: 1 })
-db.businessMembers.createIndex({ userId: 1 })
-db.businessMembers.createIndex({ status: 1 })
-```
-
-**Validation Rules:**
-- One user can have only ONE role per business (enforced by unique index)
-- User can belong to MULTIPLE businesses (different documents)
-- `role` must be one of: "owner", "admin", "manager", "staff"
+**User-to-Business Relationship:**
+- One user belongs to ONE primary business.
+- Role and Permission logic is centralized in `config/roles.js`.
+- Security is enforced via `tenantIsolation.middleware.js` and `scopeToBusinessId` utility.
 
 ---
 
