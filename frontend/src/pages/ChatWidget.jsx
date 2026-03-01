@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Send, MessageCircle } from 'lucide-react';
+import { Send, MessageCircle, X, Trash2 } from 'lucide-react';
+import { io } from 'socket.io-client';
 import { API_URLS } from '../apiConfig';
 import LeadCaptureForm from '../components/LeadCaptureForm';
 
@@ -22,6 +23,33 @@ export default function ChatWidget() {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Visitor Tracking
+    useEffect(() => {
+        if (!slug) return;
+
+        const socket = io(import.meta.env.VITE_API_BASE_URL || '', {
+            path: '/socket.io',
+        });
+
+        socket.on('connect', () => {
+            socket.emit('visitor-session-start', {
+                businessSlug: slug,
+                url: window.location.href,
+                referrer: document.referrer
+            });
+        });
+
+        // Track page views if this was a multi-page widget (simplified here)
+        socket.emit('page-view', {
+            page: 'Chat Lobby',
+            url: window.location.pathname
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, [slug]);
 
     const handleSend = async (e) => {
         e.preventDefault();
@@ -105,13 +133,26 @@ export default function ChatWidget() {
             {/* Phone Simulator */}
             <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col h-[600px]">
 
-                {/* Header */}
-                <div className="bg-blue-600 p-4 flex items-center text-white">
-                    <MessageCircle className="w-6 h-6 mr-2" />
-                    <div>
-                        <h3 className="font-bold">Support Chat</h3>
-                        <p className="text-xs opacity-80">Powered by AI</p>
+                <div className="bg-blue-600 p-4 flex items-center justify-between text-white">
+                    <div className="flex items-center">
+                        <MessageCircle className="w-6 h-6 mr-2" />
+                        <div>
+                            <h3 className="font-bold">Support Chat</h3>
+                            <p className="text-xs opacity-80">Powered by AI</p>
+                        </div>
                     </div>
+                    <button
+                        onClick={() => {
+                            if (confirm('Clear conversation?')) {
+                                setMessages([{ role: 'assistant', text: 'Hello! How can I help you today?', type: 'text' }]);
+                                setSessionId(null);
+                            }
+                        }}
+                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                        title="Clear Chat"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
                 </div>
 
                 {/* Messages */}

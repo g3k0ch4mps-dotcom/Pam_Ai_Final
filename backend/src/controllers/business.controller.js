@@ -1,4 +1,6 @@
 const Business = require('../models/Business');
+const Conversation = require('../models/Conversation');
+const Lead = require('../models/Lead');
 const logger = require('../utils/logger');
 
 /**
@@ -133,8 +135,110 @@ const getPublicBusinessInfo = async (req, res) => {
     }
 };
 
+/**
+ * Get dashboard statistics
+ * @route GET /api/business/v1/dashboard/stats
+ */
+const getDashboardStats = async (req, res) => {
+    try {
+        const businessId = req.businessId;
+
+        const [
+            conversationCount,
+            leadCount,
+            ticketStats,
+            onlineVisitors // This will be handled by the visitor model later
+        ] = await Promise.all([
+            Conversation.countDocuments({ businessId, isTicket: false }),
+            Lead.countDocuments({ businessId }),
+            Conversation.aggregate([
+                { $match: { businessId, isTicket: true } },
+                { $group: { _id: '$status', count: { $sum: 1 } } }
+            ]),
+            // Visitor model not yet implemented in Phase 2, but we can placeholder or skip for now
+            Promise.resolve(0)
+        ]);
+
+        const tickets = {
+            open: 0,
+            pending: 0,
+            in_progress: 0,
+            resolved: 0,
+            closed: 0,
+            total: 0
+        };
+
+        ticketStats.forEach(s => {
+            tickets[s._id] = s.count;
+            tickets.total += s.count;
+        });
+
+        res.json({
+            success: true,
+            data: {
+                conversations: conversationCount,
+                leads: leadCount,
+                tickets,
+                onlineVisitors
+            }
+        });
+    } catch (error) {
+        logger.error(`Dashboard stats error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Failed to fetch dashboard stats' });
+    }
+};
+
+/**
+ * Get analytics overview
+ * @route GET /api/business/v1/analytics/overview
+ */
+const getAnalyticsOverview = async (req, res) => {
+    try {
+        const businessId = req.businessId;
+
+        // Basic analytics for now: last 7 days of conversations and leads
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+        const conversationTrend = await Conversation.aggregate([
+            { $match: { businessId, createdAt: { $gte: sevenDaysAgo } } },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        const leadTrend = await Lead.aggregate([
+            { $match: { businessId, createdAt: { $gte: sevenDaysAgo } } },
+            {
+                $group: {
+                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { _id: 1 } }
+        ]);
+
+        res.json({
+            success: true,
+            data: {
+                conversationTrend,
+                leadTrend
+            }
+        });
+    } catch (error) {
+        logger.error(`Analytics overview error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Failed to fetch analytics' });
+    }
+};
+
 module.exports = {
     getBusinessProfile,
     updateBusinessSettings,
-    getPublicBusinessInfo
+    getPublicBusinessInfo,
+    getDashboardStats,
+    getAnalyticsOverview
 };

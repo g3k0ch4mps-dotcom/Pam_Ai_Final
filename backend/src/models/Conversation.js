@@ -65,7 +65,39 @@ const conversationSchema = new mongoose.Schema({
     metadata: {
         type: Map,
         of: String
-    }
+    },
+    // ==========================================
+    // TICKETING FIELDS
+    // ==========================================
+    isTicket: {
+        type: Boolean,
+        default: false
+    },
+    ticketNumber: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    status: {
+        type: String,
+        enum: ['open', 'pending', 'in_progress', 'resolved', 'closed'],
+        default: 'open'
+    },
+    priority: {
+        type: String,
+        enum: ['low', 'medium', 'high', 'urgent'],
+        default: 'medium'
+    },
+    assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    tags: [String],
+    dueDate: Date,
+    resolvedAt: Date,
+    customerEmail: String,
+    customerName: String,
+    customerPhone: String
 }, {
     timestamps: true
 });

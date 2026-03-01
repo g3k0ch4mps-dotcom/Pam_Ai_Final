@@ -70,7 +70,23 @@ const userSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
-    }
+    },
+    // ==========================================
+    // AUTH ENHANCEMENTS (Google & OTP)
+    // ==========================================
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true // Allow null for non-Google users
+    },
+    emailVerificationToken: String,
+    emailVerificationExpires: Date,
+    emailVerified: {
+        type: Boolean,
+        default: false
+    },
+    otpSecret: String,
+    otpExpires: Date
 }, {
     timestamps: true
 });

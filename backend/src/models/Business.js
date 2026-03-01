@@ -38,17 +38,25 @@ const businessSchema = new mongoose.Schema({
     subscription: {
         plan: {
             type: String,
-            enum: ['free', 'pro', 'enterprise'],
+            enum: ['free', 'starter', 'professional', 'enterprise'],
             default: 'free'
         },
         status: {
             type: String,
-            enum: ['active', 'past_due', 'canceled', 'trialing'],
+            enum: ['active', 'past_due', 'canceled', 'trialing', 'incomplete', 'incomplete_expired', 'unpaid'],
             default: 'active'
         },
-        startDate: Date,
-        endDate: Date,
-        features: [String]
+        stripeCustomerId: String,
+        stripeSubscriptionId: String,
+        currentPeriodStart: Date,
+        currentPeriodEnd: Date,
+        features: {
+            maxDocuments: { type: Number, default: 10 },
+            maxTeamMembers: { type: Number, default: 1 },
+            maxConversations: { type: Number, default: 100 },
+            customWidget: { type: Boolean, default: false },
+            advancedAnalytics: { type: Boolean, default: false }
+        }
     },
 
     // Usage Limits & Tracking

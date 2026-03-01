@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Users, Mail, Phone, Zap, Activity, Download, ChevronRight, MessageCircle } from 'lucide-react';
 import { API_URLS } from '../apiConfig';
-import './Leads.css';
+// import './Leads.css'; // Removing legacy CSS in favor of utility classes
 
 // but will ensure it's clean.
 
@@ -107,59 +108,58 @@ function Leads() {
     }
 
     return (
-        <div className="p-6 max-w-7xl mx-auto space-y-6">
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* Header */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-800">👥 Customer Leads</h1>
-                    <p className="text-gray-500 text-sm">Track and manage your potential customers.</p>
+                    <h1 className="text-3xl font-black text-gray-900">Customer Leads</h1>
+                    <p className="text-gray-500 mt-1 font-medium">Track and manage your potential customers captured by Pam AI.</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-4">
                     <select
                         value={filter}
                         onChange={(e) => setFilter(e.target.value)}
-                        className="border rounded-lg px-3 py-2 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="border border-gray-200 rounded-xl px-4 py-3 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold text-sm"
                     >
-                        <option value="all">All Leads</option>
-                        <option value="email">Has Email</option>
-                        <option value="hot">Hot Leads (50+)</option>
-                        <option value="veryhot">Very Hot (70+)</option>
-                        <option value="new">Status: New</option>
+                        <option value="all">All Channels</option>
+                        <option value="email">Has Contact Info</option>
+                        <option value="hot">High Intent (50+)</option>
+                        <option value="veryhot">Immediate Action (70+)</option>
+                        <option value="new">Newly Captured</option>
                     </select>
 
-                    <button onClick={exportLeads} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 shadow-sm transition">
-                        <span>📊</span> Export CSV
+                    <button onClick={exportLeads} className="bg-white border border-gray-200 text-gray-700 px-6 py-3 rounded-xl flex items-center gap-2 shadow-sm font-bold hover:bg-gray-50 transition active:scale-95">
+                        <Activity className="w-4 h-4 text-green-500" /> Export CSV
                     </button>
                 </div>
             </div>
 
             {/* Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <StatCard icon="👥" label="Total Leads" value={leads.length} />
-                <StatCard icon="📧" label="With Email" value={leads.filter(l => l.email).length} />
-                <StatCard icon="📞" label="With Phone" value={leads.filter(l => l.phone).length} />
-                <StatCard icon="🔥" label="Hot Leads" value={leads.filter(l => l.leadScore >= 50).length} highlight />
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <StatCard icon={<Users className="w-6 h-6 text-blue-600" />} label="Total Pipeline" value={leads.length} color="blue" />
+                <StatCard icon={<Mail className="w-6 h-6 text-purple-600" />} label="With Email" value={leads.filter(l => l.email).length} color="purple" />
+                <StatCard icon={<Activity className="w-6 h-6 text-orange-600" />} label="Active Status" value={leads.filter(l => l.status === 'new').length} color="orange" />
+                <StatCard icon={<Zap className="w-6 h-6 text-red-600" />} label="High Intent" value={leads.filter(l => l.leadScore >= 50).length} highlight color="red" />
             </div>
 
             {/* Leads Table */}
-            <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 {leads.length === 0 ? (
-                    <div className="p-12 text-center text-gray-500">
-                        <div className="text-4xl mb-4">📭</div>
-                        <h3 className="text-lg font-medium">No leads found</h3>
-                        <p>Try adjusting your filters or wait for new customers!</p>
+                    <div className="p-20 text-center text-gray-400">
+                        <Users className="w-16 h-16 mx-auto mb-4 opacity-10" />
+                        <h3 className="text-xl font-black text-gray-900">No leads found</h3>
+                        <p className="font-medium">Pam AI hasn't captured any leads matching your criteria yet.</p>
                     </div>
                 ) : (
                     <table className="w-full text-left border-collapse">
-                        <thead className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
+                        <thead className="bg-[#F8FAFC] text-gray-400 text-[10px] uppercase font-black tracking-widest border-b border-gray-100">
                             <tr>
-                                <th className="px-6 py-4 font-semibold">Name</th>
-                                <th className="px-6 py-4 font-semibold">Contact</th>
-                                <th className="px-6 py-4 font-semibold">Interests</th>
-                                <th className="px-6 py-4 font-semibold text-center">Score</th>
-                                <th className="px-6 py-4 font-semibold">Status</th>
-                                <th className="px-6 py-4 font-semibold">Last Contact</th>
-                                <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                                <th className="px-6 py-5">Customer Name</th>
+                                <th className="px-6 py-5">Contact Details</th>
+                                <th className="px-6 py-5 text-center">Intent Score</th>
+                                <th className="px-6 py-5">Engagement Status</th>
+                                <th className="px-6 py-5">Last Activity</th>
+                                <th className="px-6 py-5 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -234,12 +234,14 @@ function Leads() {
 }
 
 // Sub-components
-const StatCard = ({ icon, label, value, highlight }) => (
-    <div className={`bg-white p-4 rounded-xl border shadow-sm flex items-center gap-4 ${highlight ? 'border-orange-200 bg-orange-50' : ''}`}>
-        <div className="text-2xl">{icon}</div>
+const StatCard = ({ icon, label, value, highlight, color }) => (
+    <div className={`bg-white p-6 rounded-2xl border shadow-sm flex items-center gap-4 transition-all hover:shadow-md ${highlight ? `ring-2 ring-${color}-100 border-${color}-200` : 'border-gray-100'}`}>
+        <div className={`w-12 h-12 bg-${color}-50 rounded-xl flex items-center justify-center`}>
+            {icon}
+        </div>
         <div>
-            <div className="text-2xl font-bold text-gray-800">{value}</div>
-            <div className="text-sm text-gray-500">{label}</div>
+            <p className="text-gray-500 text-[10px] font-black uppercase tracking-widest">{label}</p>
+            <p className="text-2xl font-black text-gray-900">{value}</p>
         </div>
     </div>
 );

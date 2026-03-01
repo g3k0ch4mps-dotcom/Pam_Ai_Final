@@ -28,6 +28,13 @@ const ROLES = {
             'conversations.delete',
             'conversations.assign',
 
+            // Tickets
+            'tickets.create',
+            'tickets.read',
+            'tickets.update',
+            'tickets.delete',
+            'tickets.assign',
+
             // Team Management
             'team.invite',
             'team.remove',
@@ -69,6 +76,12 @@ const ROLES = {
             'conversations.update',
             'conversations.assign',
 
+            // Tickets
+            'tickets.create',
+            'tickets.read',
+            'tickets.update',
+            'tickets.assign',
+
             // Team Management (limited)
             'team.invite',
             'team.view',
@@ -94,6 +107,10 @@ const ROLES = {
             'conversations.read',
             'conversations.update',
 
+            // Tickets
+            'tickets.read',
+            'tickets.update',
+
             // Team
             'team.view',
         ],
@@ -107,6 +124,7 @@ const ROLES = {
         permissions: [
             'documents.read',
             'conversations.read',
+            'tickets.read',
             'team.view',
         ],
     },

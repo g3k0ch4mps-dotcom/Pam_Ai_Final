@@ -52,10 +52,19 @@ const generateRandomToken = () => {
     return crypto.randomBytes(32).toString('hex');
 };
 
+/**
+ * Generate a 6-digit OTP
+ * @returns {string} 6-digit number as string
+ */
+const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
 module.exports = {
     hashPassword,
     comparePassword,
     generateToken,
     verifyToken,
-    generateRandomToken
+    generateRandomToken,
+    generateOTP
 };

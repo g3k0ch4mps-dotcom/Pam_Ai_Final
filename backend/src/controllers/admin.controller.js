@@ -36,12 +36,13 @@ const getDashboardStats = async (req, res) => {
  */
 const listAllBusinesses = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 20;
+        const { page = 1, limit = 20, slug } = req.query;
+        const query = {};
+        if (slug) query.businessSlug = slug;
 
-        const businesses = await Business.find()
-            .skip((page - 1) * limit)
-            .limit(limit)
+        const businesses = await Business.find(query)
+            .skip((parseInt(page) - 1) * parseInt(limit))
+            .limit(parseInt(limit))
             .sort({ createdAt: -1 });
 
         res.json({ success: true, data: businesses });

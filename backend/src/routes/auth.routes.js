@@ -20,6 +20,10 @@ const authLimiter = rateLimit({
 // Public routes
 router.post('/register', authLimiter, validateRegistration, authController.registerBusiness);
 router.post('/login', authLimiter, validateLogin, authController.login);
+router.post('/google', authLimiter, authController.googleLogin);
+router.post('/request-otp', authLimiter, authController.requestOTP);
+router.post('/verify-otp', authLimiter, authController.verifyOTP);
+router.get('/verify-email/:token', authController.verifyEmail);
 
 // Protected routes
 router.get('/me', authenticate, authController.getMe);

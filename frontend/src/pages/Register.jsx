@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Building, User, Lock, Mail } from 'lucide-react';
+import { Building, User, Lock, Mail, Chrome } from 'lucide-react';
+import { GoogleLogin } from '@react-oauth/google';
 import { API_URLS } from '../apiConfig';
 
 export default function Register() {
@@ -13,6 +14,7 @@ export default function Register() {
         password: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -22,6 +24,7 @@ export default function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         try {
             const response = await fetch(API_URLS.auth.register, {
@@ -48,6 +51,29 @@ export default function Register() {
         } catch (err) {
             console.error('Registration error:', err); // Debug log
             setError('Connection error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleGoogleSuccess = async (credentialResponse) => {
+        setError('');
+        try {
+            const response = await fetch(`${API_URLS.auth.base}/google`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: credentialResponse.credential }),
+            });
+            const data = await response.json();
+            if (data.success) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                navigate('/dashboard');
+            } else {
+                setError(data.error?.message || 'Google registration failed');
+            }
+        } catch (err) {
+            setError('Google registration error');
         }
     };
 
@@ -126,12 +152,33 @@ export default function Register() {
                     <div>
                         <button
                             type="submit"
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            disabled={loading}
+                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                         >
-                            Start Free Trial
+                            {loading ? 'Registering...' : 'Start Free Trial'}
                         </button>
                     </div>
                 </form>
+
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-2 bg-white text-gray-500">Or register with</span>
+                    </div>
+                </div>
+
+                <div className="flex justify-center">
+                    <GoogleLogin
+                        onSuccess={handleGoogleSuccess}
+                        onError={() => setError('Google Registration Failed')}
+                        useOneTap
+                        theme="outline"
+                        text="signup_with"
+                        shape="rectangular"
+                    />
+                </div>
                 <div className="text-center">
                     <Link to="/login" className="text-sm text-blue-600 hover:underline">Already have an account? Login</Link>
                 </div>

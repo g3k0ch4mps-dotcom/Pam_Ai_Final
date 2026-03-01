@@ -1,16 +1,26 @@
 const OpenAI = require('openai');
-const { GoogleGenerativeAI } = require('@google/generative-ai'); // Added for Gemini
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 const logger = require('../utils/logger');
 
-// Initialize OpenAI Client
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+// Lazy-loaded AI clients
+let _openai = null;
+let _genAI = null;
+let _geminiModel = null;
 
-// // START GEMINI CONFIGURATION // //
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const geminiModel = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-// // END GEMINI CONFIGURATION // //
+const getOpenAI = () => {
+    if (!_openai && process.env.OPENAI_API_KEY) {
+        _openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    }
+    return _openai;
+};
+
+const getGemini = () => {
+    if (!_genAI && process.env.GEMINI_API_KEY) {
+        _genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        _geminiModel = _genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    }
+    return { genAI: _genAI, geminiModel: _geminiModel };
+};
 
 /**
  * Generate a response using RAG (Retrieval-Augmented Generation)
@@ -57,7 +67,8 @@ const generateResponse = async (question, contextDocs, businessSettings) => {
     let processingError = null;
 
     // --- 1. Attempt OpenAI (Primary) ---
-    if (isValidKey(process.env.OPENAI_API_KEY)) {
+    const openai = getOpenAI();
+    if (openai && isValidKey(process.env.OPENAI_API_KEY)) {
         try {
             logger.info('Attempting AI generation with OpenAI...');
             const completion = await openai.chat.completions.create({
@@ -83,11 +94,12 @@ const generateResponse = async (question, contextDocs, businessSettings) => {
             // Continue to fallback...
         }
     } else {
-        logger.info('Skipping OpenAI (Key invalid or missing)');
+        logger.info('Skipping OpenAI (Key invalid or client null)');
     }
 
     // --- 2. Attempt Gemini (Fallback or Primary if OpenAI missing) ---
-    if (isValidKey(process.env.GEMINI_API_KEY)) {
+    const { geminiModel } = getGemini();
+    if (geminiModel && isValidKey(process.env.GEMINI_API_KEY)) {
         try {
             logger.info(processingError ? '⚠️ OpenAI failed. Falling back to Google Gemini...' : 'Attempting AI generation with Gemini...');
 
@@ -105,7 +117,7 @@ const generateResponse = async (question, contextDocs, businessSettings) => {
             processingError = geminiError;
         }
     } else {
-        logger.info('Skipping Gemini (Key invalid or missing)');
+        logger.info('Skipping Gemini (Key invalid or client null)');
     }
 
     // --- Final Fallback: Mock/Error ---

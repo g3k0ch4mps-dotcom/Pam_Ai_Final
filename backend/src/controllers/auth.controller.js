@@ -1,9 +1,14 @@
 const User = require('../models/User');
 const Business = require('../models/Business');
 const authService = require('../services/auth.service');
+const emailService = require('../services/email.service');
 const { generateUniqueSlug } = require('../utils/slug');
 const logger = require('../utils/logger');
 const mongoose = require('mongoose');
+const { OAuth2Client } = require('google-auth-library');
+const crypto = require('crypto');
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 /**
  * Register a new business and owner
@@ -178,26 +183,160 @@ const login = async (req, res) => {
 };
 
 /**
- * Get current user profile
+ * Google OAuth Login/Register
+ * @route POST /api/auth/google
+ */
+const googleLogin = async (req, res) => {
+    try {
+        const { idToken } = req.body;
+
+        const ticket = await client.verifyIdToken({
+            idToken,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { email, sub: googleId, given_name: firstName, family_name: lastName } = ticket.getPayload();
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // New user from Google
+            user = new User({
+                email,
+                googleId,
+                firstName,
+                lastName,
+                role: 'business_owner', // Default role for new signups
+                isEmailVerified: true, // Google emails are verified
+                passwordHash: await authService.hashPassword(crypto.randomBytes(16).toString('hex')) // Dummy password
+            });
+            await user.save();
+        } else if (!user.googleId) {
+            // Existing user linking Google
+            user.googleId = googleId;
+            user.isEmailVerified = true;
+            await user.save();
+        }
+
+        const token = authService.generateToken(user);
+
+        res.json({
+            success: true,
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        logger.error(`Google login error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Google authentication failed' });
+    }
+};
+
+/**
+ * Request Email OTP
+ * @route POST /api/auth/request-otp
+ */
+const requestOTP = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const otp = authService.generateOTP();
+        user.otpSecret = otp;
+        user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+        await user.save();
+
+        await emailService.sendVerificationEmail(email, otp);
+
+        res.json({ success: true, message: 'OTP sent to email' });
+    } catch (error) {
+        logger.error(`OTP request error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Failed to send OTP' });
+    }
+};
+
+/**
+ * Verify Email OTP
+ * @route POST /api/auth/verify-otp
+ */
+const verifyOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user || user.otpSecret !== otp || user.otpExpires < new Date()) {
+            return res.status(400).json({ success: false, error: 'Invalid or expired OTP' });
+        }
+
+        user.isEmailVerified = true;
+        user.otpSecret = undefined;
+        user.otpExpires = undefined;
+        await user.save();
+
+        res.json({ success: true, message: 'Email verified successfully' });
+    } catch (error) {
+        logger.error(`OTP verification error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Failed to verify OTP' });
+    }
+};
+
+/**
+ * Verify Email via Token
+ * @route GET /api/auth/verify-email/:token
+ */
+const verifyEmail = async (req, res) => {
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({
+            emailVerificationToken: token,
+            emailVerificationExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, error: 'Invalid or expired verification token' });
+        }
+
+        user.isEmailVerified = true;
+        user.emailVerificationToken = undefined;
+        user.emailVerificationExpires = undefined;
+        await user.save();
+
+        res.json({ success: true, message: 'Email verified successfully' });
+    } catch (error) {
+        logger.error(`Email verification error: ${error.message}`);
+        res.status(500).json({ success: false, error: 'Failed to verify email' });
+    }
+};
+
+/**
+ * Get current user profile and business
  * @route GET /api/auth/me
  */
 const getMe = async (req, res) => {
     try {
-        // User is already attached by middleware
-        const user = req.user;
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                error: {
+                    code: 'USER_NOT_FOUND',
+                    message: 'User not found'
+                }
+            });
+        }
 
-        // Fetch business details
-        let businessData = null;
-        if (req.businessId) {
-            const business = await Business.findById(req.businessId);
-            if (business) {
-                businessData = {
-                    id: business._id,
-                    name: business.businessName,
-                    slug: business.businessSlug,
-                    role: req.userRole
-                };
-            }
+        let business = null;
+        if (user.businessId) {
+            business = await Business.findById(user.businessId);
         }
 
         res.json({
@@ -208,19 +347,22 @@ const getMe = async (req, res) => {
                     email: user.email,
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    role: user.role,
-                    lastLogin: user.lastLogin
+                    role: user.role
                 },
-                business: businessData
+                business: business ? {
+                    id: business._id,
+                    businessName: business.businessName,
+                    businessSlug: business.businessSlug
+                } : null
             }
         });
     } catch (error) {
-        logger.error(`Profile fetch error: ${error.message}`);
+        logger.error(`GetMe error: ${error.message}`);
         res.status(500).json({
             success: false,
             error: {
-                code: 'PROFILE_ERROR',
-                message: 'Failed to fetch profile'
+                code: 'SERVER_ERROR',
+                message: 'Failed to retrieve profile'
             }
         });
     }
@@ -229,5 +371,9 @@ const getMe = async (req, res) => {
 module.exports = {
     registerBusiness,
     login,
-    getMe
+    getMe,
+    googleLogin,
+    requestOTP,
+    verifyOTP,
+    verifyEmail
 };
