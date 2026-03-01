@@ -3,6 +3,7 @@ const logger = require('../utils/logger');
 const { Parser } = require('json2csv');
 const { scopeToBusinessId } = require('../utils/queryScoping');
 const Lead = require('../models/Lead');
+const Business = require('../models/Business'); // Added this line
 
 /**
  * Lead Controller
@@ -25,6 +26,12 @@ const captureLead = async (req, res) => {
             return res.status(400).json({ success: false, message: 'Missing required fields' });
         }
 
+        // A01:2021 - Broken Access Control: Verify business context
+        const business = await Business.findOne({ businessSlug });
+        if (!business) {
+            return res.status(404).json({ success: false, message: 'Invalid business context' });
+        }
+
         // We assume the lead already exists from the chat session starting
         // If not, we might fail or create a bare one.
         // Ideally, we get businessId from the params if this is a business-scoped route
@@ -35,12 +42,13 @@ const captureLead = async (req, res) => {
         // The service handles findOrCreate. But we need a Business ID to create one.
 
         // Let's rely on the service to handle the update if it exists
-        const lead = await leadService.updateContactInfo(sessionId, data);
+        // The service now requires businessId for security
+        const lead = await leadService.updateContactInfo(sessionId, business._id, data);
 
         res.json({ success: true, lead });
     } catch (error) {
         logger.error(`Capture lead error: ${error.message}`);
-        res.status(500).json({ success: false, message: 'Failed to capture lead' });
+        res.status(500).json({ success: false, message: error.message || 'Failed to capture lead' });
     }
 };
 
