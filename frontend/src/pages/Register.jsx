@@ -78,46 +78,52 @@ export default function Register() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                        Create your Business Account
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-slate-950 py-12 px-4 transition-colors duration-300">
+            <div className="max-w-md w-full space-y-8 bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] border border-gray-100 dark:border-slate-800 shadow-2xl">
+                <div className="text-center">
+                    <h2 className="text-4xl font-black text-blue-600">
+                        Pamilo AI
                     </h2>
+                    <p className="mt-2 text-gray-500 dark:text-slate-400 font-medium">Create your business account</p>
                 </div>
-                {error && <div className="text-red-500 text-center text-sm">{error}</div>}
-                <form className="mt-8 space-y-6" onSubmit={handleRegister}>
-                    <div className="rounded-md shadow-sm -space-y-px">
 
+                {error && (
+                    <div className="p-4 text-sm text-red-500 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 rounded-xl font-bold text-center">
+                        {error}
+                    </div>
+                )}
+
+                <form className="mt-8 space-y-6" onSubmit={handleRegister}>
+                    <div className="space-y-6">
                         {/* Business Info */}
-                        <div className="mb-4">
-                            <label className="text-xs font-bold text-gray-500 uppercase">Business Info</label>
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest ml-1">Business Identity</label>
                             <input
                                 name="businessName"
                                 type="text"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Business Name"
+                                className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Legal Business Name"
                                 onChange={handleChange}
                             />
                             <input
                                 name="industry"
                                 type="text"
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Industry (e.g. Retail)"
+                                className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Industry (e.g. Fintech, Healthcare)"
                                 onChange={handleChange}
                             />
                         </div>
 
-                        {/* Personal Info */}
-                        <div className="mb-4">
-                            <label className="text-xs font-bold text-gray-500 uppercase">Owner Info</label>
-                            <div className="flex">
+                        {/* Owner Info */}
+                        <div className="space-y-3">
+                            <label className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest ml-1">Owner Credentials</label>
+                            <div className="grid grid-cols-2 gap-3">
                                 <input
                                     name="firstName"
                                     type="text"
                                     required
-                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-tl-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                    className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                     placeholder="First Name"
                                     onChange={handleChange}
                                 />
@@ -125,7 +131,7 @@ export default function Register() {
                                     name="lastName"
                                     type="text"
                                     required
-                                    className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-tr-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                                    className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                     placeholder="Last Name"
                                     onChange={handleChange}
                                 />
@@ -134,38 +140,36 @@ export default function Register() {
                                 name="email"
                                 type="email"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Email address"
+                                className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Business Email address"
                                 onChange={handleChange}
                             />
                             <input
                                 name="password"
                                 type="password"
                                 required
-                                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                                placeholder="Password"
+                                className="w-full p-4 bg-gray-50 dark:bg-slate-800 border border-gray-100 dark:border-slate-700 rounded-2xl text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                placeholder="Secure Password"
                                 onChange={handleChange}
                             />
                         </div>
                     </div>
 
-                    <div>
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-                        >
-                            {loading ? 'Registering...' : 'Start Free Trial'}
-                        </button>
-                    </div>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg shadow-blue-200 dark:shadow-none hover:bg-blue-700 transition-all disabled:opacity-50"
+                    >
+                        {loading ? 'Processing Registration...' : 'Launch Free Trial'}
+                    </button>
                 </form>
 
-                <div className="relative my-6">
+                <div className="relative my-8">
                     <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-gray-300"></div>
+                        <div className="w-full border-t border-gray-100 dark:border-slate-800"></div>
                     </div>
-                    <div className="relative flex justify-center text-sm">
-                        <span className="px-2 bg-white text-gray-500">Or register with</span>
+                    <div className="relative flex justify-center text-[10px] font-black uppercase tracking-widest">
+                        <span className="px-4 bg-white dark:bg-slate-900 text-gray-400 dark:text-slate-500">Or register with</span>
                     </div>
                 </div>
 
@@ -179,8 +183,14 @@ export default function Register() {
                         shape="rectangular"
                     />
                 </div>
-                <div className="text-center">
-                    <Link to="/login" className="text-sm text-blue-600 hover:underline">Already have an account? Login</Link>
+
+                <div className="text-center pt-4">
+                    <p className="text-sm text-gray-500 dark:text-slate-400 font-medium">
+                        Already have an account?{' '}
+                        <Link to="/login" className="font-black text-blue-600 hover:text-blue-500 decoration-2 underline-offset-4">
+                            Login Here
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

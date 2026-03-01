@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - Widget Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg text-white">
+<span class="material-symbols-outlined block">smart_toy</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Pamilo AI</h1>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">Analytics</a>
+<a class="text-sm font-medium text-primary border-b-2 border-primary py-5" href="#">Settings</a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary transition-colors" href="#">Docs</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64" placeholder="Search settings..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User Profile" data-alt="Professional user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhU3HWIQnMTQAPQk6InxVoHb8f0lwqZMDJxazfxtMaTi6vWfmpCzbLADvqDf0iwmTtevllUQ_i8le2_wHmKoa6H8rgbis-M36VVTSAk1d79iO6CL5imvFRGkWeANHlZR_uekf5UopIxJ6qbdXWkrYS4EwfrxNPfBB2FlRm-1fMIo8hs0lm2Pe2syxb_nTJhpQ31zdNESqwxdZ82_tSJ2iljJ491nU-ftYlATHePOx-Ox732RwYwfIqFZBSs17DuboAyAemhmPJEyg"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Page Header & Tabs -->
+<div class="mb-8">
+<div class="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mb-2">
+<span>Settings</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 dark:text-slate-100 font-medium">Widget Customization</span>
+</div>
+<h2 class="text-3xl font-extrabold tracking-tight mb-6">Widget Configuration</h2>
+<div class="border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
+<nav class="flex gap-8 whitespace-nowrap min-w-max">
+<a class="pb-4 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" href="#">Business</a>
+<a class="pb-4 text-sm font-semibold text-primary border-b-2 border-primary relative" href="#">
+                        Widget
+                        <span class="absolute -top-1 -right-4 bg-primary/10 text-primary text-[10px] px-1.5 py-0.5 rounded-full font-bold">Active</span>
+</a>
+<a class="pb-4 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" href="#">Team</a>
+<a class="pb-4 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" href="#">Integrations</a>
+<a class="pb-4 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" href="#">Billing</a>
+<a class="pb-4 text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" href="#">Advanced</a>
+</nav>
+</div>
+</div>
+<!-- Main Settings Content -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Controls -->
+<div class="lg:col-span-5 space-y-6">
+<!-- Appearance Section -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">palette</span>
+                        Appearance
+                    </h3>
+<div class="space-y-5">
+<!-- Primary Color -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Primary Widget Color</label>
+<div class="flex gap-3">
+<div class="relative flex-1">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">#</span>
+<input class="w-full pl-8 pr-4 py-2 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary" type="text" value="3C83F6"/>
+</div>
+<div class="w-10 h-10 rounded-lg bg-primary border border-slate-200 cursor-pointer"></div>
+</div>
+</div>
+<!-- Position -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Widget Position</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-primary bg-primary/5 text-primary font-medium">
+<span class="material-symbols-outlined text-lg">align_horizontal_right</span>
+                                    Bottom Right
+                                </button>
+<button class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 transition-all font-medium">
+<span class="material-symbols-outlined text-lg">align_horizontal_left</span>
+                                    Bottom Left
+                                </button>
+</div>
+</div>
+<!-- Welcome Message -->
+<div>
+<label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Welcome Message</label>
+<textarea class="w-full px-4 py-2 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg focus:ring-primary focus:border-primary text-sm" placeholder="e.g. Hi! How can I help you today?" rows="3">Hi! I'm Pamilo AI. How can I help you optimize your workflow today?</textarea>
+</div>
+</div>
+</div>
+<!-- Embed Code Section -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">code</span>
+                            Embed Code
+                        </h3>
+<button class="text-xs font-bold text-primary hover:bg-primary/10 px-2 py-1 rounded transition-colors uppercase tracking-wider">Copy Snippet</button>
+</div>
+<p class="text-xs text-slate-500 mb-3 leading-relaxed">Copy and paste this snippet into your website's &lt;head&gt; section to activate the widget.</p>
+<div class="bg-slate-950 rounded-lg p-4 font-mono text-[11px] text-slate-300 overflow-x-auto custom-scrollbar border border-slate-800">
+<pre><code>&lt;script&gt;
+  window.pamiloAI = {
+    apiKey: 'PAI-8821-X99Z',
+    theme: '#3c83f6',
+    pos: 'bottom-right'
+  };
+&lt;/script&gt;
+&lt;script src="https://cdn.pamilo.ai/v1/widget.js" async&gt;&lt;/script&gt;</code></pre>
+</div>
+</div>
+<div class="flex items-center justify-end gap-4 pt-2">
+<button class="px-6 py-2.5 rounded-lg font-bold text-sm text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Discard</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-8 py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 transition-transform active:scale-95">Save Changes</button>
+</div>
+</div>
+<!-- Right Column: Live Preview -->
+<div class="lg:col-span-7 flex flex-col">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">visibility</span>
+                        Live Preview
+                    </h3>
+<div class="flex gap-2">
+<button class="p-1.5 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-lg">desktop_windows</span>
+</button>
+<button class="p-1.5 rounded bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-400 hover:text-primary">
+<span class="material-symbols-outlined text-lg">smartphone</span>
+</button>
+</div>
+</div>
+<!-- Website Mockup -->
+<div class="flex-1 min-h-[500px] bg-slate-200 dark:bg-slate-800 rounded-xl p-4 border-2 border-dashed border-slate-300 dark:border-slate-700 relative overflow-hidden">
+<!-- Browser Chrome -->
+<div class="bg-white dark:bg-slate-900 rounded-lg shadow-2xl h-full w-full overflow-hidden relative border border-slate-200 dark:border-slate-700">
+<div class="h-6 bg-slate-100 dark:bg-slate-800 flex items-center px-3 gap-1.5 border-b border-slate-200 dark:border-slate-700">
+<div class="w-2 h-2 rounded-full bg-red-400"></div>
+<div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+<div class="w-2 h-2 rounded-full bg-green-400"></div>
+</div>
+<!-- Content of Mockup -->
+<div class="p-8">
+<nav class="flex items-center justify-between mb-12">
+<div class="w-24 h-4 bg-slate-200 dark:bg-slate-800 rounded"></div>
+<div class="flex gap-4">
+<div class="w-12 h-2 bg-slate-100 dark:bg-slate-800 rounded"></div>
+<div class="w-12 h-2 bg-slate-100 dark:bg-slate-800 rounded"></div>
+<div class="w-12 h-2 bg-slate-100 dark:bg-slate-800 rounded"></div>
+</div>
+</nav>
+<div class="max-w-md">
+<div class="h-10 bg-slate-200 dark:bg-slate-800 rounded-lg w-3/4 mb-4"></div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-full mb-2"></div>
+<div class="h-4 bg-slate-100 dark:bg-slate-800 rounded w-5/6 mb-8"></div>
+<div class="w-32 h-10 bg-primary/20 rounded-lg"></div>
+</div>
+<div class="mt-16 grid grid-cols-2 gap-4">
+<div class="h-32 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800"></div>
+<div class="h-32 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800"></div>
+</div>
+</div>
+<!-- Chat Widget UI (Active Preview) -->
+<div class="absolute bottom-6 right-6 flex flex-col items-end gap-4">
+<!-- Chat Window -->
+<div class="w-72 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col">
+<div class="p-4 bg-primary text-white flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-green-400"></div>
+<span class="text-sm font-bold">Pamilo Support</span>
+</div>
+<span class="material-symbols-outlined text-lg">close</span>
+</div>
+<div class="p-4 h-48 overflow-y-auto bg-slate-50 dark:bg-slate-900 space-y-3">
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-white text-[10px]">P</div>
+<div class="bg-white dark:bg-slate-800 p-2.5 rounded-2xl rounded-tl-none shadow-sm text-[11px] border border-slate-100 dark:border-slate-800">
+                                            Hi! I'm Pamilo AI. How can I help you optimize your workflow today?
+                                        </div>
+</div>
+<div class="flex justify-end">
+<div class="bg-primary text-white p-2.5 rounded-2xl rounded-tr-none shadow-sm text-[11px]">
+                                            Tell me more about the widget.
+                                        </div>
+</div>
+</div>
+<div class="p-3 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2 bg-white dark:bg-slate-900">
+<input class="flex-1 border-none focus:ring-0 text-xs bg-transparent" placeholder="Type a message..." type="text"/>
+<span class="material-symbols-outlined text-primary text-lg cursor-pointer">send</span>
+</div>
+</div>
+<!-- Chat Trigger Button -->
+<button class="w-14 h-14 rounded-full bg-primary text-white shadow-xl flex items-center justify-center transition-transform hover:scale-110 active:scale-95">
+<span class="material-symbols-outlined text-3xl">chat_bubble</span>
+</button>
+</div>
+</div>
+<!-- Floating Preview Label -->
+<div class="absolute top-8 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-widest border border-white/20">
+                        Interactive Mockup
+                    </div>
+</div>
+<div class="mt-4 flex items-center gap-4 text-xs text-slate-500">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+                        Responsive Design
+                    </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+                        Light/Dark Mode Ready
+                    </div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-green-500">check_circle</span>
+                        Real-time Styles
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar (Mobile only) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 z-50">
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-lg shadow-primary/20">Save Configuration</button>
+</div>
+</body></html>

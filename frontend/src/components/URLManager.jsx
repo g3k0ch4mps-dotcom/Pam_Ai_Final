@@ -135,42 +135,42 @@ export default function URLManager({ businessId }) {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             {/* Add URL Form */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h3 className="text-sm font-bold text-blue-900 mb-3 flex items-center">
-                    <Link2 className="w-4 h-4 mr-2" />
-                    Add Content from URL
+            <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-900/20 rounded-3xl p-8">
+                <h3 className="text-sm font-black text-blue-900 dark:text-blue-400 mb-6 flex items-center uppercase tracking-widest">
+                    <Link2 className="w-5 h-5 mr-3" />
+                    Expand Intelligence from URL
                 </h3>
 
-                <form onSubmit={handlePreviewURL} className="space-y-3">
+                <form onSubmit={handlePreviewURL} className="space-y-6">
                     <div>
                         <input
                             type="url"
                             value={newUrl}
                             onChange={(e) => setNewUrl(e.target.value)}
                             placeholder="https://yourwebsite.com/page"
-                            className="w-full px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-5 py-4 bg-white dark:bg-slate-900 border border-blue-100 dark:border-slate-800 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white transition-all shadow-sm"
                             required
                         />
                     </div>
 
-                    <div className="flex items-center space-x-4">
-                        <label className="flex items-center space-x-2 text-sm text-blue-800">
+                    <div className="flex items-center space-x-6">
+                        <label className="flex items-center space-x-3 text-sm font-bold text-blue-800 dark:text-blue-400 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={autoRefresh}
                                 onChange={(e) => setAutoRefresh(e.target.checked)}
-                                className="rounded border-blue-300"
+                                className="w-4 h-4 rounded border-blue-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-blue-600 focus:ring-blue-500"
                             />
-                            <span>Auto-refresh</span>
+                            <span>Enable Periodic Sync</span>
                         </label>
 
                         {autoRefresh && (
                             <select
                                 value={frequency}
                                 onChange={(e) => setFrequency(e.target.value)}
-                                className="text-sm px-2 py-1 border border-blue-300 rounded"
+                                className="text-xs font-black uppercase tracking-widest px-3 py-1.5 bg-white dark:bg-slate-900 border border-blue-100 dark:border-slate-800 rounded-lg text-blue-700 dark:text-blue-400 outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="daily">Daily</option>
                                 <option value="weekly">Weekly</option>
@@ -180,7 +180,7 @@ export default function URLManager({ businessId }) {
                     </div>
 
                     {error && (
-                        <div className="flex items-center text-red-600 text-sm">
+                        <div className="flex items-center text-red-600 dark:text-red-400 text-[10px] font-black uppercase tracking-widest bg-red-50 dark:bg-red-900/10 p-3 rounded-xl border border-red-100 dark:border-red-900/20">
                             <AlertCircle className="w-4 h-4 mr-2" />
                             {error}
                         </div>
@@ -189,88 +189,93 @@ export default function URLManager({ businessId }) {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 flex items-center justify-center"
+                        className="w-full px-8 py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 disabled:bg-blue-300 dark:disabled:bg-slate-800 flex items-center justify-center shadow-lg shadow-blue-500/20 transition-all active:scale-95"
                     >
                         {loading ? (
                             <>
-                                <Loader className="w-4 h-4 mr-2 animate-spin" />
-                                Previewing...
+                                <Loader className="w-4 h-4 mr-3 animate-spin" />
+                                Analyzing Pipeline...
                             </>
                         ) : (
-                            'Preview Content'
+                            'Analyze Content'
                         )}
                     </button>
                 </form>
             </div>
 
             {/* URL List */}
-            <div className="space-y-3">
-                <h3 className="text-sm font-bold text-gray-700">Added URLs ({urls.length})</h3>
+            <div className="space-y-4">
+                <h3 className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest ml-1">Processed Sources ({urls.length})</h3>
 
                 {urls.length === 0 ? (
-                    <p className="text-gray-500 text-sm text-center py-6">
-                        No URLs added yet. Add a URL above to scrape content from your website.
-                    </p>
+                    <div className="text-center py-12 bg-gray-50 dark:bg-slate-800/30 rounded-3xl border border-dashed dark:border-slate-800">
+                        <p className="text-gray-400 dark:text-slate-600 text-xs font-black uppercase tracking-widest">
+                            No external synchronization active.
+                        </p>
+                    </div>
                 ) : (
-                    urls.map(url => (
-                        <div key={url._id} className="border rounded-lg p-4 hover:bg-gray-50">
-                            <div className="flex items-start justify-between">
-                                <div className="flex-1">
-                                    <div className="flex items-center space-x-2 mb-1">
-                                        <Link2 className="w-4 h-4 text-blue-600" />
-                                        <h4 className="text-sm font-medium text-gray-900">
-                                            {url.urlTitle || 'Untitled'}
-                                        </h4>
-                                    </div>
+                    <div className="grid grid-cols-1 gap-4">
+                        {urls.map(url => (
+                            <div key={url._id} className="border dark:border-slate-800 rounded-3xl p-6 bg-white dark:bg-slate-900/50 hover:border-blue-500/30 transition-all group shadow-sm">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1 min-w-0">
+                                        <div className="flex items-center space-x-3 mb-2">
+                                            <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded-xl text-blue-600 dark:text-blue-400">
+                                                <Link2 className="w-4 h-4" />
+                                            </div>
+                                            <h4 className="text-sm font-black text-gray-900 dark:text-white truncate">
+                                                {url.urlTitle || 'Intelligence Stream'}
+                                            </h4>
+                                        </div>
 
-                                    <a
-                                        href={url.sourceURL}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-xs text-blue-600 hover:underline block mb-2"
-                                    >
-                                        {url.sourceURL}
-                                    </a>
+                                        <a
+                                            href={url.sourceURL}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-xs text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center mb-3 font-medium opacity-70"
+                                        >
+                                            {url.sourceURL} <ExternalLink className="w-3 h-3 ml-1" />
+                                        </a>
 
-                                    {url.urlDescription && (
-                                        <p className="text-xs text-gray-600 mb-2">
-                                            {url.urlDescription.substring(0, 150)}
-                                            {url.urlDescription.length > 150 && '...'}
-                                        </p>
-                                    )}
-
-                                    <div className="flex items-center space-x-4 text-xs text-gray-500">
-                                        <span>
-                                            Scraped: {new Date(url.lastScrapedAt).toLocaleDateString()}
-                                        </span>
-                                        {url.autoRefresh?.enabled && (
-                                            <span className="flex items-center text-green-600">
-                                                <CheckCircle className="w-3 h-3 mr-1" />
-                                                Auto-refresh: {url.autoRefresh.frequency}
-                                            </span>
+                                        {url.urlDescription && (
+                                            <p className="text-xs text-gray-500 dark:text-slate-400 mb-4 line-clamp-2 leading-relaxed">
+                                                {url.urlDescription}
+                                            </p>
                                         )}
-                                    </div>
-                                </div>
 
-                                <div className="flex items-center space-x-2 ml-4">
-                                    <button
-                                        onClick={() => handleRefresh(url._id)}
-                                        className="p-2 text-blue-600 hover:bg-blue-50 rounded"
-                                        title="Refresh content"
-                                    >
-                                        <RefreshCw className="w-4 h-4" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(url._id)}
-                                        className="p-2 text-red-600 hover:bg-red-50 rounded"
-                                        title="Remove URL"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </button>
+                                        <div className="flex items-center space-x-6 text-[10px] font-black uppercase tracking-widest">
+                                            <span className="text-gray-400 dark:text-slate-600">
+                                                Synced: {new Date(url.lastScrapedAt).toLocaleDateString()}
+                                            </span>
+                                            {url.autoRefresh?.enabled && (
+                                                <span className="flex items-center text-green-600 dark:text-green-400">
+                                                    <RefreshCw className="w-3 h-3 mr-1 animate-spin-slow" />
+                                                    Auto-Sync: {url.autoRefresh.frequency}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center space-x-2 ml-6">
+                                        <button
+                                            onClick={() => handleRefresh(url._id)}
+                                            className="w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                                            title="Re-synchronize content"
+                                        >
+                                            <RefreshCw className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(url._id)}
+                                            className="w-10 h-10 flex items-center justify-center bg-gray-50 dark:bg-slate-800 text-red-600 dark:text-red-400 rounded-xl hover:bg-red-600 hover:text-white transition-all shadow-sm"
+                                            title="Terminate connection"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))
+                        ))}
+                    </div>
                 )}
             </div>
 

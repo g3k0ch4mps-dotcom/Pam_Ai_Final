@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - Tickets Kanban Board</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .kanban-column { min-width: 300px; max-width: 300px; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col h-screen sticky top-0">
+<div class="p-6">
+<div class="flex items-center gap-3">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-white text-base font-bold leading-none">Pamilo AI</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Business Dashboard</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">confirmation_number</span>
+<span class="text-sm font-semibold">Tickets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-medium">Reporting</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<div class="flex items-center gap-3 px-3 py-4 mt-2 border-t border-slate-100 dark:border-slate-800">
+<img class="size-8 rounded-full border border-slate-200 dark:border-slate-700" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy6wS43jPOQTCEP_n2-0YIVeooDGWT2lDOZeSU3YwIm8I8zoIlftQxEnibqjaZLSwEkZDaPlfl5MBq3oSum2_d26OQ9rjQNAX4g_F6i1YGXEkJ4UcPZxIu9zcH1RW57NyR5SYx2lbgqFv7OsNslZrLh71f9ee9GRAkK73vYkbqZi6k1ENoKbpiUOEXy4nIUq50d_DaW1Ix6HQ6_yT_ZuE0dW7jDJa-mcJcWubo4_SdOedZ36SQDxncRoKmG4FkF0rBo_vH57STkGg"/>
+<div class="flex flex-col">
+<p class="text-sm font-semibold text-slate-900 dark:text-white">Alex Rivera</p>
+<p class="text-xs text-slate-500">Support Lead</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-8 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<h2 class="text-xl font-bold text-slate-900 dark:text-white">Tickets Kanban Board</h2>
+<div class="h-4 w-px bg-slate-200 dark:border-slate-700 mx-2"></div>
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span>All Products</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-background-light dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary" placeholder="Search tickets..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
+<span class="material-symbols-outlined text-lg">add</span>
+                    Create Ticket
+                </button>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<!-- Kanban Board Container -->
+<div class="flex-1 overflow-x-auto p-8 scrollbar-hide">
+<div class="flex gap-6 h-full items-start">
+<!-- Column: Open -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider">Open</h3>
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-0.5 rounded-full font-bold">5</span>
+</div>
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Card -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all cursor-grab active:cursor-grabbing">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400">TICKET-1024</span>
+<span class="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Urgent</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">Login issue on mobile</h4>
+<p class="text-xs text-slate-500 mb-4">Alex Rivera</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>2h ago</span>
+</div>
+<img class="size-6 rounded-full grayscale opacity-70" data-alt="Customer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1I61Oy8wF20xX_fQhOTg3wL0tTXJFUuOfvMDBeTZwJsb18qbSYyzt0xOV0WD4A2rjB91uH0u01ZS5ZoVm-bkKlcE-B4MnNAv0oqVEGjDYs0U0hIJtldHlqLJXdSdupn4oIUNFBqpDMhw6Xm3Rl_ImNVAl_KtXQNxWfnqa5UuSTKLbzk6swFIuwlm7ZK6_qqbRWJXbmI-6B4z4UPc6CuSyke-IwU7F-gjC-rGeII9T0YKHiT3T4GhJ0IGtJ_t_kY-5rp6aNggv3c0"/>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400">TICKET-1025</span>
+<span class="bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">High</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">API integration error</h4>
+<p class="text-xs text-slate-500 mb-4">Sarah Chen</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>5h ago</span>
+</div>
+<img class="size-6 rounded-full grayscale opacity-70" data-alt="Customer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQebC_tw8jlnGzjZdZWcCVQXUKN10YbWctm8We8_49Oa0HEN5MoyLkU_SgQqTdddTCTCWhgcYSVefDkT5BCZBbPR0uU5bbaxyykz9y27UQ-iJlMK0bPaMc5zNLQ9O3ijnlSHqdOpi7m4qqPef4a9NJSKq2YJhqY1SJbfsvAOdoYUySrj4HOGiJE7p2a32MYnTXELaM7qnQPcGDfJAz_EtBo6TFvsRIBYQZ2oRU39eWC4tYZKdEI5Huoh_tddnKyFkGaNXs5_Na7Qk"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Pending -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider">Pending</h3>
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-0.5 rounded-full font-bold">3</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400">TICKET-1011</span>
+<span class="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Medium</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">Billing inquiry</h4>
+<p class="text-xs text-slate-500 mb-4">Mike Johnson</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>1d ago</span>
+</div>
+<img class="size-6 rounded-full grayscale opacity-70" data-alt="Customer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDjlnnPUCpBJtyGp0fanVrdiY7u7KWD53dX2cDv01lIqpoulkGxxOY4RsHewtR4xht7JE-uidqG_F-no-y4p08ykv-BAi1GHB404RLvQB3T3u3UHwkibZB54EYLZiZn8Efes268Z1BLO98xfdw5uAnNbbLRj_5byp3GdbdgmRf8WSMLfYEW9EGM-xQtB_Yur1ZSvZNNpKuyBvJHbA2eoecgXvuakkHWL-WG274OmhezaBSBoQ8gXqUGwM2e-c4B9RRFCZVMvQBqyg"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: In Progress -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider">In Progress</h3>
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-0.5 rounded-full font-bold">8</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400">TICKET-1027</span>
+<span class="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Urgent</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">Database timeout error</h4>
+<p class="text-xs text-slate-500 mb-4">Jordan Smith</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-slate-400">
+<span class="material-symbols-outlined text-sm text-primary">pending</span>
+<span>Started 15m ago</span>
+</div>
+<img class="size-6 rounded-full grayscale opacity-70" data-alt="Customer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCscgTivhGIAzNpBofQ5i19tLFaKpZuG76jyT0hZYQgRjQICazoYfEDNB_L2GQd7zBh9nlx8Up4SdVEy2tStEUJzLAGSajOw2EFR9hvK6eqO7kZvbVNDEFxv9HGg7EwxSwYC5zxLrkZbWz8CNcoDwqM-wpsMnFWhXA10pmAiqJFXdYwwhhzPF_TjQh28EGooZ0_JCGAIl38hzqWIE6JBtuTAYoMyr7sOMMubvssMF9YhRF70y4sHI-whDpCmL4n8wpEbgU1YE25jKs"/>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 group hover:border-primary/50 transition-all cursor-grab">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400">TICKET-1028</span>
+<span class="bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Medium</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">Feature Request: Dark Mode</h4>
+<p class="text-xs text-slate-500 mb-4">Emma Watson</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-slate-400">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span>3d ago</span>
+</div>
+<img class="size-6 rounded-full grayscale opacity-70" data-alt="Customer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBNCEkhqUMFBE9PbPUCrV0ZaPh6nCJzhy8brlPMS0MfiCtwFtyuF4LepN_2mSho7L-ecA4tN9nbv6iTzmCZwCHY2xbMiPL86r3El3Q3pQ62egKWnBiaQ3ZWtgdvI5InrOJrb6IOqPobSCxXkqWWtjNPxI9uOoJEfRfY4RNBYO5mL_KABABRWypljdtDnVuGsc_qC_6Un_4rBFeaUW0waQ02JChdE5TA4PeX_zeGveZnhSi-SA1NJGXwZXilAxbjdeiCcswlyz587g"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Resolved -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider">Resolved</h3>
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-0.5 rounded-full font-bold">12</span>
+</div>
+</div>
+<div class="flex flex-col gap-3">
+<div class="bg-white/60 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-800 opacity-80">
+<div class="flex justify-between items-start mb-3">
+<span class="text-xs font-bold text-slate-400 line-through">TICKET-1001</span>
+<span class="bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 text-[10px] font-black px-2 py-0.5 rounded uppercase tracking-tighter">Resolved</span>
+</div>
+<h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">Password reset bug</h4>
+<p class="text-xs text-slate-500 mb-4">Robert Downey</p>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1 text-[11px] text-green-500">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span>Fixed 1h ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Closed -->
+<div class="kanban-column flex flex-col gap-4">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-sm text-slate-600 dark:text-slate-400 uppercase tracking-wider">Closed</h3>
+<span class="bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs px-2 py-0.5 rounded-full font-bold">20</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl p-8 items-center justify-center text-center">
+<span class="material-symbols-outlined text-3xl text-slate-300 mb-2">archive</span>
+<p class="text-xs text-slate-400 font-medium">Archived tickets are hidden by default</p>
+<button class="mt-4 text-[10px] font-black uppercase tracking-widest text-primary hover:underline">View History</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Mini Stats -->
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-8 py-3 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="size-2 rounded-full bg-green-500"></span>
+<span>System Online</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">sync</span>
+<span>Last updated: Just now</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span>48 Total active tickets</span>
+<span class="text-slate-300">|</span>
+<span>Avg. response time: 2.4h</span>
+</div>
+</footer>
+</main>
+</body></html>

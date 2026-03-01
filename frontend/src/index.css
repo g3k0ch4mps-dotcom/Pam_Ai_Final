@@ -1,12 +1,13 @@
 @import "tailwindcss";
+@config "../tailwind.config.js";
 
 @layer base {
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply antialiased text-slate-900;
+    @apply antialiased text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-950 transition-colors duration-300;
   }
 
   /* Custom Premium Scrollbar */
@@ -20,25 +21,17 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 10px;
-    border: 2px solid transparent;
-    background-clip: content-box;
+    @apply bg-slate-200 dark:bg-slate-800 rounded-full border-2 border-transparent bg-clip-content;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
-    border: 2px solid transparent;
-    background-clip: content-box;
+    @apply bg-slate-300 dark:bg-slate-700;
   }
 }
 
 /* Glassmorphism Utilities */
 .glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @apply bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-white/10 dark:border-slate-800/50;
 }
 
 .glass-dark {

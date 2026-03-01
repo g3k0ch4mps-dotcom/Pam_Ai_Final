@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI Business Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<!-- Main Wrapper for Mobile View -->
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-white dark:bg-background-dark shadow-xl overflow-x-hidden">
+<!-- Sticky Top Bar -->
+<header class="sticky top-0 z-10 flex items-center justify-between bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-3 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">Pamilo AI</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="relative p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></span>
+</button>
+<div class="ml-2 h-8 w-8 rounded-full bg-primary/20 overflow-hidden border border-primary/30">
+<img alt="Profile" class="h-full w-full object-cover" data-alt="User profile avatar circular thumbnail" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3FBr0RtxsU8e040m4ENiZGA2FCDlqdrHjr1EoKNOrimiOzoNcxidioxSwKE8xOq9idgW6V5BoaOnzQhXOmQVW7GDk-YLZ_H-3eYRBrWxICzrC82hF6DVJzvc1OUhAoz_qWfykIdl5eApz0ZdxdXFzePhSwk9PniWStPdq193yISBD4u16YO8_xPjugl1bgorc0pWK8owS_xWMvIu0fVN-w_l7aLrAbIRNzE6HSEj1IrvCKvXagK6W7XZj9oZwCeqHX9gu2IGU_bw"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Quick Stats Row (Carousel/Grid) -->
+<section class="p-4 grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+<span class="text-xs font-semibold uppercase tracking-wider">Conversations</span>
+<span class="material-symbols-outlined text-sm">chat</span>
+</div>
+<p class="text-2xl font-bold">1,240</p>
+<p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12%
+                    </p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+<span class="text-xs font-semibold uppercase tracking-wider">Leads</span>
+<span class="material-symbols-outlined text-sm">person_add</span>
+</div>
+<p class="text-2xl font-bold">85</p>
+<p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +5%
+                    </p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+<span class="text-xs font-semibold uppercase tracking-wider">Tickets</span>
+<span class="material-symbols-outlined text-sm">confirmation_number</span>
+</div>
+<p class="text-2xl font-bold">12</p>
+<p class="text-xs font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_down</span> -2%
+                    </p>
+</div>
+<div class="flex flex-col gap-1 rounded-xl p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+<span class="text-xs font-semibold uppercase tracking-wider">Visitors</span>
+<span class="material-symbols-outlined text-sm">visibility</span>
+</div>
+<p class="text-2xl font-bold">4.5k</p>
+<p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +8%
+                    </p>
+</div>
+</section>
+<!-- Chart Section -->
+<section class="px-4 py-2">
+<div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-base font-bold">Conversation Volume</h2>
+<p class="text-xs text-slate-500">Mon 12 - Sun 18</p>
+</div>
+<button class="flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-1 text-xs font-semibold">
+                            Last 7 Days
+                            <span class="material-symbols-outlined text-xs">expand_more</span>
+</button>
+</div>
+<div class="h-40 w-full">
+<svg class="w-full h-full overflow-visible" viewbox="0 0 400 150">
+<!-- Gradient fill -->
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#3c83f6" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#3c83f6" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,120 Q50,40 100,80 T200,30 T300,90 T400,20 L400,150 L0,150 Z" fill="url(#chartGradient)"></path>
+<path d="M0,120 Q50,40 100,80 T200,30 T300,90 T400,20" fill="none" stroke="#3c83f6" stroke-linecap="round" stroke-width="3"></path>
+<!-- Interaction points -->
+<circle cx="100" cy="80" fill="#3c83f6" r="4"></circle>
+<circle cx="200" cy="30" fill="#3c83f6" r="4"></circle>
+<circle cx="300" cy="90" fill="#3c83f6" r="4"></circle>
+</svg>
+</div>
+<div class="flex justify-between mt-2 px-1">
+<span class="text-[10px] font-bold text-slate-400">M</span>
+<span class="text-[10px] font-bold text-slate-400">T</span>
+<span class="text-[10px] font-bold text-slate-400">W</span>
+<span class="text-[10px] font-bold text-slate-400">T</span>
+<span class="text-[10px] font-bold text-slate-400">F</span>
+<span class="text-[10px] font-bold text-slate-400">S</span>
+<span class="text-[10px] font-bold text-slate-400">S</span>
+</div>
+</div>
+</section>
+<!-- Recent Activity List -->
+<section class="px-4 py-4">
+<div class="flex items-center justify-between mb-3">
+<h2 class="text-base font-bold">Recent Activity</h2>
+<button class="text-primary text-xs font-semibold">View All</button>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Activity Item 1 -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary text-sm font-bold">JD</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">John Doe</p>
+<p class="text-xs text-slate-500 truncate">Interested in Pricing</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary/10 text-primary uppercase">Active</span>
+<p class="text-[10px] text-slate-400 mt-1">2m ago</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-600 text-sm font-bold">SS</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Sarah Smith</p>
+<p class="text-xs text-slate-500 truncate">Technical Issue</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-orange-100 text-orange-600 uppercase">Open</span>
+<p class="text-[10px] text-slate-400 mt-1">15m ago</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex items-center gap-3 p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 text-sm font-bold">MR</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Mike Ross</p>
+<p class="text-xs text-slate-500 truncate">Feature Request</p>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-600 uppercase">Resolved</span>
+<p class="text-[10px] text-slate-400 mt-1">1h ago</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 px-2 pb-6 pt-2 z-20">
+<div class="flex items-center justify-around">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 py-1 text-primary" href="#">
+<span class="material-symbols-outlined text-[26px]">grid_view</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 py-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[26px]">forum</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Inbox</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 py-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[26px]">confirmation_number</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Tickets</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 py-1 text-slate-400 dark:text-slate-500" href="#">
+<span class="material-symbols-outlined text-[26px]">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

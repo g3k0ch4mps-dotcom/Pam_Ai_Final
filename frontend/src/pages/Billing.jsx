@@ -72,11 +72,11 @@ export default function Billing() {
 
     return (
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-gradient-to-br from-gray-900 to-blue-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
+            <div className="bg-gradient-to-br from-slate-900 to-blue-900 rounded-[2.5rem] p-10 text-white shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl -ml-10 -mb-10"></div>
 
-                <div className="relative z-10 flex justify-between items-center">
+                <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
                     <div>
                         <p className="text-blue-300 text-[10px] font-black uppercase tracking-[0.2em]">Active Subscription</p>
                         <h2 className="text-5xl font-black mt-3 tracking-tight">{subscription?.plan || 'Free Plan'}</h2>
@@ -104,22 +104,22 @@ export default function Billing() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {plans.map(plan => (
-                    <div key={plan.name} className={`bg-white border-[3px] rounded-[2rem] p-10 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${subscription?.plan?.toLowerCase() === plan.name.toLowerCase() ? 'border-blue-600 shadow-xl relative' : 'border-gray-50'}`}>
+                    <div key={plan.name} className={`bg-white dark:bg-slate-900 border-[3px] rounded-[2rem] p-10 flex flex-col transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${subscription?.plan?.toLowerCase() === plan.name.toLowerCase() ? 'border-blue-600 shadow-xl relative' : 'border-gray-50 dark:border-slate-800'}`}>
                         {subscription?.plan?.toLowerCase() === plan.name.toLowerCase() && (
                             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">
                                 Recommended for you
                             </div>
                         )}
-                        <h3 className="text-2xl font-black text-gray-900">{plan.name}</h3>
+                        <h3 className="text-2xl font-black text-gray-900 dark:text-white">{plan.name}</h3>
                         <div className="mt-4 flex items-baseline">
-                            <span className="text-5xl font-black text-gray-900">{plan.price}</span>
-                            <span className="ml-2 text-gray-400 font-bold uppercase text-[10px] tracking-widest">/ month</span>
+                            <span className="text-5xl font-black text-gray-900 dark:text-white">{plan.price}</span>
+                            <span className="ml-2 text-gray-400 dark:text-slate-500 font-bold uppercase text-[10px] tracking-widest">/ month</span>
                         </div>
                         <ul className="mt-10 space-y-5 flex-1">
                             {plan.features.map(f => (
-                                <li key={f} className="flex items-center text-sm font-bold text-gray-600">
-                                    <div className="w-6 h-6 bg-green-50 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
-                                        <Check className="h-3.5 w-3.5 text-green-600" />
+                                <li key={f} className="flex items-center text-sm font-bold text-gray-600 dark:text-slate-400">
+                                    <div className="w-6 h-6 bg-green-50 dark:bg-green-900/20 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                        <Check className="h-3.5 w-3.5 text-green-600 dark:text-green-400" />
                                     </div>
                                     {f}
                                 </li>
@@ -128,7 +128,7 @@ export default function Billing() {
                         <button
                             onClick={() => handleUpgrade(plan.id)}
                             disabled={subscription?.plan?.toLowerCase() === plan.name.toLowerCase()}
-                            className={`mt-12 w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg active:scale-95 ${subscription?.plan?.toLowerCase() === plan.name.toLowerCase() ? 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'}`}
+                            className={`mt-12 w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-lg active:scale-95 ${subscription?.plan?.toLowerCase() === plan.name.toLowerCase() ? 'bg-gray-100 dark:bg-slate-800 text-gray-400 dark:text-slate-600 cursor-not-allowed shadow-none' : 'bg-blue-600 text-white hover:bg-blue-700 shadow-blue-200'}`}
                         >
                             {subscription?.plan?.toLowerCase() === plan.name.toLowerCase() ? 'Currently Active' : 'Upgrade Now'}
                         </button>

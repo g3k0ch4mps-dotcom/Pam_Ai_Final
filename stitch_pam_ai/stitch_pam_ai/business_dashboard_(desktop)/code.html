@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - Business Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Pamilo AI</h1>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span>Conversations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<span>Tickets</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2">
+<div class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile picture of the business administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARRzTdBw9Mb5ZWitEeePCuLAzIfQp0DT_nH-EaQbMuuG9O2geBZywbac8Ei44ImwSIMD68NR-lqoMqoDHQbTh1Rw2GCZrIm1MhWCpTJPrZ2KvMAWjOObDGAVcbFRYwVNZkpv2v5KNyC9Th7U1ls9vKfJQNkNLmd0zZr263fXK3zifUiZcHMaM1DTSSAjYxQzvTAHGnoxEigPvmkAZAz4nOfbqEXmGHfnntsfD_zJsNKQkaYdzYkRsTk_PMRuHsDXmzfjE51cmf8aU"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-sm font-semibold truncate">Alex Rivera</span>
+<span class="text-xs text-slate-500 truncate">Admin Access</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- Top Utility Bar -->
+<header class="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 flex items-center justify-between shrink-0">
+<div class="flex-1 max-w-md">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg focus:ring-2 focus:ring-primary/50 text-sm" placeholder="Search interactions, leads, or help..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-primary rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="size-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-2"></div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
+                        New Campaign
+                    </button>
+</div>
+</header>
+<!-- Dashboard Body -->
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+<div>
+<h2 class="text-3xl font-bold text-slate-900 dark:text-white">Good morning, Alex</h2>
+<p class="text-slate-500 mt-1">Here's what's happening with your AI today.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-1 shadow-sm">
+<button class="px-4 py-1.5 text-sm font-medium rounded-md bg-slate-100 dark:bg-slate-800">Month</button>
+<button class="px-4 py-1.5 text-sm font-medium rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">Week</button>
+<button class="px-4 py-1.5 text-sm font-medium rounded-md hover:bg-slate-50 dark:hover:bg-slate-700">Day</button>
+</div>
+<button class="flex items-center gap-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
+<span class="material-symbols-outlined text-lg">calendar_today</span>
+<span>Jan 1, 2024 - Jan 31, 2024</span>
+</button>
+</div>
+</div>
+<!-- Metrics Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Stat Card 1 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined">chat</span>
+</div>
+<span class="text-emerald-500 text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-base">trending_up</span> 12.5%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Total Conversations</p>
+<p class="text-3xl font-bold mt-1">2,543</p>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center">
+<span class="material-symbols-outlined">person_add</span>
+</div>
+<span class="text-emerald-500 text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-base">trending_up</span> 8.2%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Leads Generated</p>
+<p class="text-3xl font-bold mt-1">842</p>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+<span class="material-symbols-outlined">confirmation_number</span>
+</div>
+<span class="text-rose-500 text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-base">trending_down</span> 3.1%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Support Tickets</p>
+<p class="text-3xl font-bold mt-1">156</p>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<div class="size-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center">
+<span class="material-symbols-outlined">visibility</span>
+</div>
+<span class="text-emerald-500 text-sm font-medium flex items-center">
+<span class="material-symbols-outlined text-base">trending_up</span> 15.7%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium uppercase tracking-wider">Unique Visitors</p>
+<p class="text-3xl font-bold mt-1">12,890</p>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Analytics Chart Section -->
+<div class="lg:col-span-2 space-y-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm h-[400px] flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-lg font-bold">Interaction Volume</h3>
+<p class="text-sm text-slate-500">Hourly AI vs Human workload distribution</p>
+</div>
+<select class="text-sm border-slate-200 dark:border-slate-800 dark:bg-slate-800 rounded-lg px-3 py-1.5 focus:ring-primary/50">
+<option>Daily</option>
+<option>Monthly</option>
+</select>
+</div>
+<div class="flex-1 relative mt-4">
+<!-- Chart Mockup -->
+<div class="absolute inset-0 flex items-end justify-between px-2 gap-4">
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 40%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg transition-all duration-500" style="height: 60%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 55%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 45%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 70%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 75%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 60%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 85%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 45%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 40%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 80%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 65%;"></div>
+</div>
+<div class="w-full bg-primary/20 rounded-t-lg relative" style="height: 65%;">
+<div class="absolute bottom-0 w-full bg-primary rounded-t-lg" style="height: 90%;"></div>
+</div>
+</div>
+</div>
+<div class="flex justify-between mt-4 text-xs font-medium text-slate-400">
+<span>MON</span>
+<span>TUE</span>
+<span>WED</span>
+<span>THU</span>
+<span>FRI</span>
+<span>SAT</span>
+<span>SUN</span>
+</div>
+</div>
+<!-- Secondary Metrics or Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold mb-4">Top Lead Sources</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-primary"></span>
+<span class="text-sm font-medium">Direct Message</span>
+</div>
+<span class="text-sm font-bold">42%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full" style="width: 42%"></div>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="size-3 rounded-full bg-emerald-500"></span>
+<span class="text-sm font-medium">Website Chat</span>
+</div>
+<span class="text-sm font-bold">35%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full" style="width: 35%"></div>
+</div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-center items-center text-center">
+<div class="size-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-slate-400 text-3xl">insights</span>
+</div>
+<h4 class="font-bold">AI Performance</h4>
+<p class="text-sm text-slate-500 mt-2">AI resolved 84% of queries without human intervention this week.</p>
+<button class="mt-4 text-primary text-sm font-semibold hover:underline">View Details</button>
+</div>
+</div>
+</div>
+<!-- Recent Activity Feed -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold">Recent Activity</h3>
+<button class="text-primary text-sm font-semibold hover:underline">View All</button>
+</div>
+<div class="flex-1 space-y-6">
+<!-- Activity Item 1 -->
+<div class="flex gap-4 relative">
+<div class="size-2 bg-emerald-500 rounded-full mt-2 shrink-0"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">New lead from John Doe</span>
+<span class="text-xs text-slate-500 mt-0.5">Automated qualify via Chatbot</span>
+<span class="text-xs text-slate-400 mt-2">2 mins ago</span>
+</div>
+<div class="ml-auto">
+<span class="text-[10px] font-bold px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full uppercase">Lead</span>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="flex gap-4 relative">
+<div class="size-2 bg-primary rounded-full mt-2 shrink-0"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">AI resolved ticket #1242</span>
+<span class="text-xs text-slate-500 mt-0.5">Topic: Password Reset Request</span>
+<span class="text-xs text-slate-400 mt-2">15 mins ago</span>
+</div>
+<div class="ml-auto">
+<span class="text-[10px] font-bold px-2 py-1 bg-primary/10 text-primary rounded-full uppercase">Closed</span>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="flex gap-4 relative">
+<div class="size-2 bg-amber-500 rounded-full mt-2 shrink-0"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Escalated Ticket #1240</span>
+<span class="text-xs text-slate-500 mt-0.5">To human agent: Sarah K.</span>
+<span class="text-xs text-slate-400 mt-2">1 hour ago</span>
+</div>
+<div class="ml-auto">
+<span class="text-[10px] font-bold px-2 py-1 bg-amber-50 text-amber-600 rounded-full uppercase">Escalated</span>
+</div>
+</div>
+<!-- Activity Item 4 -->
+<div class="flex gap-4 relative">
+<div class="size-2 bg-slate-300 rounded-full mt-2 shrink-0"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">New conversation started</span>
+<span class="text-xs text-slate-500 mt-0.5">Visitor from London, UK</span>
+<span class="text-xs text-slate-400 mt-2">2 hours ago</span>
+</div>
+<div class="ml-auto">
+<span class="text-[10px] font-bold px-2 py-1 bg-slate-100 text-slate-600 rounded-full uppercase">Active</span>
+</div>
+</div>
+<!-- Activity Item 5 -->
+<div class="flex gap-4 relative">
+<div class="size-2 bg-emerald-500 rounded-full mt-2 shrink-0"></div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold">Campaign "Winter Sale" live</span>
+<span class="text-xs text-slate-500 mt-0.5">Reaching 5,200 recipients</span>
+<span class="text-xs text-slate-400 mt-2">3 hours ago</span>
+</div>
+<div class="ml-auto">
+<span class="text-[10px] font-bold px-2 py-1 bg-emerald-50 text-emerald-600 rounded-full uppercase">Broadcast</span>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">rocket_launch</span>
+</div>
+<div class="flex flex-col">
+<span class="text-xs font-bold">Pro Plan Active</span>
+<span class="text-[10px] text-slate-500">Next billing Feb 1</span>
+</div>
+</div>
+<button class="text-xs font-bold px-3 py-1.5 border border-slate-200 dark:border-slate-700 rounded hover:bg-slate-50 dark:hover:bg-slate-800">Manage</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

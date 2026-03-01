@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - AI-Powered Customer Support</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<!-- Navigation Bar -->
+<nav class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-2xl">bolt</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Pamilo AI</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary/90 transition-colors">
+                    Try Free
+                </button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative px-4 py-16 md:py-24 overflow-hidden">
+<div class="max-w-7xl mx-auto text-center">
+<div class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium bg-primary/10 text-primary mb-6">
+<span class="relative flex h-2 w-2 mr-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                New: GPT-4o Integration
+            </div>
+<h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 leading-[1.1]">
+                AI-Powered Customer Support That <span class="text-primary">Never Sleeps</span>
+</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+                Revolutionize your customer experience with our intelligent AI that handles inquiries instantly, 24/7, across all your favorite platforms.
+            </p>
+<div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+<button class="w-full sm:w-auto bg-primary text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-primary/90 shadow-lg shadow-primary/25 transition-all">
+                    Start Free Trial
+                </button>
+<button class="w-full sm:w-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-8 py-4 rounded-lg text-lg font-bold hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                    View Demo
+                </button>
+</div>
+<div class="mt-16 relative">
+<div class="absolute inset-0 bg-gradient-to-t from-background-light dark:from-background-dark via-transparent to-transparent z-10 h-full"></div>
+<div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2 shadow-2xl">
+<img alt="Analytics Dashboard" class="rounded-lg w-full h-auto aspect-video object-cover" data-alt="Dashboard showing AI performance metrics and analytics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZBfpe_7pRY87ck0tJO3SgMNCrljCHPoFS65d41zZZ1vQhTHp6kcNGIhtKOrr7bAAsMVz8CpfTl5MLJjqzs9d-GFjnY1l-jXUPNrMQHBqhQYJKK0US1dNgnhYa-obUGbhG8hZvaeNvbDLW8eOYjHdGg4EnHg23cy9l0-MhP0IBC2GYLewLjYEJjU-u3ZIoGnHY7fG81NaOnKWFORGQpHvtQ9mTEQQ6jTLNmIGmCGRTbI158Yf8XUJ1zyppf1RBDIhn0DSkDw5C-iE"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Section -->
+<section class="py-12 border-y border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50">
+<div class="px-4 text-center">
+<h4 class="text-slate-500 dark:text-slate-400 text-sm font-bold uppercase tracking-widest mb-8">Trusted by 1,000+ businesses</h4>
+<div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="flex items-center gap-2 font-bold text-xl"><span class="material-symbols-outlined">api</span> TECHFLOW</div>
+<div class="flex items-center gap-2 font-bold text-xl"><span class="material-symbols-outlined">cloud</span> NEXUS</div>
+<div class="flex items-center gap-2 font-bold text-xl"><span class="material-symbols-outlined">shield</span> SECURE</div>
+<div class="flex items-center gap-2 font-bold text-xl"><span class="material-symbols-outlined">rocket_launch</span> VORTEX</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-20 px-4 bg-white dark:bg-slate-950">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold mb-4">Powerful Features</h2>
+<p class="text-slate-600 dark:text-slate-400">Everything you need to automate your support and grow your business.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1 -->
+<div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900 hover:border-primary/50 transition-colors group">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<h3 class="text-xl font-bold mb-3">AI-Powered Responses</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Smart, contextual answers that sound human. Our AI learns from your knowledge base to provide accurate resolutions instantly.
+                    </p>
+</div>
+<!-- Card 2 -->
+<div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900 hover:border-primary/50 transition-colors group">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">schedule</span>
+</div>
+<h3 class="text-xl font-bold mb-3">24/7 Support</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Round-the-clock availability for global customers. No more "We're away" messages – your customers get help when they need it.
+                    </p>
+</div>
+<!-- Card 3 -->
+<div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900 hover:border-primary/50 transition-colors group">
+<div class="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">ads_click</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Lead Capture</h3>
+<p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Automatically qualify and capture leads from chats. Turn inquiries into customers even while you're sleeping.
+                    </p>
+</div>
+</div>
+</div>
+</section>
+<!-- Get Started Section -->
+<section class="py-20 px-4 bg-background-light dark:bg-background-dark">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-3xl font-bold text-center mb-12">Get Started in 3 Steps</h2>
+<div class="space-y-12">
+<div class="flex gap-6 items-start">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+<div>
+<h4 class="text-xl font-bold mb-2">Connect Your Data</h4>
+<p class="text-slate-600 dark:text-slate-400">Sync your help docs, FAQs, and past support tickets. Our AI processes your specific knowledge base in minutes.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+<div>
+<h4 class="text-xl font-bold mb-2">Train &amp; Test</h4>
+<p class="text-slate-600 dark:text-slate-400">Preview responses and refine the AI's tone of voice. Customize how it interacts with your unique brand personality.</p>
+</div>
+</div>
+<div class="flex gap-6 items-start">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</div>
+<div>
+<h4 class="text-xl font-bold mb-2">Go Live</h4>
+<p class="text-slate-600 dark:text-slate-400">Install the widget with one line of code or connect to your favorite platforms like Slack, WhatsApp, and Intercom.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-20 px-4 bg-white dark:bg-slate-950">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
+<p class="text-slate-600 dark:text-slate-400">Choose the plan that fits your business stage.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+<!-- Starter Plan -->
+<div class="p-8 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col">
+<h3 class="text-xl font-bold mb-2">Starter</h3>
+<p class="text-slate-500 dark:text-slate-400 mb-6">Perfect for small teams and startups.</p>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-black">$49</span>
+<span class="text-slate-500">/mo</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Up to 500 AI responses/mo</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Custom Knowledge Base</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Standard Support</span>
+</li>
+</ul>
+<button class="w-full py-3 rounded-lg border border-primary text-primary font-bold hover:bg-primary/5 transition-colors">
+                        Choose Starter
+                    </button>
+</div>
+<!-- Professional Plan -->
+<div class="p-8 rounded-2xl border-2 border-primary bg-slate-50 dark:bg-slate-900 relative flex flex-col">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
+                        Recommended
+                    </div>
+<h3 class="text-xl font-bold mb-2">Professional</h3>
+<p class="text-slate-500 dark:text-slate-400 mb-6">Advanced features for growing businesses.</p>
+<div class="flex items-baseline gap-1 mb-8">
+<span class="text-4xl font-black">$149</span>
+<span class="text-slate-500">/mo</span>
+</div>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span class="font-semibold">Unlimited AI responses</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Multiple Knowledge Bases</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Lead Qualification Bot</span>
+</li>
+<li class="flex items-center gap-3">
+<span class="material-symbols-outlined text-green-500">check_circle</span>
+<span>Priority API Access</span>
+</li>
+</ul>
+<button class="w-full py-3 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                        Choose Professional
+                    </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-400 py-16 px-4">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary rounded-lg p-1.5 flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">bolt</span>
+</div>
+<span class="text-xl font-bold text-white tracking-tight">Pamilo AI</span>
+</div>
+<p class="text-sm leading-relaxed mb-6">
+                    Transforming customer service through innovative AI solutions. Scale your support without scaling your team.
+                </p>
+<div class="flex gap-4">
+<a class="hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+</div>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Product</h5>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-white transition-colors" href="#">Features</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Integrations</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Pricing</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Changelog</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Company</h5>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-white transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Careers</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Contact</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Blog</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Legal</h5>
+<ul class="space-y-4 text-sm">
+<li><a class="hover:text-white transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Security</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-16 pt-8 border-t border-slate-800 text-center text-sm">
+<p>© 2024 Pamilo AI. All rights reserved.</p>
+</div>
+</footer>
+</body></html>

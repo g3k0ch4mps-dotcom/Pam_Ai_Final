@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .heatmap-cell { transition: all 0.2s ease; }
+        .heatmap-cell:hover { transform: scale(1.1); z-index: 10; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar -->
+<aside class="w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="size-8 bg-primary rounded flex items-center justify-center text-white">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-base font-bold leading-none">Pamilo AI</h1>
+<span class="text-xs text-slate-500 font-medium">Intelligence Suite</span>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">bar_chart</span>
+<span class="text-sm font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="text-sm font-medium">Conversations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="text-sm font-medium">AI Models</span>
+</a>
+<div class="pt-4 pb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">Management</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden">
+<img alt="User avatar" data-alt="User profile avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDgQc-NXDHylkUp5UALUonUc3Ml1U2LcTQKdfj26pJEnRK1OQNPzaMRKzgW0Vodozo28oEZI1os8tKLsjHt4Yplco3QLWVsYNw1KfiHKU8G6ExUS4KTTF-a0rsFcc9Qh5s94hMkfVoqyFmj7pJ6t1ld110-CYDjOZn_MMnKC06RsjRWj6TwkKcdUTtjeJIqms4ZJrlOj0deIgui6I2dAay2rkwdyHT2oJbk2T9c_4XlNN5yiO2EKmEElr7uwjEUr-vLk5g2CLoPK4"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-semibold truncate">Alex Rivera</p>
+<p class="text-xs text-slate-500 truncate">Admin Account</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark">
+<!-- Header -->
+<header class="sticky top-0 z-20 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-8 py-4 flex items-center justify-between">
+<div>
+<h2 class="text-xl font-bold">Analytics Overview</h2>
+<p class="text-sm text-slate-500">Real-time performance metrics for Pamilo AI instances</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-sm">calendar_today</span>
+<span class="text-sm font-medium">Oct 1, 2023 - Oct 31, 2023</span>
+<span class="material-symbols-outlined text-slate-400 text-sm">expand_more</span>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-semibold text-sm hover:bg-blue-600 transition-colors">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export
+                    </button>
+</div>
+</header>
+<div class="p-8 space-y-8">
+<!-- KPI Scorecards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">timer</span>
+<span class="text-rose-500 text-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+                                12%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Avg Response Time</p>
+<h3 class="text-2xl font-bold mt-1">1.2m</h3>
+<div class="mt-4 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-emerald-500 bg-emerald-500/10 p-2 rounded-lg">verified</span>
+<span class="text-emerald-500 text-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                5%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Resolution Rate</p>
+<h3 class="text-2xl font-bold mt-1">94.2%</h3>
+<div class="mt-4 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-emerald-500 h-full rounded-full" style="width: 94%"></div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-violet-500 bg-violet-500/10 p-2 rounded-lg">chat_bubble</span>
+<span class="text-emerald-500 text-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                18%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Total Conversations</p>
+<h3 class="text-2xl font-bold mt-1">12,840</h3>
+<div class="mt-4 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-violet-500 h-full rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-2 rounded-lg">star</span>
+<span class="text-emerald-500 text-sm font-bold flex items-center">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                                2%
+                            </span>
+</div>
+<p class="text-slate-500 text-sm font-medium">Customer Satisfaction</p>
+<h3 class="text-2xl font-bold mt-1">4.8/5.0</h3>
+<div class="mt-4 h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="bg-amber-500 h-full rounded-full" style="width: 88%"></div>
+</div>
+</div>
+</section>
+<!-- Charts Section -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Volume Trend -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<div>
+<h4 class="text-lg font-bold">Conversation Volume Trend</h4>
+<p class="text-sm text-slate-500">Daily interaction count for the current period</p>
+</div>
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-bold rounded-md bg-white dark:bg-slate-700 shadow-sm">Daily</button>
+<button class="px-3 py-1 text-xs font-bold text-slate-500 hover:text-slate-900">Weekly</button>
+<button class="px-3 py-1 text-xs font-bold text-slate-500 hover:text-slate-900">Monthly</button>
+</div>
+</div>
+<div class="relative h-[300px] w-full mt-4">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 1000 300">
+<!-- Area Gradient -->
+<defs>
+<lineargradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#3c83f6" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#3c83f6" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line class="text-slate-100 dark:text-slate-800" stroke="currentColor" stroke-width="1" x1="0" x2="1000" y1="0" y2="0"></line>
+<line class="text-slate-100 dark:text-slate-800" stroke="currentColor" stroke-width="1" x1="0" x2="1000" y1="75" y2="75"></line>
+<line class="text-slate-100 dark:text-slate-800" stroke="currentColor" stroke-width="1" x1="0" x2="1000" y1="150" y2="150"></line>
+<line class="text-slate-100 dark:text-slate-800" stroke="currentColor" stroke-width="1" x1="0" x2="1000" y1="225" y2="225"></line>
+<line class="text-slate-100 dark:text-slate-800" stroke="currentColor" stroke-width="1" x1="0" x2="1000" y1="300" y2="300"></line>
+<!-- The Chart Path -->
+<path d="M0 250 Q 50 200 100 220 T 200 150 T 300 180 T 400 100 T 500 130 T 600 50 T 700 90 T 800 40 T 900 70 T 1000 30 L 1000 300 L 0 300 Z" fill="url(#chartGradient)"></path>
+<path d="M0 250 Q 50 200 100 220 T 200 150 T 300 180 T 400 100 T 500 130 T 600 50 T 700 90 T 800 40 T 900 70 T 1000 30" fill="none" stroke="#3c83f6" stroke-linecap="round" stroke-width="3"></path>
+<!-- Dots -->
+<circle cx="600" cy="50" fill="#3c83f6" r="6" stroke="white" stroke-width="2"></circle>
+</svg>
+<div class="absolute top-[30px] left-[615px] bg-slate-900 text-white p-2 rounded text-xs shadow-xl pointer-events-none">
+<span class="font-bold">Oct 21:</span> 2,450 conversations
+                            </div>
+</div>
+<div class="flex justify-between mt-6 px-2">
+<span class="text-xs font-bold text-slate-400">Oct 01</span>
+<span class="text-xs font-bold text-slate-400">Oct 08</span>
+<span class="text-xs font-bold text-slate-400">Oct 15</span>
+<span class="text-xs font-bold text-slate-400">Oct 22</span>
+<span class="text-xs font-bold text-slate-400">Oct 31</span>
+</div>
+</div>
+<!-- Peak Activity Heatmap -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="mb-6">
+<h4 class="text-lg font-bold">Peak Activity Hours</h4>
+<p class="text-sm text-slate-500">Volume distribution by time &amp; day</p>
+</div>
+<div class="space-y-3">
+<div class="grid grid-cols-8 gap-1 items-center">
+<div class="text-[10px] font-bold text-slate-400 uppercase text-right pr-2">Mon</div>
+<div class="h-8 bg-primary/5 rounded"></div>
+<div class="h-8 bg-primary/10 rounded"></div>
+<div class="h-8 bg-primary/40 rounded"></div>
+<div class="h-8 bg-primary/80 rounded"></div>
+<div class="h-8 bg-primary/60 rounded"></div>
+<div class="h-8 bg-primary/20 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+</div>
+<div class="grid grid-cols-8 gap-1 items-center">
+<div class="text-[10px] font-bold text-slate-400 uppercase text-right pr-2">Tue</div>
+<div class="h-8 bg-primary/5 rounded"></div>
+<div class="h-8 bg-primary/20 rounded"></div>
+<div class="h-8 bg-primary/60 rounded"></div>
+<div class="h-8 bg-primary/90 rounded"></div>
+<div class="h-8 bg-primary/40 rounded"></div>
+<div class="h-8 bg-primary/10 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+</div>
+<div class="grid grid-cols-8 gap-1 items-center">
+<div class="text-[10px] font-bold text-slate-400 uppercase text-right pr-2">Wed</div>
+<div class="h-8 bg-primary/10 rounded"></div>
+<div class="h-8 bg-primary/30 rounded"></div>
+<div class="h-8 bg-primary/80 rounded"></div>
+<div class="h-8 bg-primary/100 rounded"></div>
+<div class="h-8 bg-primary/70 rounded"></div>
+<div class="h-8 bg-primary/20 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+</div>
+<div class="grid grid-cols-8 gap-1 items-center">
+<div class="text-[10px] font-bold text-slate-400 uppercase text-right pr-2">Thu</div>
+<div class="h-8 bg-primary/5 rounded"></div>
+<div class="h-8 bg-primary/40 rounded"></div>
+<div class="h-8 bg-primary/70 rounded"></div>
+<div class="h-8 bg-primary/90 rounded"></div>
+<div class="h-8 bg-primary/50 rounded"></div>
+<div class="h-8 bg-primary/10 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+</div>
+<div class="grid grid-cols-8 gap-1 items-center">
+<div class="text-[10px] font-bold text-slate-400 uppercase text-right pr-2">Fri</div>
+<div class="h-8 bg-primary/5 rounded"></div>
+<div class="h-8 bg-primary/20 rounded"></div>
+<div class="h-8 bg-primary/50 rounded"></div>
+<div class="h-8 bg-primary/70 rounded"></div>
+<div class="h-8 bg-primary/30 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+<div class="h-8 bg-primary/5 rounded"></div>
+</div>
+</div>
+<div class="grid grid-cols-8 gap-1 mt-4">
+<div></div>
+<div class="text-[10px] font-bold text-slate-400 text-center">8AM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">10AM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">12PM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">2PM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">4PM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">6PM</div>
+<div class="text-[10px] font-bold text-slate-400 text-center">8PM</div>
+</div>
+<div class="mt-8 flex items-center justify-between">
+<span class="text-[10px] font-bold uppercase text-slate-400">Intensity</span>
+<div class="flex gap-1">
+<div class="size-3 bg-primary/5 rounded-sm"></div>
+<div class="size-3 bg-primary/30 rounded-sm"></div>
+<div class="size-3 bg-primary/60 rounded-sm"></div>
+<div class="size-3 bg-primary/100 rounded-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Granular Insights Table -->
+<section class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<div>
+<h4 class="text-lg font-bold">Top Performing Intents</h4>
+<p class="text-sm text-slate-500">Categorization effectiveness based on user feedback</p>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">View All Topics</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Intent Category</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Volume</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Accuracy</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Escalation Rate</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase text-right">Trend</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">payments</span>
+<span class="text-sm font-semibold">Billing Inquiries</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">4,520</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 98%"></div>
+</div>
+<span class="text-xs font-bold text-emerald-500">98%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">2.4%</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-emerald-500">trending_up</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-violet-500">lock</span>
+<span class="text-sm font-semibold">Account Security</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">3,120</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full">
+<div class="h-full bg-emerald-500 rounded-full" style="width: 95%"></div>
+</div>
+<span class="text-xs font-bold text-emerald-500">95%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">4.8%</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-slate-400">trending_flat</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-amber-500">local_shipping</span>
+<span class="text-sm font-semibold">Order Tracking</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">2,840</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="flex-1 w-24 h-1.5 bg-slate-100 dark:bg-slate-700 rounded-full">
+<div class="h-full bg-amber-500 rounded-full" style="width: 82%"></div>
+</div>
+<span class="text-xs font-bold text-amber-500">82%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">12.5%</td>
+<td class="px-6 py-4 text-right">
+<span class="material-symbols-outlined text-rose-500">trending_down</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Footer / Documentation -->
+<footer class="pt-8 pb-12 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+<p class="text-sm text-slate-500">Last updated: Today at 2:45 PM • Data refreshes every 5 minutes</p>
+<div class="flex gap-6">
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">description</span>
+                            Metric definitions
+                        </a>
+<a class="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-primary flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">api</span>
+                            API Access
+                        </a>
+</div>
+</footer>
+</div>
+</main>
+</div>
+</body></html>

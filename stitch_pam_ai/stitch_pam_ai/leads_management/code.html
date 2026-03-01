@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leads Management - Pamilo AI</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 lg:px-10 py-3 sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-8 flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em]">Pamilo AI</h2>
+</div>
+<label class="hidden md:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-slate-500 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 focus:border-none h-full placeholder:text-slate-500 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" placeholder="Search leads..." value=""/>
+</div>
+</label>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<nav class="hidden lg:flex items-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-semibold leading-normal border-b-2 border-primary pb-1 mt-1" href="#">Leads</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Customers</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium leading-normal transition-colors" href="#">Reports</a>
+</nav>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden lg:block"></div>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-all">
+<span class="truncate">Add Lead</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-slate-100 dark:border-slate-800" data-alt="Profile picture of an executive user" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0tK11hIHgzPaOINhd_aGFPa9udKdW7TXTlRzEcN_aKFCiDvIcHZ6F0DxUnqVRCno1yhl9FDeDEsTzgi5pmuGehOdI-sVGH9fOQSuthKzXihD9qxVxJPPvD7dzWuUCuxGu4x3kODGrIGkKkfUxg7nbbmr_Tm3LQ2VP43Xuv5qUsZdqW47ukMh8WAq7n-m_7DqzRnA0i8ZZg61Z6aj5aA4HnfCXuX2NospnLjRwjOiEzo38OtKCtbjNmVfbNQYMI-dQ1vJ6BOfoL8U");'></div>
+</div>
+</header>
+<main class="flex-1 px-6 lg:px-10 py-8 max-w-[1440px] mx-auto w-full">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
+<div class="flex flex-col gap-1">
+<h1 class="text-slate-900 dark:text-slate-100 text-3xl font-black leading-tight tracking-[-0.033em]">Leads Management</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal">Track and manage your business prospects effectively.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+                            Export
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+                            This Month
+                        </button>
+</div>
+</div>
+<!-- Metric Summary Bar -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal uppercase tracking-wider">Total Leads</p>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-1.5 rounded-lg text-[20px]">groups</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">1,248</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-emerald-600 dark:text-emerald-400 text-xs font-bold bg-emerald-50 dark:bg-emerald-400/10 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                12.5%
+                            </span>
+<span class="text-slate-400 text-xs">vs last month</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal uppercase tracking-wider">New</p>
+<span class="material-symbols-outlined text-amber-500 bg-amber-500/10 p-1.5 rounded-lg text-[20px]">fiber_new</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">45</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-emerald-600 dark:text-emerald-400 text-xs font-bold bg-emerald-50 dark:bg-emerald-400/10 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                5.2%
+                            </span>
+<span class="text-slate-400 text-xs">vs last week</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal uppercase tracking-wider">Contacted</p>
+<span class="material-symbols-outlined text-indigo-500 bg-indigo-500/10 p-1.5 rounded-lg text-[20px]">call</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">120</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-rose-600 dark:text-rose-400 text-xs font-bold bg-rose-50 dark:bg-rose-400/10 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_down</span>
+                                2.1%
+                            </span>
+<span class="text-slate-400 text-xs">vs last week</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium leading-normal uppercase tracking-wider">Won</p>
+<span class="material-symbols-outlined text-emerald-500 bg-emerald-500/10 p-1.5 rounded-lg text-[20px]">check_circle</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight">32</p>
+<div class="flex items-center gap-1.5 mt-1">
+<span class="text-emerald-600 dark:text-emerald-400 text-xs font-bold bg-emerald-50 dark:bg-emerald-400/10 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+                                8.4%
+                            </span>
+<span class="text-slate-400 text-xs">vs last month</span>
+</div>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<!-- Table Toolbar -->
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+<div class="flex border-b border-slate-200 dark:border-slate-800 w-full sm:w-auto">
+<button class="px-4 py-3 text-sm font-bold border-b-2 border-primary text-primary transition-all">All Leads</button>
+<button class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all">New</button>
+<button class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all">Contacted</button>
+<button class="px-4 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all">Won</button>
+</div>
+<div class="flex items-center gap-2 w-full sm:w-auto">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">tune</span>
+</button>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Name</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Email</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Phone</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Status</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Source</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800">Date</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider border-b border-slate-200 dark:border-slate-800 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">AR</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Alex Rivera</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">alex.rivera@example.com</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">(555) 123-4567</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-400/10 text-blue-700 dark:text-blue-400">New</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">LinkedIn</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 24, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">JS</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Jordan Smith</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">j.smith@corp.org</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">(555) 987-6543</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 dark:bg-amber-400/10 text-amber-700 dark:text-amber-400">Contacted</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Website</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 22, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-sm">ML</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Maria Lopez</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">m.lopez@design.com</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">(555) 246-8135</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-400/10 text-emerald-700 dark:text-emerald-400">Won</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Referral</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 20, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-sm">DC</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">David Chen</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">d.chen@techsolutions.io</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">(555) 369-1472</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">Lost</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Cold Call</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 18, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">SW</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Sarah Williams</span>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">sarah.w@marketing.co</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">(555) 741-8520</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-400/10 text-blue-700 dark:text-blue-400">New</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Twitter</td>
+<td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Oct 15, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+<p class="text-sm text-slate-500 dark:text-slate-400 font-medium">Showing <span class="text-slate-900 dark:text-white font-bold">1-5</span> of <span class="text-slate-900 dark:text-white font-bold">1,248</span> leads</p>
+<div class="flex items-center gap-2">
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold text-slate-400 dark:text-slate-600 bg-white dark:bg-slate-900 cursor-not-allowed">Previous</button>
+<div class="flex items-center gap-1">
+<button class="size-9 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">1</button>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm transition-colors">2</button>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm transition-colors">3</button>
+<span class="px-2 text-slate-400 text-sm">...</span>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold text-sm transition-colors">25</button>
+</div>
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 hover:bg-slate-50 transition-colors">Next</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="mt-auto px-6 py-8 border-t border-slate-200 dark:border-slate-800 flex justify-center">
+<p class="text-slate-400 text-xs font-medium">© 2023 Pamilo AI. All rights reserved.</p>
+</footer>
+</div>
+</div>
+</body></html>

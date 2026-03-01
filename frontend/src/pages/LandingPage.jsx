@@ -6,14 +6,15 @@ import {
     Users, BarChart3, Lock
 } from 'lucide-react';
 import LandingChat from '../components/LandingChat';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function LandingPage() {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gray-950 text-white selection:bg-blue-500/30">
+        <div className="min-h-screen bg-white dark:bg-gray-950 text-slate-900 dark:text-white selection:bg-blue-500/30 transition-colors duration-300">
             {/* Header / Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-gray-950/80 backdrop-blur-xl">
+            <nav className="fixed top-0 left-0 right-0 z-50 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl transition-colors">
                 <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                     <div className="flex items-center space-x-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                         <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 transition-transform group-hover:scale-110">
@@ -22,14 +23,15 @@ export default function LandingPage() {
                         <span className="text-xl font-black tracking-tighter uppercase">Pamilo <span className="text-blue-500">AI</span></span>
                     </div>
 
-                    <div className="hidden md:flex items-center space-x-10 text-sm font-bold uppercase tracking-widest text-white/50">
-                        <a href="#features" className="hover:text-white transition-colors">Features</a>
-                        <a href="#solutions" className="hover:text-white transition-colors">Solutions</a>
-                        <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+                    <div className="hidden md:flex items-center space-x-10 text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-white/50">
+                        <a href="#features" className="hover:text-blue-600 dark:hover:text-white transition-colors">Features</a>
+                        <a href="#solutions" className="hover:text-blue-600 dark:hover:text-white transition-colors">Solutions</a>
+                        <a href="#pricing" className="hover:text-blue-600 dark:hover:text-white transition-colors">Pricing</a>
                     </div>
 
                     <div className="flex items-center space-x-4">
-                        <Link to="/login" className="text-sm font-bold uppercase tracking-widest text-white/60 hover:text-white transition-colors px-4 py-2">Login</Link>
+                        <ThemeToggle />
+                        <Link to="/login" className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-white/60 hover:text-blue-600 dark:hover:text-white transition-colors px-4 py-2">Login</Link>
                         <Link
                             to="/register"
                             className="bg-white text-black text-xs font-black uppercase px-6 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-lg shadow-white/5"
@@ -43,21 +45,21 @@ export default function LandingPage() {
             {/* Hero Section */}
             <section className="pt-40 pb-20 px-6 relative overflow-hidden">
                 {/* Background Blobs */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full -z-10" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-blue-600/5 dark:bg-blue-600/10 blur-[150px] rounded-full -z-10" />
                 <div className="absolute -top-40 right-0 w-[500px] h-[500px] bg-indigo-600/5 blur-[120px] rounded-full -z-10 animate-pulse" />
 
                 <div className="max-w-5xl mx-auto text-center">
-                    <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
+                    <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 mb-8 animate-in fade-in slide-in-from-top-4 duration-700">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-ping" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400">Phase 4 Live: Team Management Ready</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600 dark:text-emerald-400">Phase 4 Live: Team Management Ready</span>
                     </div>
 
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.95] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+                    <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[0.95] mb-8 animate-in fade-in slide-in-from-bottom-8 duration-700 text-slate-900 dark:text-white">
                         The Next Era of <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-400 animate-gradient-x">Business Intelligence</span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-600 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-400 animate-gradient-x">Business Intelligence</span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-white/50 font-medium max-w-2xl mx-auto mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000">
+                    <p className="text-xl md:text-2xl text-slate-500 dark:text-white/50 font-medium max-w-2xl mx-auto mb-12 animate-in fade-in slide-in-from-bottom-12 duration-1000">
                         Deploy custom AI assistants trained on your unique business data. Automate support, capture leads, and scale your operations without overhead.
                     </p>
 
@@ -68,13 +70,13 @@ export default function LandingPage() {
                         >
                             Build Your Assistant <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </button>
-                        <button className="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 text-white font-black uppercase text-sm rounded-[2rem] hover:bg-white/10 transition-all">
+                        <button className="w-full sm:w-auto px-10 py-5 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-900 dark:text-white font-black uppercase text-sm rounded-[2rem] hover:bg-slate-200 dark:hover:bg-white/10 transition-all">
                             View Live Demo
                         </button>
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 border-t border-white/5 pt-12 text-white/40">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 border-t border-slate-100 dark:border-white/5 pt-12 text-slate-400 dark:text-white/40">
                         {[
                             { label: 'Uptime', value: '99.9%' },
                             { label: 'Avg Feedback', value: '4.9/5' },
@@ -82,7 +84,7 @@ export default function LandingPage() {
                             { label: 'AI Models', value: 'Global' }
                         ].map((s, i) => (
                             <div key={i} className="space-y-1">
-                                <p className="text-white font-black text-2xl tracking-tighter">{s.value}</p>
+                                <p className="text-slate-900 dark:text-white font-black text-2xl tracking-tighter">{s.value}</p>
                                 <p className="text-[10px] font-black uppercase tracking-widest">{s.label}</p>
                             </div>
                         ))}
@@ -95,7 +97,7 @@ export default function LandingPage() {
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-20">
                         <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-blue-500 mb-4 text-center">Engineered for Scale</h2>
-                        <h3 className="text-4xl md:text-6xl font-black tracking-tight">Enterprise Infrastructure. <br /> Startup Agility.</h3>
+                        <h3 className="text-4xl md:text-6xl font-black tracking-tight text-slate-900 dark:text-white">Enterprise Infrastructure. <br /> Startup Agility.</h3>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -119,12 +121,12 @@ export default function LandingPage() {
                                 color: 'emerald'
                             }
                         ].map((f, i) => (
-                            <div key={i} className="group bg-white/[0.02] border border-white/5 p-12 rounded-[3rem] hover:bg-white/[0.04] hover:border-blue-500/30 transition-all duration-500 relative overflow-hidden">
+                            <div key={i} className="group bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5 p-12 rounded-[3rem] hover:bg-white dark:hover:bg-white/[0.04] hover:border-blue-500/30 transition-all duration-500 relative overflow-hidden shadow-sm hover:shadow-xl dark:shadow-none">
                                 <div className={`w-16 h-16 bg-${f.color}-500/10 rounded-[1.5rem] flex items-center justify-center mb-8 group-hover:scale-110 transition-transform`}>
                                     <f.icon className={`w-8 h-8 text-${f.color}-500`} />
                                 </div>
-                                <h4 className="text-2xl font-black mb-4 tracking-tight">{f.title}</h4>
-                                <p className="text-white/40 leading-relaxed font-medium">{f.desc}</p>
+                                <h4 className="text-2xl font-black mb-4 tracking-tight text-slate-900 dark:text-white">{f.title}</h4>
+                                <p className="text-slate-500 dark:text-white/40 leading-relaxed font-medium">{f.desc}</p>
                             </div>
                         ))}
                     </div>

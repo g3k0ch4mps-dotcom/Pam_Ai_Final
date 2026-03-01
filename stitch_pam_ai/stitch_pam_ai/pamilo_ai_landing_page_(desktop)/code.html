@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI - Automate the Mundane</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .bento-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background-light text-slate-900 font-display selection:bg-primary/30">
+<!-- Sticky Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 glass-nav border-b border-slate-200">
+<div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary text-white p-1.5 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined !text-[20px]">bolt</span>
+</div>
+<span class="text-xl font-bold tracking-tight text-slate-900">Pamilo AI</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#features">Features</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#solutions">Solutions</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#pricing">Pricing</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#">Docs</a>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 transition-colors">Log in</button>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-sm hover:bg-primary/90 transition-all">Get Started</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative pt-32 pb-20 px-6 overflow-hidden">
+<div class="max-w-5xl mx-auto text-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold mb-8 uppercase tracking-widest">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                New: v2.4 out now
+            </div>
+<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+                Automate the mundane, <br class="hidden md:block"/>
+<span class="text-primary">amplify the exceptional.</span>
+</h1>
+<p class="text-lg md:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+                Experience extreme clarity and intelligence with our high-end SaaS automation platform. Built for speed, designed for scale.
+            </p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+<button class="w-full sm:w-auto bg-primary text-white px-8 py-4 rounded-xl text-base font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    Start your 14-day free trial
+                </button>
+<button class="w-full sm:w-auto bg-white border border-slate-200 text-slate-900 px-8 py-4 rounded-xl text-base font-bold hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+                    Book a Demo
+                </button>
+</div>
+<!-- Hero Image / Mockup -->
+<div class="relative max-w-6xl mx-auto px-4">
+<div class="rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
+<div class="bg-slate-50 rounded-xl overflow-hidden aspect-[16/9] relative border border-slate-100">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent"></div>
+<img class="w-full h-full object-cover" data-alt="High fidelity SaaS dashboard UI interface with charts and AI data visualizations" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCs5kiJYjAYgoytyYjUCFV9irVEzigpiWNfYDX76Xq9raiAbTuVkEffLuO6nd8_DUKlxRU_RiWmnMn_SoS6O6TaT9eaSFOPC74hGD9-cgnFGeV5YmyCxpF-3wZd-325IZQiJIQpA618tgFRZdspNPgs6ZcSODv7cZmSvvJQVjbOvBx2IrzDmSQb7leZ2LxythuEx12HBQ3HmK7ULdVw3rRFIIdBYIPDT3ulQn_IG8ha9LpFgUqz7aNZh0vKD5cn-TJONPNqAELfguQ"/>
+</div>
+</div>
+<!-- Decorative elements -->
+<div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-b from-primary/5 to-transparent blur-3xl rounded-full"></div>
+</div>
+</div>
+</header>
+<!-- Logo Cloud -->
+<section class="py-12 px-6 border-y border-slate-200 bg-white">
+<div class="max-w-7xl mx-auto">
+<p class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-10">Trusted by modern engineering teams</p>
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale">
+<div class="h-8 w-24 bg-slate-400 rounded" data-alt="Client company logo placeholder"></div>
+<div class="h-8 w-32 bg-slate-400 rounded" data-alt="Client company logo placeholder"></div>
+<div class="h-8 w-20 bg-slate-400 rounded" data-alt="Client company logo placeholder"></div>
+<div class="h-8 w-28 bg-slate-400 rounded" data-alt="Client company logo placeholder"></div>
+<div class="h-8 w-24 bg-slate-400 rounded" data-alt="Client company logo placeholder"></div>
+</div>
+</div>
+</section>
+<!-- Feature Grid (Bento) -->
+<section class="py-24 px-6 bg-background-light" id="features">
+<div class="max-w-7xl mx-auto">
+<div class="text-left mb-16">
+<h2 class="text-sm font-bold text-primary uppercase tracking-[0.2em] mb-4">Core Capabilities</h2>
+<h3 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">Smarter workflows, better results</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Large card -->
+<div class="md:col-span-8 bento-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col justify-between overflow-hidden relative group">
+<div class="relative z-10">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-6">
+<span class="material-symbols-outlined">insights</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 mb-3">AI Powered Insights</h4>
+<p class="text-slate-600 max-w-md">Get deep analytical data processed by our neural engines instantly. Understand patterns before they become problems.</p>
+</div>
+<div class="mt-12 h-48 bg-slate-50 rounded-lg border border-slate-100 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract data visualization chart showing AI trends" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUUaPeWUNUYqoD-7eXpUhMmM4dl6xMBL0AQT2aUa_t85AT4kDKwSIATjP5XH8V5WCa-9J2359S7mlIb0lJDoEOjlWi6nyBEHffUfvaXZN7ovXMJX02_yLDdpjRRM678oNo1b4B9MTofzoMbdM1efVBhrE7Jry-Etj4QAWOeA59HNcMJlN7U2RYCmGVrU_kLren2GU4hNmaKyu1em8VMDrD_M9c-QyJPTZsc_jOLu_OejelaXXmbwFi40guAIFZU-yzXerhjjbOgRA"/>
+</div>
+</div>
+<!-- Small card -->
+<div class="md:col-span-4 bento-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+<div class="w-12 h-12 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600 mb-6">
+<span class="material-symbols-outlined">sync</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 mb-3">Real-time Sync</h4>
+<p class="text-slate-600">Work together seamlessly with built-in syncing and version control that updates in milliseconds.</p>
+</div>
+<!-- Small card -->
+<div class="md:col-span-4 bento-card bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+<div class="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-600 mb-6">
+<span class="material-symbols-outlined">auto_fix</span>
+</div>
+<h4 class="text-2xl font-bold text-slate-900 mb-3">Auto Workflows</h4>
+<p class="text-slate-600">Trigger complex sequences with simple natural language commands and automated logical branches.</p>
+</div>
+<!-- Large card -->
+<div class="md:col-span-8 bento-card bg-slate-900 text-white border border-slate-800 rounded-2xl p-8 flex flex-col md:flex-row gap-8 overflow-hidden relative">
+<div class="flex-1 flex flex-col justify-center">
+<h4 class="text-2xl font-bold mb-3">Enterprise Grade Security</h4>
+<p class="text-slate-400 mb-6">Built for scale with SOC2 compliance and end-to-end encryption for all your automation data.</p>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-sm font-medium text-slate-300">
+<span class="material-symbols-outlined text-emerald-400 !text-sm">check_circle</span> SSO &amp; SAML Integration
+                            </li>
+<li class="flex items-center gap-2 text-sm font-medium text-slate-300">
+<span class="material-symbols-outlined text-emerald-400 !text-sm">check_circle</span> Role-based access control
+                            </li>
+</ul>
+</div>
+<div class="flex-1 flex items-center justify-center">
+<span class="material-symbols-outlined !text-[120px] text-slate-800">verified_user</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-24 px-6 bg-white border-t border-slate-200" id="pricing">
+<div class="max-w-5xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Transparent Pricing</h2>
+<p class="text-slate-600">Choose the plan that fits your team's velocity.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Starter -->
+<div class="border border-slate-200 rounded-2xl p-8 flex flex-col bg-slate-50">
+<h4 class="text-lg font-bold mb-2">Starter</h4>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold text-slate-900">$0</span>
+<span class="text-slate-500 text-sm font-medium">/mo</span>
+</div>
+<p class="text-sm text-slate-600 mb-8 font-medium">Perfect for individuals and side projects.</p>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            Up to 3 projects
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            Basic AI automation
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            Community support
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-slate-300 font-bold hover:bg-white transition-all">Get Started</button>
+</div>
+<!-- Pro -->
+<div class="border-2 border-primary rounded-2xl p-8 flex flex-col bg-white relative shadow-xl shadow-primary/5">
+<div class="absolute top-0 right-8 -translate-y-1/2 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">Recommended</div>
+<h4 class="text-lg font-bold mb-2">Pro</h4>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold text-slate-900">$29</span>
+<span class="text-slate-500 text-sm font-medium">/mo</span>
+</div>
+<p class="text-sm text-slate-600 mb-8 font-medium">For growing teams and scaling apps.</p>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-start gap-3 text-sm text-slate-600 font-semibold">
+<span class="material-symbols-outlined text-primary !text-[18px]">check</span>
+                            Unlimited projects
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600 font-semibold">
+<span class="material-symbols-outlined text-primary !text-[18px]">check</span>
+                            Advanced AI insights
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600 font-semibold">
+<span class="material-symbols-outlined text-primary !text-[18px]">check</span>
+                            Team collaboration tools
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600 font-semibold">
+<span class="material-symbols-outlined text-primary !text-[18px]">check</span>
+                            Priority email support
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">Start Free Trial</button>
+</div>
+<!-- Enterprise -->
+<div class="border border-slate-200 rounded-2xl p-8 flex flex-col bg-slate-50">
+<h4 class="text-lg font-bold mb-2">Enterprise</h4>
+<div class="flex items-baseline gap-1 mb-6">
+<span class="text-4xl font-extrabold text-slate-900">Custom</span>
+</div>
+<p class="text-sm text-slate-600 mb-8 font-medium">Advanced security for large teams.</p>
+<ul class="space-y-4 mb-10 flex-grow">
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            Dedicated account manager
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            Custom SSO &amp; Security
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            SLA guarantees
+                        </li>
+<li class="flex items-start gap-3 text-sm text-slate-600">
+<span class="material-symbols-outlined text-slate-400 !text-[18px]">check</span>
+                            On-premise options
+                        </li>
+</ul>
+<button class="w-full py-3 rounded-xl border border-slate-300 font-bold hover:bg-white transition-all">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA Section -->
+<section class="py-24 px-6 bg-primary">
+<div class="max-w-4xl mx-auto text-center text-white">
+<h2 class="text-4xl md:text-5xl font-extrabold mb-8 tracking-tight leading-tight">Ready to transform how <br class="hidden md:block"/> your team operates?</h2>
+<p class="text-primary-foreground/80 text-lg mb-12 max-w-xl mx-auto">Join 10,000+ companies scaling their operations with Pamilo AI. No credit card required to start.</p>
+<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto bg-white text-primary px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-50 transition-all">Get Started Now</button>
+<button class="w-full sm:w-auto bg-primary/20 border border-white/30 px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary/30 transition-all">View Demo</button>
+</div>
+</div>
+</section>
+<!-- Minimalist Footer -->
+<footer class="bg-white pt-20 pb-10 px-6 border-t border-slate-200">
+<div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-12 mb-16">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary text-white p-1 rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined !text-[18px]">bolt</span>
+</div>
+<span class="text-lg font-bold tracking-tight text-slate-900">Pamilo AI</span>
+</div>
+<p class="text-slate-500 max-w-xs text-sm leading-relaxed">The high-end automation platform designed for modern engineering teams. Focused on speed, intelligence, and clarity.</p>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 mb-6 text-sm">Product</h5>
+<ul class="space-y-4 text-sm text-slate-500 font-medium">
+<li><a class="hover:text-primary" href="#">Features</a></li>
+<li><a class="hover:text-primary" href="#">Security</a></li>
+<li><a class="hover:text-primary" href="#">API</a></li>
+<li><a class="hover:text-primary" href="#">Releases</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 mb-6 text-sm">Resources</h5>
+<ul class="space-y-4 text-sm text-slate-500 font-medium">
+<li><a class="hover:text-primary" href="#">Documentation</a></li>
+<li><a class="hover:text-primary" href="#">Help Center</a></li>
+<li><a class="hover:text-primary" href="#">Blog</a></li>
+<li><a class="hover:text-primary" href="#">University</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-slate-900 mb-6 text-sm">Legal</h5>
+<ul class="space-y-4 text-sm text-slate-500 font-medium">
+<li><a class="hover:text-primary" href="#">Privacy</a></li>
+<li><a class="hover:text-primary" href="#">Terms</a></li>
+<li><a class="hover:text-primary" href="#">Cookies</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-slate-400 text-xs font-medium">© 2024 Pamilo AI Inc. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined !text-[20px]">public</span></a>
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined !text-[20px]">alternate_email</span></a>
+<a class="text-slate-400 hover:text-primary" href="#"><span class="material-symbols-outlined !text-[20px]">groups</span></a>
+</div>
+</div>
+</footer>
+</body></html>

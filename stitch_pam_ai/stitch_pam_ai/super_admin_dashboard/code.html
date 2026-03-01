@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pamilo AI | Super Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav {
+            background-color: rgba(60, 131, 246, 0.1);
+            color: #3c83f6;
+            border-right: 3px solid #3c83f6;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 flex-shrink-0 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hidden md:flex flex-col">
+<div class="p-6 flex items-center gap-3">
+<div class="bg-primary size-10 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white font-bold text-lg leading-tight">Pamilo AI</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Super Admin</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1 mt-4">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg active-nav group transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">corporate_fare</span>
+<span class="text-sm font-semibold">Businesses</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-semibold">Users</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-semibold">Revenue</span>
+</a>
+<div class="pt-4 pb-2">
+<p class="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">System</p>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-semibold">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="text-sm font-semibold">System Logs</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-red-50 hover:text-red-600 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-semibold">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Container -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- Top Header -->
+<header class="h-16 flex items-center justify-between px-8 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10">
+<div class="flex items-center flex-1">
+<div class="max-w-md w-full relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 transition-all" placeholder="Search systems, businesses, or logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<div class="h-8 w-px bg-slate-200 dark:border-slate-800 mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Alex Rivera</p>
+<p class="text-xs text-slate-500 mt-1">Global Admin</p>
+</div>
+<img class="size-9 rounded-lg object-cover ring-2 ring-slate-100 dark:ring-slate-800 group-hover:ring-primary transition-all" data-alt="Admin user profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMI_1_8mlXdWO1Wb4IitxTDCKjwery92pYakcJmg5ixlmPVPL5E5l1Ws3uvwaBrjmu87jefFf-gQLt_hYPIP0DZxhITKrTRnRrgP_hXeGSpRiLLjVqdzVHSXTfep6MRiL0huMhtk0gcojHsXqM9VXiGtmuNaVg6tWtj7H104rLDXAkZQtwMRU0D3S55wXQTsII59kPAFJbX_hXSqbO2SUR0Z65hrmcgQZsq7dXv-frXh7JUSBs72NPlJk_gjPYY0fQnvrdA-IhJ8Y"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-8">
+<!-- Page Title -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">System Overview</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Real-time performance metrics for Pamilo AI infrastructure.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-slate-50 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg">download</span> Export CSV
+                        </button>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-blue-600 transition-colors shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-lg">add</span> Add Business
+                        </button>
+</div>
+</div>
+<!-- Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-blue-50 dark:bg-blue-900/30 text-primary rounded-lg">
+<span class="material-symbols-outlined">corporate_fare</span>
+</div>
+<span class="text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded text-xs font-bold">+12%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Businesses</p>
+<h3 class="text-3xl font-black mt-1 text-slate-900 dark:text-white">247</h3>
+<p class="text-xs text-slate-400 mt-2">Vs. 221 last month</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-green-50 dark:bg-green-900/30 text-green-600 rounded-lg">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded text-xs font-bold">+8.5%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Monthly Revenue</p>
+<h3 class="text-3xl font-black mt-1 text-slate-900 dark:text-white">$12,450</h3>
+<p class="text-xs text-slate-400 mt-2">Target: $15,000</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-4">
+<div class="p-2 bg-purple-50 dark:bg-purple-900/30 text-purple-600 rounded-lg">
+<span class="material-symbols-outlined">group</span>
+</div>
+<span class="text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded text-xs font-bold">+5.2%</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Active Users</p>
+<h3 class="text-3xl font-black mt-1 text-slate-900 dark:text-white">1,893</h3>
+<p class="text-xs text-slate-400 mt-2">Real-time sessions: 142</p>
+</div>
+</div>
+<!-- Charts and Visuals -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<!-- Revenue Area Chart -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h4 class="font-bold text-slate-900 dark:text-white">Revenue Growth</h4>
+<p class="text-xs text-slate-500">Subscription revenue over the last 6 months</p>
+</div>
+<select class="text-xs font-bold border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 rounded-lg focus:ring-primary">
+<option>Last 6 Months</option>
+<option>Last Year</option>
+</select>
+</div>
+<div class="h-64 w-full relative">
+<!-- SVG Placeholder for Chart -->
+<svg class="w-full h-full" viewbox="0 0 100 40">
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#3c83f6;stop-opacity:0.2"></stop>
+<stop offset="100%" style="stop-color:#3c83f6;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+<path d="M0 35 Q 20 25, 40 30 T 80 15 T 100 10 V 40 H 0 Z" fill="url(#grad1)"></path>
+<path d="M0 35 Q 20 25, 40 30 T 80 15 T 100 10" fill="none" stroke="#3c83f6" stroke-width="0.5"></path>
+<circle cx="40" cy="30" fill="#3c83f6" r="1"></circle>
+<circle cx="80" cy="15" fill="#3c83f6" r="1"></circle>
+<circle cx="100" cy="10" fill="#3c83f6" r="1"></circle>
+</svg>
+<div class="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] text-slate-400 font-bold uppercase">
+<span>Jan</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Apr</span>
+<span>May</span>
+<span>Jun</span>
+</div>
+</div>
+</div>
+<!-- Side Stats/Distribution -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<h4 class="font-bold text-slate-900 dark:text-white mb-6">Plan Distribution</h4>
+<div class="space-y-4">
+<div>
+<div class="flex items-center justify-between text-sm mb-1">
+<span class="text-slate-600 dark:text-slate-400">Enterprise</span>
+<span class="font-bold">24%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[24%]"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-sm mb-1">
+<span class="text-slate-600 dark:text-slate-400">Pro</span>
+<span class="font-bold">48%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-indigo-500 h-full w-[48%]"></div>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between text-sm mb-1">
+<span class="text-slate-600 dark:text-slate-400">Starter</span>
+<span class="font-bold">28%</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-slate-400 h-full w-[28%]"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+<p class="text-xs text-slate-500 leading-relaxed italic">
+                                "The Enterprise segment grew by 4.2% since the last audit. Recommend targeting more mid-market firms."
+                            </p>
+</div>
+</div>
+</div>
+<!-- Recent Businesses Table -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<h4 class="font-bold text-slate-900 dark:text-white">Recent Businesses</h4>
+<button class="text-primary text-sm font-bold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Business Name</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Plan Type</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider">Onboarded</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+<!-- Acme Corp -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-indigo-600 font-bold text-xs">AC</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Acme Corp</p>
+<p class="text-xs text-slate-500">acme-corp.pamilo.ai</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-2 py-1 bg-primary/10 text-primary rounded text-xs font-bold uppercase tracking-tight">Enterprise</span>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-green-600 text-xs font-bold uppercase">
+<span class="size-1.5 bg-green-500 rounded-full"></span> Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 12, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Tech Inc -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 font-bold text-xs">TI</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Tech Inc</p>
+<p class="text-xs text-slate-500">tech-inc.pamilo.ai</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-xs font-bold uppercase tracking-tight">Pro</span>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-green-600 text-xs font-bold uppercase">
+<span class="size-1.5 bg-green-500 rounded-full"></span> Active
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 14, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+<!-- Global Solutions -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center text-amber-600 font-bold text-xs">GS</div>
+<div>
+<p class="text-sm font-bold text-slate-900 dark:text-white">Global Solutions</p>
+<p class="text-xs text-slate-500">global-sol.pamilo.ai</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded text-xs font-bold uppercase tracking-tight">Starter</span>
+</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-amber-500 text-xs font-bold uppercase">
+<span class="size-1.5 bg-amber-400 rounded-full"></span> Pending
+                                        </span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500">Oct 15, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-lg">more_horiz</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

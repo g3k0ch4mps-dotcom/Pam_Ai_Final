@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Knowledge Base - Pamilo AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3c83f6",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101722",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen flex-col">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md px-6 py-3 lg:px-10">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined text-2xl">auto_awesome</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Pamilo AI</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary" href="#">Dashboard</a>
+<a class="text-sm font-semibold text-primary" href="#">Knowledge Base</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary" href="#">Agents</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-400 dark:hover:text-primary" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>Add Content</span>
+</button>
+<div class="h-10 w-10 overflow-hidden rounded-full border border-slate-200 dark:border-slate-800">
+<img class="h-full w-full object-cover" data-alt="User avatar with professional appearance" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy1vxwM5WviTrfatlhHMQPeaAnW_sM3I9uFRgrNPftd6wJ8Il1Y5CvNeg2Th1ntdx9g3z-NzkoVxRdJRPis5-b4Rr2lHKO4W2KqVte9ItkfD_lrgQoZNzLc1_2FMdlvcqUV5Jsx3lr2kDNVN4EY4C30LUFlG4TlLrOfXHC4x1L4g7kZfU5gcq0bbEmc4oNOODFhqK2Wb-judyOC871hDGWwq-hFbKTgNNNV9nYrKCwUtKK4iXkf8-xF0ZCft7PDHyMZDHKmD9vBxE"/>
+</div>
+</div>
+</header>
+<main class="mx-auto w-full max-w-7xl flex-1 px-6 py-8 lg:px-10">
+<!-- Header Section -->
+<div class="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">Knowledge Base</h1>
+<p class="mt-1 text-slate-500 dark:text-slate-400">Manage your training data and document sources for your AI agents.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-bold shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700">
+<span class="material-symbols-outlined text-sm">upload</span>
+<span>Quick Upload</span>
+</button>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+<div class="flex flex-col gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total Documents</span>
+<span class="material-symbols-outlined text-primary">description</span>
+</div>
+<p class="text-3xl font-bold tracking-tight">128</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Storage Used</span>
+<span class="material-symbols-outlined text-primary">database</span>
+</div>
+<p class="text-3xl font-bold tracking-tight">4.2 GB</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Last Sync</span>
+<span class="material-symbols-outlined text-primary">sync</span>
+</div>
+<p class="text-3xl font-bold tracking-tight">2 mins ago</p>
+</div>
+</div>
+<!-- Filters & Actions -->
+<div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+<div class="flex flex-wrap items-center gap-2">
+<div class="relative w-full sm:w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full rounded-lg border-slate-200 bg-white py-2 pl-10 pr-4 text-sm focus:border-primary focus:ring-primary dark:border-slate-700 dark:bg-slate-900" placeholder="Search documents..." type="text"/>
+</div>
+<button class="flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-2 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700">
+<span>All Types</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-1 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 py-2 text-sm font-medium hover:bg-slate-200 dark:hover:bg-slate-700">
+<span>Status</span>
+<span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+<span class="material-symbols-outlined">grid_view</span>
+</button>
+<button class="p-2 text-primary">
+<span class="material-symbols-outlined">view_list</span>
+</button>
+</div>
+</div>
+<!-- Document Table -->
+<div class="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/50">
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400">Document Name</th>
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400">Type</th>
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400">Status</th>
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400">Size</th>
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400">Upload Date</th>
+<th class="px-6 py-4 font-semibold text-slate-600 dark:text-slate-400 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1: PDF Ready -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+<span class="material-symbols-outlined text-lg">picture_as_pdf</span>
+</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Company_Handbook_2024.pdf</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium dark:bg-slate-800">PDF</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        Ready
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">2.4 MB</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 12, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: URL Processing -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-primary dark:bg-primary/20 dark:text-primary">
+<span class="material-symbols-outlined text-lg">link</span>
+</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">docs.pamilo.ai/integrations</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium dark:bg-slate-800">URL</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+<span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                                        Processing
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">--</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 14, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Text Ready -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+<span class="material-symbols-outlined text-lg">description</span>
+</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Product_Spec_V2.txt</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium dark:bg-slate-800">Text</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">
+<span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                        Ready
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">45 KB</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 15, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="p-2 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: CSV Error -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400">
+<span class="material-symbols-outlined text-lg">table_chart</span>
+</div>
+<span class="font-medium text-slate-900 dark:text-slate-100">Legacy_Data_Export.csv</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium dark:bg-slate-800">CSV</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
+<span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                                        Error
+                                    </span>
+</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">1.2 MB</td>
+<td class="px-6 py-4 text-slate-500 dark:text-slate-400">Oct 15, 2023</td>
+<td class="px-6 py-4 text-right">
+<button class="text-xs font-bold text-primary hover:underline">Retry</button>
+<button class="ml-2 p-2 text-slate-400 hover:text-slate-900 dark:hover:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-4">
+<p class="text-xs text-slate-500 dark:text-slate-400">Showing 1 to 4 of 128 documents</p>
+<div class="flex items-center gap-2">
+<button class="flex h-8 w-8 items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400 hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="flex h-8 w-8 items-center justify-center rounded bg-primary text-xs font-bold text-white">1</button>
+<button class="flex h-8 w-8 items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50">2</button>
+<button class="flex h-8 w-8 items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-medium hover:bg-slate-50">3</button>
+<button class="flex h-8 w-8 items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400 hover:bg-slate-50">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Upload Dropzone (Minimized View) -->
+<div class="mt-8 rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-12 text-center">
+<div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-3xl">cloud_upload</span>
+</div>
+<h3 class="mt-4 text-lg font-bold">Upload New Content</h3>
+<p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Drag and drop files here, or paste a URL to scrape content directly.</p>
+<div class="mt-6 flex items-center justify-center gap-3">
+<button class="rounded-lg bg-primary px-6 py-2 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90">Select Files</button>
+<button class="rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-6 py-2 text-sm font-bold shadow-sm hover:bg-slate-50">Add URL</button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark py-6 text-center">
+<p class="text-xs text-slate-400 dark:text-slate-600">© 2024 Pamilo AI. All documents are encrypted and secure.</p>
+</footer>
+</div>
+</body></html>

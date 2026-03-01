@@ -39,49 +39,49 @@ export default function Analytics() {
     ];
 
     return (
-        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500 transition-colors duration-300">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-black text-gray-900">Performance Analytics</h1>
-                    <p className="text-gray-500 mt-1 font-medium">Deep dive into your AI's impact and customer behavior.</p>
+                    <h1 className="text-3xl font-black text-gray-900 dark:text-white">Performance Analytics</h1>
+                    <p className="text-gray-500 dark:text-slate-400 mt-1 font-medium">Deep dive into your AI's impact and customer behavior.</p>
                 </div>
                 <div className="flex gap-3">
-                    <button className="px-6 py-3 bg-white border border-gray-100 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 hover:text-blue-600 transition-all">Last 30 Days</button>
-                    <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-200 hover:scale-105 active:scale-95 transition-all">Generate Report</button>
+                    <button className="px-6 py-3 bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-xl text-xs font-black uppercase tracking-widest text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-white transition-all">Last 30 Days</button>
+                    <button className="px-6 py-3 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-200 dark:shadow-none hover:scale-105 active:scale-95 transition-all">Generate Report</button>
                 </div>
             </div>
 
             {/* Main Stats */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {stats.map((s, i) => (
-                    <div key={i} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300">
+                    <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300">
                         <div className="flex justify-between items-start">
-                            <div className={`w-12 h-12 bg-${s.color}-50 rounded-2xl flex items-center justify-center text-${s.color}-600`}>
+                            <div className={`w-12 h-12 bg-${s.color}-50 dark:bg-${s.color}-900/20 rounded-2xl flex items-center justify-center text-${s.color}-600 dark:text-${s.color}-400`}>
                                 <s.icon className="w-6 h-6" />
                             </div>
-                            <span className={`text-[10px] font-black px-2 py-1 rounded-full ${s.trend.startsWith('+') ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'}`}>
+                            <span className={`text-[10px] font-black px-2 py-1 rounded-full ${s.trend.startsWith('+') ? 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400' : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400'}`}>
                                 {s.trend}
                             </span>
                         </div>
-                        <p className="text-gray-400 text-[10px] font-black uppercase tracking-widest mt-6">{s.label}</p>
-                        <p className="text-3xl font-black text-gray-900 mt-1">{s.value}</p>
+                        <p className="text-gray-400 dark:text-slate-500 text-[10px] font-black uppercase tracking-widest mt-6">{s.label}</p>
+                        <p className="text-3xl font-black text-gray-900 dark:text-white mt-1">{s.value}</p>
                     </div>
                 ))}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Visual Chart Placeholder */}
-                <div className="lg:col-span-2 bg-white rounded-[2.5rem] p-10 border border-gray-100 shadow-sm">
+                <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[2.5rem] p-10 border border-gray-100 dark:border-slate-800 shadow-sm transition-colors">
                     <div className="flex justify-between items-center mb-10">
-                        <h3 className="text-xl font-black text-gray-900">Conversation Trends</h3>
+                        <h3 className="text-xl font-black text-gray-900 dark:text-white">Conversation Trends</h3>
                         <div className="flex space-x-2">
                             <div className="flex items-center space-x-2">
                                 <div className="w-3 h-3 bg-blue-600 rounded-full"></div>
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Successful</span>
+                                <span className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest">Successful</span>
                             </div>
                             <div className="flex items-center space-x-2">
-                                <div className="w-3 h-3 bg-gray-200 rounded-full"></div>
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Dropped</span>
+                                <div className="w-3 h-3 bg-gray-200 dark:bg-slate-700 rounded-full"></div>
+                                <span className="text-[10px] font-black text-gray-400 dark:text-slate-500 uppercase tracking-widest">Dropped</span>
                             </div>
                         </div>
                     </div>

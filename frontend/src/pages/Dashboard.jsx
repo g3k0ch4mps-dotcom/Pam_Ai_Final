@@ -15,6 +15,7 @@ import Inbox from './Inbox';
 import Analytics from './Analytics';
 import SettingsView from './Settings';
 import Team from './Team';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function Dashboard() {
     const [user, setUser] = useState(null);
@@ -172,12 +173,12 @@ export default function Dashboard() {
     };
 
     if (loading) return (
-        <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 flex items-center justify-center">
             <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center animate-bounce shadow-xl shadow-blue-200">
+                <div className="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center animate-bounce shadow-xl shadow-blue-200 dark:shadow-none">
                     <Activity className="text-white w-8 h-8" />
                 </div>
-                <p className="text-sm font-black text-gray-400 uppercase tracking-[0.3em] animate-pulse">Initializing Pamilo AI</p>
+                <p className="text-sm font-black text-gray-400 dark:text-slate-500 uppercase tracking-[0.3em] animate-pulse">Initializing Pamilo AI</p>
             </div>
         </div>
     );
@@ -195,12 +196,15 @@ export default function Dashboard() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] flex">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 flex transition-colors duration-300">
             {/* Sidebar */}
-            <aside className="w-64 bg-white border-r flex flex-col fixed h-full z-20">
+            <aside className="w-64 bg-white dark:bg-slate-900 border-r dark:border-slate-800 flex flex-col fixed h-full z-20 transition-colors duration-300">
                 <div className="p-6">
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Pamilo AI</h1>
-                    <div className="mt-4 px-3 py-2 bg-blue-50 rounded-lg flex items-center space-x-2">
+                    <div className="flex items-center justify-between">
+                        <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Pamilo AI</h1>
+                        <ThemeToggle />
+                    </div>
+                    <div className="mt-4 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                         <span className="text-xs font-bold text-blue-700 uppercase truncate">
                             {business?.businessName || 'Pro Account'}
@@ -214,29 +218,29 @@ export default function Dashboard() {
                             key={item.id}
                             onClick={() => setActiveTab(item.id)}
                             className={`w-full flex items-center px-4 py-3 text-sm font-semibold rounded-xl transition-all duration-200 ${activeTab === item.id
-                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-200'
-                                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900 group'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20'
+                                : 'text-gray-500 dark:text-slate-400 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-gray-900 dark:hover:text-white group'
                                 }`}
                         >
-                            <item.icon className={`mr-3 h-5 w-5 ${activeTab === item.id ? 'text-white' : 'text-gray-400 group-hover:text-blue-500'}`} />
+                            <item.icon className={`mr-3 h-5 w-5 ${activeTab === item.id ? 'text-white' : 'text-gray-400 dark:text-slate-500 group-hover:text-blue-500'}`} />
                             {item.label}
                         </button>
                     ))}
                 </nav>
 
-                <div className="p-4 border-t">
+                <div className="p-4 border-t dark:border-slate-800">
                     <div className="flex items-center space-x-3 mb-4">
-                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                        <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
                             {user?.firstName?.[0]}{user?.lastName?.[0]}
                         </div>
                         <div className="flex-1 overflow-hidden">
-                            <p className="text-sm font-bold text-gray-900 truncate">{user?.firstName} {user?.lastName}</p>
-                            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate">{user?.firstName} {user?.lastName}</p>
+                            <p className="text-xs text-gray-500 dark:text-slate-400 truncate">{user?.email}</p>
                         </div>
                     </div>
                     <button
                         onClick={handleLogout}
-                        className="w-full flex items-center px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        className="w-full flex items-center px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
                     >
                         <LogOut className="mr-3 h-4 w-4" />
                         Sign Out
@@ -277,12 +281,12 @@ export default function Dashboard() {
                         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="flex justify-between items-end">
                                 <div>
-                                    <h2 className="text-3xl font-black text-gray-900">Welcome back!</h2>
-                                    <p className="text-gray-500 mt-1 font-medium">Here's what's happening with Pamilo AI today.</p>
+                                    <h2 className="text-3xl font-black text-gray-900 dark:text-white">Welcome back!</h2>
+                                    <p className="text-gray-500 dark:text-slate-400 mt-1 font-medium">Here's what's happening with Pamilo AI today.</p>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">Global Status</div>
-                                    <div className="flex items-center text-green-500 mt-1 font-bold">
+                                    <div className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-widest">Global Status</div>
+                                    <div className="flex items-center text-green-500 dark:text-green-400 mt-1 font-bold">
                                         <Activity className="w-4 h-4 mr-2" /> Systems Online
                                     </div>
                                 </div>
@@ -296,44 +300,45 @@ export default function Dashboard() {
                                     { label: 'Active Tickets', value: stats?.tickets?.open || 0, icon: Ticket, color: 'orange' },
                                     { label: 'Live Visitors', value: visitors.length, icon: Globe, color: 'green' },
                                 ].map((stat, i) => (
-                                    <div key={i} className="bg-white p-6 rounded-2xl border shadow-sm hover:shadow-md transition-shadow">
-                                        <div className={`w-12 h-12 bg-${stat.color}-50 rounded-xl flex items-center justify-center mb-4 text-${stat.color}-600`}>
+                                    <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-2xl border dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
+                                        <div className={`w-12 h-12 bg-${stat.color}-50 dark:bg-${stat.color}-900/20 rounded-xl flex items-center justify-center mb-4 text-${stat.color}-600 dark:text-${stat.color}-400`}>
                                             <stat.icon className="w-6 h-6" />
                                         </div>
-                                        <p className="text-gray-500 text-sm font-bold uppercase tracking-tight">{stat.label}</p>
-                                        <p className="text-3xl font-black text-gray-900 mt-1">{stat.value}</p>
+                                        <p className="text-gray-500 dark:text-slate-400 text-sm font-bold uppercase tracking-tight">{stat.label}</p>
+                                        <p className="text-3xl font-black text-gray-900 dark:text-white mt-1">{stat.value}</p>
                                     </div>
                                 ))}
                             </div>
 
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 {/* Online Visitors List */}
-                                <div className="lg:col-span-2 bg-white rounded-2xl border shadow-sm overflow-hidden">
-                                    <div className="p-6 border-b flex justify-between items-center">
-                                        <h3 className="text-lg font-bold text-gray-900">Live Traffic</h3>
-                                        <span className="px-3 py-1 bg-green-50 text-green-600 text-xs font-black rounded-full uppercase">Real-time</span>
+                                <div className="lg:col-span-2 bg-white dark:bg-slate-900 rounded-[2.5rem] border dark:border-slate-800 shadow-sm overflow-hidden">
+                                    <div className="p-8 border-b dark:border-slate-800 flex justify-between items-center">
+                                        <h3 className="text-xl font-black text-gray-900 dark:text-white">Live Intelligence</h3>
+                                        <span className="px-4 py-1.5 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-black rounded-full uppercase tracking-widest border border-green-100 dark:border-green-900/20">Operational</span>
                                     </div>
-                                    <div className="divide-y max-h-[400px] overflow-y-auto">
+                                    <div className="divide-y dark:divide-slate-800 max-h-[400px] overflow-y-auto">
                                         {visitors.length === 0 ? (
-                                            <div className="p-12 text-center text-gray-400">
-                                                <Globe className="w-12 h-12 mx-auto mb-4 opacity-20" />
-                                                <p className="font-bold">No active visitors right now</p>
+                                            <div className="p-20 text-center text-gray-400 dark:text-slate-600">
+                                                <Globe className="w-16 h-16 mx-auto mb-4 opacity-10" />
+                                                <p className="font-black text-lg text-gray-900 dark:text-white">No active interceptors</p>
+                                                <p className="text-xs font-medium uppercase tracking-widest mt-1">Waiting for incoming traffic stream...</p>
                                             </div>
                                         ) : (
                                             visitors.map((v, i) => (
-                                                <div key={i} className="p-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xs uppercase">
+                                                <div key={i} className="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors group">
+                                                    <div className="flex items-center space-x-4">
+                                                        <div className="w-10 h-10 bg-blue-50 dark:bg-blue-900/20 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-xs uppercase border border-blue-100 dark:border-blue-900/20">
                                                             {v.location?.country?.slice(0, 2) || '??'}
                                                         </div>
                                                         <div>
-                                                            <p className="text-sm font-bold text-gray-900">{v.sessionId.slice(0, 8)}...</p>
-                                                            <p className="text-xs text-gray-500">{v.location?.city || 'Unknown Location'}</p>
+                                                            <p className="text-sm font-black text-gray-900 dark:text-white group-hover:text-blue-600 transition-colors">{v.sessionId.slice(0, 8)}...</p>
+                                                            <p className="text-xs font-bold text-gray-400 dark:text-slate-500 uppercase tracking-tight">{v.location?.city || 'Unknown Location'}</p>
                                                         </div>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-xs font-bold text-blue-600">{v.currentPage}</p>
-                                                        <p className="text-[10px] text-gray-400 font-medium">Just now</p>
+                                                        <p className="text-xs font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest">{v.currentPage}</p>
+                                                        <p className="text-[10px] text-gray-400 dark:text-slate-600 font-bold uppercase tracking-tighter mt-1">Acquired now</p>
                                                     </div>
                                                 </div>
                                             ))
@@ -342,24 +347,24 @@ export default function Dashboard() {
                                 </div>
 
                                 {/* Active Tickets Summary */}
-                                <div className="bg-white rounded-2xl border shadow-sm p-6">
-                                    <h3 className="text-lg font-bold text-gray-900 mb-6">Tickets Overview</h3>
-                                    <div className="space-y-4">
+                                <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border dark:border-slate-800 shadow-sm p-8 flex flex-col">
+                                    <h3 className="text-xl font-black text-gray-900 dark:text-white mb-8">Pipeline Health</h3>
+                                    <div className="space-y-6 flex-1">
                                         {Object.entries(stats?.tickets || {}).filter(([k]) => k !== 'total').map(([status, count]) => (
-                                            <div key={status} className="flex items-center justify-between">
+                                            <div key={status} className="flex items-center justify-between group">
                                                 <div className="flex items-center">
-                                                    <div className={`w-2 h-2 rounded-full mr-3 ${status === 'open' ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
-                                                    <span className="text-sm font-bold text-gray-600 capitalize">{status.replace('_', ' ')}</span>
+                                                    <div className={`w-2.5 h-2.5 rounded-full mr-4 ${status === 'open' ? 'bg-blue-500 shadow-lg shadow-blue-500/50' : 'bg-gray-200 dark:bg-slate-700'}`}></div>
+                                                    <span className="text-xs font-black text-gray-500 dark:text-slate-400 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{status.replace('_', ' ')}</span>
                                                 </div>
-                                                <span className="text-sm font-black text-gray-900">{count}</span>
+                                                <span className="text-lg font-black text-gray-900 dark:text-white">{count}</span>
                                             </div>
                                         ))}
                                     </div>
                                     <button
                                         onClick={() => setActiveTab('tickets')}
-                                        className="w-full mt-8 py-3 bg-gray-50 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center"
+                                        className="w-full mt-10 py-4 bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-slate-300 font-black text-xs uppercase tracking-[0.2em] rounded-2xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center shadow-sm active:scale-95"
                                     >
-                                        View Board <ChevronRight className="w-4 h-4 ml-2" />
+                                        Inspect Board <ChevronRight className="w-4 h-4 ml-2" />
                                     </button>
                                 </div>
                             </div>
@@ -367,39 +372,39 @@ export default function Dashboard() {
                     )}
 
                     {activeTab === 'documents' && (
-                        <div className="bg-white rounded-2xl border shadow-sm p-8 animate-in fade-in duration-300">
-                            <div className="flex justify-between items-center mb-8">
+                        <div className="bg-white dark:bg-slate-900 rounded-[2.5rem] border dark:border-slate-800 shadow-sm p-10 animate-in fade-in duration-300">
+                            <div className="flex justify-between items-center mb-10">
                                 <div>
-                                    <h2 className="text-2xl font-black text-gray-900">Knowledge Base</h2>
-                                    <p className="text-gray-500 font-medium">Train your AI with documents and website URLs.</p>
+                                    <h2 className="text-2xl font-black text-gray-900 dark:text-white">Knowledge Base</h2>
+                                    <p className="text-gray-500 dark:text-slate-400 font-medium">Train your AI with documents and website URLs.</p>
                                 </div>
-                                <label className="flex items-center cursor-pointer px-6 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-200">
-                                    <Upload className="w-5 h-5 mr-2" />
+                                <label className="flex items-center cursor-pointer px-8 py-4 bg-blue-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 shadow-lg shadow-blue-500/20">
+                                    <Upload className="w-5 h-5 mr-3" />
                                     Upload Data
                                     <input type="file" className="hidden" onChange={handleUpload} accept=".pdf,.docx,.txt" />
                                 </label>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {documents.length === 0 ? (
-                                    <div className="text-center py-16 bg-gray-50 rounded-2xl border border-dashed">
-                                        <FileText className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                                        <p className="text-gray-500 font-bold text-lg">Your Knowledge Base is empty</p>
-                                        <p className="text-gray-400 text-sm mt-1">Upload a PDF or Word document to get started.</p>
+                                    <div className="md:col-span-2 text-center py-20 bg-gray-50 dark:bg-slate-800/50 rounded-3xl border border-dashed dark:border-slate-700">
+                                        <FileText className="w-16 h-16 text-gray-300 dark:text-slate-700 mx-auto mb-4" />
+                                        <p className="text-gray-500 dark:text-slate-400 font-black text-lg">Knowledge Base empty</p>
+                                        <p className="text-gray-400 dark:text-slate-600 text-xs font-medium mt-1">Upload a PDF or Word document to get started.</p>
                                     </div>
                                 ) : (
                                     documents.map(doc => (
-                                        <div key={doc._id} className="flex items-center justify-between p-5 border rounded-2xl bg-white hover:border-blue-200 transition-colors group">
+                                        <div key={doc._id} className="flex items-center justify-between p-5 border dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900 hover:border-blue-200 dark:hover:border-blue-500/50 transition-colors group">
                                             <div className="flex items-center">
-                                                <div className="w-12 h-12 bg-gray-50 rounded-xl flex items-center justify-center text-gray-400 group-hover:text-blue-500 transition-colors">
+                                                <div className="w-12 h-12 bg-gray-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-gray-400 dark:text-slate-500 group-hover:text-blue-500 transition-colors">
                                                     <FileText className="w-6 h-6" />
                                                 </div>
                                                 <div className="ml-4">
-                                                    <p className="text-sm font-black text-gray-900 leading-none">{doc.originalName}</p>
-                                                    <p className="text-xs text-gray-500 mt-1 font-bold">{(doc.size / 1024).toFixed(1)} KB • {new Date(doc.createdAt).toLocaleDateString()}</p>
+                                                    <p className="text-sm font-black text-gray-900 dark:text-white leading-none">{doc.originalName}</p>
+                                                    <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-2 font-black uppercase tracking-widest">{(doc.size / 1024).toFixed(1)} KB • {new Date(doc.createdAt).toLocaleDateString()}</p>
                                                 </div>
                                             </div>
-                                            <button onClick={() => handleDeleteDoc(doc._id)} className="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
+                                            <button onClick={() => handleDeleteDoc(doc._id)} className="w-10 h-10 flex items-center justify-center text-gray-300 dark:text-slate-700 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all">
                                                 <Trash2 className="w-5 h-5" />
                                             </button>
                                         </div>
@@ -407,7 +412,7 @@ export default function Dashboard() {
                                 )}
                             </div>
 
-                            <div className="mt-12 pt-8 border-t">
+                            <div className="mt-16 pt-10 border-t dark:border-slate-800">
                                 <URLManager businessId={business?.id} />
                             </div>
                         </div>
