@@ -149,11 +149,16 @@ const handleInternalChat = async (req, res) => {
         // Search Knowledge Base (Scoped)
         const contextDocs = await searchService.searchDocuments(req.businessId, message, 3);
 
+        // Fetch business name for AI context (req.business might not be populated)
+        let businessName = 'Business';
+        const business = await Business.findById(req.businessId).select('businessName');
+        if (business) businessName = business.businessName;
+
         // Generate Response
         const responseData = await aiService.generateResponse(
             message,
             contextDocs,
-            { businessName: req.business.businessName }
+            { businessName }
         );
 
         // Update Conversation
