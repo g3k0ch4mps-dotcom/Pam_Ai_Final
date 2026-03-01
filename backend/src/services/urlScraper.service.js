@@ -54,9 +54,14 @@ class URLScraperService {
      * Core scraping logic - Tries Axios first, then Puppeteer
      */
     async scrapeURL(url) {
-        // 1. Validate URL
+        // 1. Validate URL & Security
         if (!this.validateURL(url)) {
             throw new Error('Invalid URL format');
+        }
+
+        if (!this.isSSRFSafe(url)) {
+            logger.warn(`[Scraper] SSRF attempt blocked: ${url}`);
+            throw new Error('Access to internal or private networks is forbidden');
         }
 
         logger.info(`[Scraper] Starting scrape for ${url}`);
@@ -548,6 +553,39 @@ class URLScraperService {
     validateURL(url) {
         if (!url || typeof url !== 'string') return false;
         return validator.isURL(url, { protocols: ['http', 'https'], require_protocol: true });
+    }
+
+    /**
+     * SSRF Protection: Block private IP ranges and localhost
+     */
+    isSSRFSafe(urlStr) {
+        try {
+            const url = new URL(urlStr);
+            const hostname = url.hostname.toLowerCase();
+
+            // 1. Block localhost and common local names
+            const localNames = ['localhost', 'loopback', '0.0.0.0', '127.0.0.1', '[::1]'];
+            if (localNames.some(name => hostname.includes(name))) return false;
+
+            // 2. Block private IP ranges (IPv4)
+            // 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16 (Link-local)
+            const privateIpPatterns = [
+                /^10\./,
+                /^172\.(1[6-9]|2[0-9]|3[0-1])\./,
+                /^192\.168\./,
+                /^169\.254\./,
+                /^127\./
+            ];
+
+            if (privateIpPatterns.some(pattern => pattern.test(hostname))) return false;
+
+            // 3. Block Cloud Provider Metadata Services
+            if (hostname === 'metadata.google.internal' || hostname === '169.254.169.254') return false;
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     getUserFriendlyError(error) {
