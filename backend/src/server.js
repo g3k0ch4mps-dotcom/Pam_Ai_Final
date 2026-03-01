@@ -18,6 +18,9 @@ const express = require('express');
 const cors = require('cors');
 const { connectDatabase, isConnected: isMongoConnected } = require('./config/database');
 const logger = require('./utils/logger');
+const http = require('http');
+const { Server } = require('socket.io');
+const initializeVisitorSocket = require('./sockets/visitor.socket');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -57,9 +60,29 @@ const limiter = rateLimit({
     }
   }
 });
+
+// Stricter Rate Limiting for Auth/Sensitive routes (A07: Identification and Authentication Failures)
+const authLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 10, // 10 attempts per hour for login/register
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: {
+      code: 'AUTH_RATE_LIMIT_EXCEEDED',
+      message: 'Too many authentication attempts. Please try again in an hour.'
+    }
+  }
+});
+
 app.use('/api', limiter); // Apply to all API routes
+app.use('/api/auth', authLimiter); // Extra protection for auth routes
 
 // 3. Body parsing middleware
+// NOTE: Stripe webhook needs raw body for signature verification
+app.use('/webhooks/stripe', express.raw({ type: 'application/json' }));
+
 app.use(express.json({ limit: '10kb' })); // Body limit is 10kb
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
@@ -127,6 +150,10 @@ app.use('/api/auth', authRoutes);
 // New Structured Namespaces
 app.use('/api/business/v1', businessNamespace); // e.g., /api/business/v1/documents
 app.use('/api/admin/v1', adminNamespace);
+
+// Stripe Webhook
+const webhookController = require('./controllers/webhook.controller');
+app.post('/webhooks/stripe', webhookController.handleWebhook);
 
 // Legacy/Compatibility Routes (Mapped to same controllers via existing routers)
 // These keys will eventually be deprecated in favor of /api/business/v1/...
@@ -202,9 +229,18 @@ async function startServer() {
     logger.info('Starting server initialization...');
     await connectDatabase();
 
+    // Step 2: Initialize Socket.io
+    const httpServer = http.createServer(app);
+    const io = new Server(httpServer, {
+      cors: {
+        origin: process.env.CORS_ORIGIN || '*',
+        methods: ['GET', 'POST']
+      }
+    });
+    initializeVisitorSocket(io);
 
     // Step 3: Start listening for requests
-    app.listen(PORT, () => {
+    httpServer.listen(PORT, () => {
       logger.info('═══════════════════════════════════════════════════════');
       logger.info('  Business AI Assistant API');
       logger.info('═══════════════════════════════════════════════════════');
