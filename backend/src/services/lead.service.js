@@ -32,14 +32,16 @@ class LeadService {
     }
 
     /**
-     * Update lead contact information
+     * Update lead contact information (Scoped to businessId for security)
      */
-    async updateContactInfo(sessionId, data) {
+    async updateContactInfo(sessionId, businessId, data) {
         try {
-            const lead = await Lead.findOne({ sessionId });
+            // A01:2021 - Broken Access Control: Must match BOTH sessionId and businessId
+            const lead = await Lead.findOne({ sessionId, businessId });
 
             if (!lead) {
-                throw new Error('Lead not found');
+                logger.warn(`[LeadService] Lead update failed: Session ${sessionId} not found for business ${businessId}`);
+                throw new Error('Lead not found or invalid session context');
             }
 
             // Update only provided fields
